@@ -294,8 +294,8 @@ Check: your bisect named `380836c`.
    <summary>Why does the GDS conflict when the text file doesn't?</summary>
 
    Undoing a commit means applying its change backwards to today's files. For `wires.tcl` that's
-   easy, because nobody has touched that line since. The GDS has been rebuilt four times since,
-   and git can't apply a binary change to a different binary, so it stops and asks.
+   easy, because nobody has touched that line since. Three later commits changed the GDS, and
+   git can't apply a binary change to a different binary, so it stops and asks.
 
    </details>
 
