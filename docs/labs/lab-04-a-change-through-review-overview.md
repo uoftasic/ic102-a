@@ -194,7 +194,8 @@ What happens to an open pull request when `main` changes under it?
    holds the runs of anyone who has never had a change merged into a repository until someone with
    write access approves them. A `pull_request` run uses the workflow files from the pull request
    itself, so read **Files changed** first and check that nothing under `.github/` changed. Then
-   press **Approve and run workflows**.
+   press **Approve and run workflows**. Do this before you merge anything of your own in step 4,
+   because once the pull request has a conflict it gets no runs at all.
 
    <!-- SCREENSHOT-TODO: github.com, signed in as the repository's owner, a pull request from a fork in ttsky-ic102-a-review, scrolled to the merge box with the workflows awaiting approval and the button that approves them. Needs a second account, which opened the pull request. -->
    ![A first-time contributor's pull request, with its workflows waiting for approval.](../assets/img/ic102-a-approve-runs.png){width=640}

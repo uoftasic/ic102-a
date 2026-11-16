@@ -107,7 +107,7 @@ push.
    this kind of token, why it needs Workflows as well as Contents, and why it lives in your password
    manager rather than in a file.
 
-   <!-- RUN-TODO: with this token, from the workbench: a push to the student's own ttsky-ic102-a, the first push of the Lab 04 sandbox copy (it adds workflow files) to a new empty ttsky-ic102-a-review, a branch pushed to the student's ttsky-ic102-a-review-fork, and GitHub's exact refusal when Workflows is left off, to quote in Getting started. One account is enough, except that the fork needs a second account's repository to fork. -->
+   <!-- RUN-TODO: with this token, from the workbench: a push to the student's own ttsky-ic102-a, the first push of the Lab 04 sandbox copy (it adds workflow files) to a new empty ttsky-ic102-a-review, a branch pushed to the student's ttsky-ic102-a-review-fork, and GitHub's exact refusal when Workflows is left off, to quote in Getting started. Needs two accounts for the fork (a second account's ttsky-ic102-a-review to fork); the rest needs one. -->
 
 Check: you have the no-reply address and the token saved somewhere you can paste from.
 
