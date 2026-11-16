@@ -117,13 +117,14 @@ Check: a green `gds` run on `main` with all three jobs, an active ruleset, and a
 
 What does a layout change look like when you can't read it in a diff?
 
-1. Open `https://github.com/PARTNER-USERNAME/ttsky-ic102-a-review` and click **Fork**. Leave
-   "Copy the main branch only" ticked, and change the repository name to
-   `ttsky-ic102-a-review-fork`, because you already have a repository called
-   `ttsky-ic102-a-review`.
-
-   <!-- SCREENSHOT-TODO: github.com, signed in, the "Create a new fork" page for PARTNER-USERNAME/ttsky-ic102-a-review: Owner set to a personal account, Repository name changed to ttsky-ic102-a-review-fork, "Copy the main branch only" ticked. Needs a second account, whose repository is forked: GitHub doesn't let an account fork its own repository, so the one-account live test of Nov 16, 2026 couldn't take it. -->
-   ![Forking your partner's review repository under a new name.](../assets/img/ic102-a-fork.png){width=640}
+1. Open `https://github.com/PARTNER-USERNAME/ttsky-ic102-a-review` and click **Fork**, in the
+   top-right corner of the page. On the form that opens, choose your own account as the Owner,
+   and change the Repository name to `ttsky-ic102-a-review-fork`. A fork gets the name of the
+   repository it was made from unless you change it, and you already have a repository called
+   `ttsky-ic102-a-review`. Make sure "Copy the main branch only" is ticked, because without it
+   every branch in your partner's repository is copied into your fork as well, and then click
+   **Create fork**. GitHub's own description of this form is in
+   [forking a repository](https://docs.github.com/en/pull-requests/how-tos/work-with-forks/fork-a-repo#forking-a-repository).
 
 2. Clone your fork, set it up as you did your own, and add your partner's repository as a second
    remote called `upstream`, so you can fetch what they merge:
@@ -207,15 +208,20 @@ five files.
 
 What happens to an open pull request when `main` changes under it?
 
-1. Open your partner's pull request in your repository. Its checks haven't started, because GitHub
-   holds the runs of anyone who has never had a change merged into a repository, until someone
-   with write access approves them. A `pull_request` run uses the workflow files from the pull request
-   itself, so read **Files changed** first and check that nothing under `.github/` changed. Then
-   press **Approve and run workflows**. Do this before you merge anything of your own in step 4,
-   because once the pull request has a conflict it gets no runs at all.
+1. Open your partner's pull request in your repository. Its checks haven't started, because by
+   default GitHub holds the runs of anyone who has never had a commit or pull request merged into
+   a repository, until someone with write access approves them
+   ([repository Actions settings](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#controlling-changes-from-forks-to-workflows-in-public-repositories)).
+   A `pull_request` run uses the workflow files from the pull request itself, so read
+   **Files changed** first and check that nothing under `.github/` changed. Then click
+   **Awaiting approval**, in the upper right corner, to open the **Merge status** panel, and click
+   **Approve workflows to run** in it
+   ([approving workflow runs from forks](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/approve-runs-from-forks#approving-workflow-runs-on-a-pull-request-from-a-public-fork)).
+   Do this before you merge anything of your own in step 4, because once the pull request has a
+   conflict it gets no runs at all.
 
-   <!-- SCREENSHOT-TODO: github.com, signed in as the repository's owner, a pull request from a fork in ttsky-ic102-a-review, scrolled to the merge box with the workflows awaiting approval and the button that approves them. Needs a second account, which opened the pull request: GitHub holds the runs only of someone else's fork, so the one-account live test of Nov 16, 2026 couldn't take it. -->
-   ![A first-time contributor's pull request, with its workflows waiting for approval.](../assets/img/ic102-a-approve-runs.png){width=640}
+   Those two labels are from GitHub's documentation: our test of this lab used one account, so
+   GitHub never held its runs and we never saw the panel.
 
    You should see `docs`, `gds` and `precheck` run and pass, and `viewer` skipped. The merge box
    lists `docs / docs (pull_request)`, `gds / gds (pull_request)` and
@@ -225,7 +231,7 @@ What happens to an open pull request when `main` changes under it?
    <!-- Screenshot: vproHacks/ic102-review-sandbox-a#3 on Nov 16, 2026 (also used for the bypass shot below), seen by its owner, who also opened it: the one-account live test used a branch of the same repository in place of a partner's fork, so the merge box also offers the owner's bypass. #1 showed the same merge box earlier. -->
    ![A pull request waiting for its approval, with its three required checks passed and viewer skipped.](../assets/img/ic102-a-merge-blocked.png){width=760}
 
-   <!-- RUN-TODO (two accounts): a pull_request run from a partner's fork into a student's ttsky-ic102-a-review. Confirm whether each later push to the pull request needs its runs approved again, and the approve button's exact label (GitHub's documentation, read Nov 16, 2026, says "Approve workflows to run"). Also Part 5, step 5: that a push after an approval dismisses it; and Part 6, step 1: the merge button's label once the pull request is approved ("Merge pull request" is inferred from the blocked state, where the greyed button reads that and has no method menu). The one-account live test of Nov 16, 2026 confirmed the rest with a same-repository pull request (vproHacks/ic102-review-sandbox-a#1, runs 43828896448 and 43828896478): viewer is skipped, and the merge box names the required checks as above. -->
+   <!-- Run: the one-account live test of Nov 16, 2026 used a same-repository pull request (vproHacks/ic102-review-sandbox-a#1, runs 43828896448 and 43828896478) for the results above: viewer is skipped, and the merge box names the required checks. A pull request from a fork, with its approvals and re-approvals (here, Part 5, step 5 and Part 6, step 1), needs a second account, which was dropped on Nov 16, 2026; those steps, and the approval labels in step 1, follow GitHub's documentation as read on Nov 16, 2026. -->
 
 2. Now claim the slot next to your partner's in your own repository: if they took slot K, take
    K + 1, or K − 1 if they took 7. In your own clone (`cd /foss/designs/projects/ttsky-ic102-a-review`),
@@ -284,14 +290,13 @@ Can you tell, without reading the GDS, whether a layout change is what its descr
    description that says slot 5 for a pinout that describes `ui[4]` is a mistake that precheck
    can't catch, because it doesn't read the digital pins' descriptions at all.
 
-5. Write the review: **Files changed** › **Review changes** › **Request changes**, with a comment
-   that says what should change and why. There usually is something, even if it's only a
-   description that's missing the LVS line. Make each request specific enough to act on: your
-   partner can act on "Paste the `Final result` line of `make lvs` from the latest commit", but not
-   on "looks off".
-
-   <!-- SCREENSHOT-TODO: github.com, signed in as the owner, a pull request from a fork in ttsky-ic102-a-review > Files changed > "Review changes" open, with a comment typed and "Request changes" selected. Needs a second account, which opened the pull request: GitHub doesn't let the author of a pull request approve it or request changes on it, so the one-account live test of Nov 16, 2026 could only leave a comment review. -->
-   ![Requesting a change.](../assets/img/ic102-a-request-changes.png){width=640}
+5. Write the review. On **Files changed**, click **Review changes** above the changed code, type a
+   comment that says what should change and why, select **Request changes**, and click
+   **Submit review**
+   ([submitting your review](https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/reviewing-proposed-changes-in-a-pull-request#submitting-your-review)).
+   There usually is something, even if it's only a description that's missing the LVS line. Make
+   each request specific enough to act on: your partner can act on "Paste the `Final result` line
+   of `make lvs` from the latest commit", but not on "looks off".
 
 Check: you've submitted a review on your partner's pull request that requests a specific change.
 
@@ -300,10 +305,10 @@ Check: you've submitted a review on your partner's pull request that requests a 
 What happens to an approval when you push again?
 
 1. Back in your fork's clone, make the change your partner asked for, commit it, and push. That
-   push starts no runs, because the pull request still has its conflict; the checks run again after
-   step 4. Reply to each of their comments and resolve it, because the ruleset blocks the merge
-   while a conversation is still open. Ask your partner to look again; they can approve a pull
-   request that has a conflict.
+   push starts no runs, because the pull request still has its conflict; the checks can run again
+   after step 4. Reply to each of their comments and resolve it, because the ruleset blocks the
+   merge while a conversation is still open. Ask your partner to look again; they can approve a
+   pull request that has a conflict.
 
 2. Once they've approved, bring their `main` into your branch. Predict which files will conflict
    first, then:
@@ -372,15 +377,21 @@ What happens to an approval when you push again?
    you and your partner claimed the same slot, and you need to pick another one and change it in
    both `slots.tcl` and `info.yaml`.
 
-5. The conflict is gone, so the checks run again on the new commit. Before you look, predict
-   whether your pull request is still approved.
+5. The conflict is gone, so the new commit can have runs again, but they may have to wait for your
+   partner's approval, as theirs waited for yours in Part 3. GitHub checks both the pull request's
+   author and whoever triggered the run, here you with your push, and you still have nothing
+   merged into your partner's repository
+   ([repository Actions settings](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#controlling-changes-from-forks-to-workflows-in-public-repositories)).
+   Before you look, predict whether your pull request is still approved.
 
    <details>
    <summary>Answer</summary>
 
    No. The ruleset dismisses an approval when new commits arrive, because your partner approved
    the commits they saw, and the merge you pushed is a new layout that neither of you has
-   reviewed. Ask them to look again.
+   reviewed. Ask them to look again. GitHub's
+   [pull request rule](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets#require-a-pull-request-before-merging)
+   calls the setting "Dismiss stale pull request approvals when new commits are pushed".
 
    </details>
 
@@ -389,12 +400,17 @@ the pull request shows no conflict.
 
 ## Part 6: Approve and merge
 
-1. When your partner has pushed their merge, look at their pull request again: the checks, the
-   new render, and the `slots.tcl` and pinout lines, which now hold both claims. When it's right,
-   approve it and press **Merge pull request** (a merge commit is the only kind the ruleset
-   allows). You have to do this yourself, because your partner has no write access to your
-   repository. The merge is a push to `main`, so the workflows run there, `viewer` included, and
-   your Pages site shows the layout with both slots.
+1. When your partner has pushed their merge, look at their pull request again. If its runs are
+   waiting for approval again, approve them as you did in Part 3, step 1, reading
+   **Files changed** first. Then look at the checks, the new render, and the `slots.tcl` and
+   pinout lines, which now hold both claims. When it's right, approve it (**Review changes** ›
+   **Approve** › **Submit review**), then click **Merge pull request** and **Confirm merge**.
+   GitHub's
+   [merging a pull request](https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/merging-a-pull-request#merging-a-pull-request)
+   gives those two clicks for a merge commit, the only kind the ruleset allows. You have to do this
+   yourself, because your partner has no write access to your repository. The merge is a push to
+   `main`, so the workflows run there, `viewer` included, and your Pages site shows the layout with
+   both slots.
 
 2. Look at your repository's history:
 
