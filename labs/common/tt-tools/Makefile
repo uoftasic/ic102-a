@@ -11,7 +11,7 @@ SHELL := /bin/bash
 .PHONY: help install check-tools precheck precheck-workbench selftest uninstall
 
 help:
-	@echo "make install                      install the pinned tools into .local/ (about 3 GB)"
+	@echo "make install                      install the pinned tools into .local/ (about 1.8 GB)"
 	@echo "make check-tools                  print each version next to the pinned one"
 	@echo "make precheck PROJECT=<dir>       Tiny Tapeout's precheck on <dir>, with the pinned tools"
 	@echo "make precheck-workbench PROJECT=<dir>"
