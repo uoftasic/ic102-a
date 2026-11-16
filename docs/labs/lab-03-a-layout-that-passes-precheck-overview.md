@@ -223,7 +223,7 @@ How does a layout change get into `main` in a way someone else can check?
    your tile as Tiny Tapeout renders it. The inverter is 3 µm wide in a 161 µm tile, so it's a
    speck near the bottom; the stripes and the two long wires to the pins are what you can see.
 
-   ![The tile with the inverter, rendered the way the gds_render step does it, from a run of the reference solution.](../assets/img/ic102-a-render-inverter-tile.png){width=320}
+   ![The tile with the inverter from the reference solution, rendered locally with the same gdstk call the gds_render step uses.](../assets/img/ic102-a-render-inverter-tile.png){width=320}
 
    ![The same render, close up: the cell between its two stripes, the two supply stacks, and the input and output wires running out to ua[0] (right) and ua[1] (left).](../assets/img/ic102-a-render-inverter-zoom.png){width=640}
 
