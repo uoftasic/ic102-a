@@ -120,10 +120,10 @@ Check: a green `gds` run on `main` with all three jobs, an active ruleset, and a
 What does a layout change look like when you can't read it in a diff?
 
 1. Open `https://github.com/PARTNER-USERNAME/ttsky-ic102-a-review` and click **Fork**, in the
-   top-right corner of the page. On the form that opens, keep your own account as the Owner, and
-   keep "Copy the main branch only" ticked, because without it every branch in your partner's
-   repository is copied into your fork as well; in our test the form started with both set that
-   way. Change the Repository name to `ttsky-ic102-a-review-fork`. A fork gets the name of the
+   top-right corner of the page. On the form that opens, keep your own account as the Owner and
+   keep "Copy the main branch only" ticked; both were already set that way in our test. Without
+   that box, every branch in your partner's repository is copied into your fork as well. Change
+   the Repository name to `ttsky-ic102-a-review-fork`. A fork gets the name of the
    repository it was made from unless you change it, and you already have a repository called
    `ttsky-ic102-a-review`. GitHub says the new name "is available" once you've typed it. Then
    click **Create fork**. GitHub describes the form in
@@ -206,7 +206,7 @@ What does a layout change look like when you can't read it in a diff?
    tool wrote part of the change or the description, say which part, and what you checked
    yourself. Create the pull request and tell your partner its number.
 
-   ![Your pull request on your partner's repository, from our test, where uoftasic/ic102-partner-sandbox-a stood in for the partner's. The line under the title names the base, uoftasic:main, and the fork's branch; docs and gds have passed and precheck is still running. The account that opened it also owns the organisation, which is why the bypass box appears near the bottom. The ruleset gives the bypass only to the repository's admin, so you won't have it on your partner's repository.](../assets/img/ic102-a-fork-pr-author.png){width=760 fig-alt="A pull request titled Claim slot 4 for vproHacks's inverter #1, marked Open, with the line: vproHacks wants to merge 1 commit into uoftasic:main from vproHacks:slot-4-vproHacks. The tabs read Conversation 0, Commits 1, Checks 4 and Files changed 5, with +148 and -30, and Merge status and Code buttons sit in the upper right corner. The merge box says Review required: At least 1 approving review is required by reviewers with write access. Under Some checks haven't completed yet, gds / precheck (pull_request) has started, gds / viewer (pull_request) is skipped, and docs / docs (pull_request) and gds / gds (pull_request) passed in 39s and 1m; docs, gds and precheck are marked Required. Then: Merging is blocked, New changes require approval from someone other than the last pusher; Copilot cannot watch this pull request, Agent Merge is not supported for pull requests from forks; an unticked box, Merge without waiting for requirements to be met (bypass rules); and a greyed Merge pull request button."}
+   ![Your pull request on your partner's repository, in our test, where uoftasic/ic102-partner-sandbox-a stood in for the partner's. The line under the title names the base, uoftasic:main, and the branch in the fork. Docs and gds have passed, and precheck is still running. The bypass box near the bottom is there because the account that opened the pull request also owns the organisation; the ruleset gives the bypass only to the repository's admin, so you won't have it on your partner's repository.](../assets/img/ic102-a-fork-pr-author.png){width=760 fig-alt="A pull request titled Claim slot 4 for vproHacks's inverter #1, marked Open, with the line: vproHacks wants to merge 1 commit into uoftasic:main from vproHacks:slot-4-vproHacks. The tabs read Conversation 0, Commits 1, Checks 4 and Files changed 5, with +148 and -30, and Merge status and Code buttons sit in the upper right corner. The merge box says Review required: At least 1 approving review is required by reviewers with write access. Under Some checks haven't completed yet, gds / precheck (pull_request) has started, gds / viewer (pull_request) is skipped, and docs / docs (pull_request) and gds / gds (pull_request) passed in 39s and 1m; docs, gds and precheck are marked Required. Then: Merging is blocked, New changes require approval from someone other than the last pusher; Copilot cannot watch this pull request, Agent Merge is not supported for pull requests from forks; an unticked box, Merge without waiting for requirements to be met (bypass rules); and a greyed Merge pull request button."}
 
 Check: your pull request is open on your partner's repository, with one commit that changes those
 five files.
@@ -222,16 +222,15 @@ What happens to an open pull request when `main` changes under it?
    A `pull_request` run uses the workflow files from the pull request itself, so read
    **Files changed** first and check that nothing under `.github/` changed. Then click
    **Awaiting approval**, in the upper right corner of the page, to open the **Merge status** panel,
-   and click
-   **Approve workflows to run** in it
+   and click **Approve workflows to run** in it
    ([approving workflow runs from forks](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/approve-runs-from-forks#approving-workflow-runs-on-a-pull-request-from-a-public-fork)).
    Do this before you merge anything of your own in step 4, because once the pull request has a
    conflict it gets no runs at all.
 
    Those two labels are from GitHub's documentation. In both of our tests of this lab, the pull
    request came from an account with write access to the repository, so GitHub never held its runs
-   and we never saw the panel. The button in the upper right corner read **Merge status** then, as
-   in the picture in Part 2, step 7.
+   and we never saw the panel. With nothing held, the button in the upper right corner read
+   **Merge status**, as in the picture in Part 2, step 7.
 
    You should see `docs`, `gds` and `precheck` run and pass, and `viewer` skipped. The merge box
    lists `docs / docs (pull_request)`, `gds / gds (pull_request)` and
@@ -263,12 +262,12 @@ What happens to an open pull request when `main` changes under it?
    conflict with your `main` now. Then open it. You should see "This branch has conflicts that
    must be resolved", and no new runs, because GitHub's documentation says "Workflows will not run
    on `pull_request` activity if the pull request has a merge conflict." The checks box keeps the
-   results of the runs the pull request already had, under the heading "Checks awaiting conflict
-   resolution". While the conflict lasts, the merge box also drops "Review required" and the
-   bypass box.
+   results of the runs that the pull request already had, under the heading "Checks awaiting
+   conflict resolution". While the conflict lasts, the merge box also drops "Review required" and
+   the bypass box.
 
    <!-- Screenshot: uoftasic/ic102-partner-sandbox-a#1 on Nov 16, 2026, a pull request from vproHacks's fork, after #2 (from a branch of the organisation's repository) was merged; the organisation stood in for the partner. Seen by vproHacks, who owns the organisation. -->
-   ![Your partner's pull request once your claim is merged: the checks it had, and the four files that conflict. In our test the roles were the other way round: this is our pull request from a fork to uoftasic/ic102-partner-sandbox-a, which stood in for a partner's repository, after the organisation merged its own claim.](../assets/img/ic102-a-fork-pr-conflict.png){width=640 fig-alt="The merge box of a pull request whose last commit is Claim slot 4 for vproHacks's inverter. Checks awaiting conflict resolution: 1 skipped, 3 successful checks. gds / viewer (pull_request) is skipped, and docs / docs, gds / gds and gds / precheck (pull_request) were successful, each marked Required. This branch has conflicts that must be resolved: Use the command line to resolve conflicts before continuing, next to a Resolve conflicts menu, and the files gds/tt_um_ic102a_sandbox.gds, info.yaml, layout/slots.tcl and lef/tt_um_ic102a_sandbox.lef. Below, Copilot cannot watch this pull request, and a greyed Merge pull request button with no bypass box."}
+   ![Your partner's pull request once your claim is merged: the checks it had, and the four files that conflict. In our test the roles were the other way round. This is our pull request from a fork to uoftasic/ic102-partner-sandbox-a, which stood in for a partner's repository, after the organisation merged its own claim.](../assets/img/ic102-a-fork-pr-conflict.png){width=640 fig-alt="The merge box of a pull request whose last commit is Claim slot 4 for vproHacks's inverter. Checks awaiting conflict resolution: 1 skipped, 3 successful checks. gds / viewer (pull_request) is skipped, and docs / docs, gds / gds and gds / precheck (pull_request) were successful, each marked Required. This branch has conflicts that must be resolved: Use the command line to resolve conflicts before continuing, next to a Resolve conflicts menu, and the files gds/tt_um_ic102a_sandbox.gds, info.yaml, layout/slots.tcl and lef/tt_um_ic102a_sandbox.lef. Below, Copilot cannot watch this pull request, and a greyed Merge pull request button with no bypass box."}
 
 Check: your claim is merged into your `main`, and your partner's pull request shows a conflict.
 
@@ -408,7 +407,7 @@ What happens to an approval when you push again?
 
    </details>
 
-   ![Your pull request on your partner's repository after the merge is pushed, from our test, where uoftasic/ic102-partner-sandbox-a stood in for the partner's: no conflict, the three required checks green again, viewer skipped, and still "Review required" and "Merging is blocked". Nobody had approved it in our test, so this picture can't show an approval being dismissed. Its runs weren't held either, because the account that pushed owns the organisation.](../assets/img/ic102-a-fork-pr-resolved.png){width=640 fig-alt="A pull request timeline: vproHacks and others added 2 commits, Claim slot 4 for vproHacks's inverter (2d4528e) and Merge remote-tracking branch 'upstream/main' into slot-4-vproHacks (be2c89e), both with green ticks. The merge box says Review required: At least 1 approving review is required by reviewers with write access. All checks have passed, 1 skipped, 3 successful checks: gds / viewer (pull_request) is skipped, and docs / docs, gds / gds and gds / precheck (pull_request) were successful in 49s, 1m and 1m, each marked Required. Then: Merging is blocked, New changes require approval from someone other than the last pusher; Copilot cannot watch this pull request; an unticked bypass box; and a greyed Merge pull request button."}
+   ![Your pull request on your partner's repository once the merge is pushed, in our test, where uoftasic/ic102-partner-sandbox-a stood in for the partner's. The conflict is gone, the three required checks are green again and viewer is skipped, and it still says "Review required" and "Merging is blocked". Nobody had approved it, so the picture can't show an approval being dismissed. Its runs weren't held either, because the account that pushed owns the organisation.](../assets/img/ic102-a-fork-pr-resolved.png){width=640 fig-alt="A pull request timeline: vproHacks and others added 2 commits, Claim slot 4 for vproHacks's inverter (2d4528e) and Merge remote-tracking branch 'upstream/main' into slot-4-vproHacks (be2c89e), both with green ticks. The merge box says Review required: At least 1 approving review is required by reviewers with write access. All checks have passed, 1 skipped, 3 successful checks: gds / viewer (pull_request) is skipped, and docs / docs, gds / gds and gds / precheck (pull_request) were successful in 49s, 1m and 1m, each marked Required. Then: Merging is blocked, New changes require approval from someone other than the last pusher; Copilot cannot watch this pull request; an unticked bypass box; and a greyed Merge pull request button."}
 
 Check: your branch has a merge commit, `make lvs` matches and `make precheck` passes on it, and
 the pull request shows no conflict.
@@ -418,10 +417,9 @@ the pull request shows no conflict.
 1. When your partner has pushed their merge, look at their pull request again. If its runs are
    waiting for approval again, approve them as you did in Part 3, step 1, reading
    **Files changed** first. Then look at the checks, the new render, and the `slots.tcl` and
-   pinout lines, which now hold both claims. When it's right, approve it (**Submit review** on
-   **Files changed**, then **Approve** and **Submit review** in the **Finish your review** dialog),
-   then click **Merge pull request** and **Confirm merge**.
-   GitHub's
+   pinout lines, which now hold both claims. When it's right, approve it: click **Submit review**
+   on **Files changed**, select **Approve** in the **Finish your review** dialog, and click
+   **Submit review** there. Then click **Merge pull request** and **Confirm merge**. GitHub's
    [merging a pull request](https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/merging-a-pull-request#merging-a-pull-request)
    gives those two clicks for a merge commit, the only kind the ruleset allows. You have to do this
    yourself, because your partner has no write access to your repository. The merge is a push to
