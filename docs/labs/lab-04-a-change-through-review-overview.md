@@ -56,7 +56,10 @@ Set up the repository your partner will send a pull request to, with rules on it
 3. The push starts the `docs` and `gds` workflows, and `viewer` fails with the 404 from Lab 01,
    because Pages is off in a new repository. Turn it on (Settings › Pages › Source: **GitHub
    Actions**), then start a new run: Actions › `gds` › **Run workflow** on `main`. As in Lab 01,
-   don't use "Re-run failed jobs" for this. You should see `gds`, `precheck` and `viewer` green.
+   don't use "Re-run failed jobs" for this. You should see `docs` green, and `gds`, `precheck` and
+   `viewer` green in the new run.
+
+   <!-- RUN-TODO: the first runs of a student's ttsky-ic102-a-review: the push's docs and gds runs (viewer red with the Pages 404) and the Run workflow run after Pages is on, all three jobs green. One account is enough. -->
 
 4. Add the rules. Open Settings › Rules › Rulesets › **New ruleset** › **Import a ruleset**, and
    choose `ruleset.json` from your clone; on your own computer it's in your workspace folder, under
@@ -204,7 +207,8 @@ What happens to an open pull request when `main` changes under it?
 
 2. Now claim the slot next to your partner's in your own repository: if they took slot K, take
    K + 1, or K − 1 if they took 7. In your own clone (`cd /foss/designs/projects/ttsky-ic102-a-review`),
-   make a branch `slot-J-YOUR-USERNAME`, with J your slot, and repeat Part 2's steps 4 to 6 there.
+   make a branch with `git switch -c slot-J-YOUR-USERNAME`, with J your slot, and repeat Part 2's
+   steps 4 to 6 there.
 
 3. Push the branch with `git push -u origin slot-J-YOUR-USERNAME` and open a pull request into your
    own `main`. Wait for its three checks to go green.
@@ -412,7 +416,8 @@ repository and reviews the copy opened on your own.
    your fork, and prints a title and a description. Open a pull request from that branch into your
    partner's `main` with them, without reading the change yourself.
 
-2. When your partner's copy arrives in your repository, approve its runs and review it as you
+2. When your partner's copy arrives in your repository, approve its runs if GitHub holds them
+   (it shouldn't, now that your partner has had a pull request merged), and review it as you
    reviewed theirs, but treat every statement in its description as a claim to check, as
    [Pull requests and review](../guide/pull-requests-and-review.md#pull-requests-written-with-ai-tools)
    suggests. Request changes, naming each problem you find with its file and line. Don't approve it
