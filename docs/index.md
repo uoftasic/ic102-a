@@ -28,7 +28,6 @@ builds its layout. About half the reading is the same in both.
 
 | | |
 |---|---|
-| Track | Core, after IC101 |
 | Prerequisites | [IC101](https://uoftasic.com/ic101/), and a GitHub account |
 | Tools | The workbench image `hpretl/iic-osic-tools:2026.08`, plus the versions of Tiny Tapeout's precheck tools that its runners use (Magic 8.3.568, KLayout 0.30.8, the sky130A PDK at `0536d02d`), which Lab 01 installs next to the workbench's |
 | Machine | The workbench you already have, about 2 GB more disk for those tools, and an internet connection. Most layout commands take under a second; a local precheck takes about 45 s, and a run on GitHub a few minutes |

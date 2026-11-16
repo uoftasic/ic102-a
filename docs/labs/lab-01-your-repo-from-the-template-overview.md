@@ -125,7 +125,7 @@ you've changed anything?
    already, and whether each will pass. The template's `.github/workflows/` has two files.
 
 3. Open your repository's **Actions** tab. You should see two runs, `docs` and `gds`, both on the
-   commit "Initial commit", and both red.
+   commit "Initial commit", and both red, as the team's `asic-zoo-template` had on Nov 11, 2026.
 
    <details>
    <summary>Answer</summary>
@@ -248,12 +248,15 @@ Which of the `docs` workflow's complaints can you fix before you push?
 7. Before the runs finish, predict which of the two workflows will be green this time. Then open
    the `gds` run, then its `gds` job, then the failed step, and write down its first error line.
 
-   You should see `docs` green and `gds` red, with the same message that every push to the team's
-   `asic-zoo-template` produced before it had a layout:
+   You should see `docs` green and `gds` red, with the message that every push to the team's
+   `asic-zoo-template` produced before it had a layout. Theirs, still with the template's top
+   module, read:
 
    ```
-   cp: cannot stat 'gds/tt_um_yourname_ic102.gds': No such file or directory
+   cp: cannot stat 'gds/tt_um_example.gds': No such file or directory
    ```
+
+   Yours names your own top module.
 
    ![The same failure in uoftasic/asic-zoo-template: gds red after 42 s, precheck and viewer skipped. The person who pushed is shown as a team member.](../assets/img/ic102-a-run-no-gds.png){width=760}
 
@@ -326,14 +329,16 @@ What's the least layout that passes precheck?
    `.gitignore` and the kit's line in it keep precheck's and Magic's scratch files out of git.
 
 5. Predict which jobs of the new `gds` run will pass, then open it. You should see `gds` and
-   `precheck` green and `viewer` red, and in the `viewer` job's log this line, the same one
-   `protocol-emulator` got on Nov 15, 2026, with your own repository's address at the end:
+   `precheck` green and `viewer` red, and in the `viewer` job's log a line like the one
+   `protocol-emulator` got on Nov 15, 2026:
 
    ```
-   ##[error]Error: Failed to create deployment (status: 404) with build version ... Ensure GitHub Pages has been enabled: https://github.com/YOUR-USERNAME/ttsky-ic102-a/settings/pages
+   ##[error]Error: Failed to create deployment (status: 404) with build version 1cfc24b86f90762ad72f47f340634ccdaaa96d5f. Request ID 5018:223A0C:13B2E1A:3F3E2A0:6AFA17C5 Ensure GitHub Pages has been enabled: https://github.com/uoftasic/protocol-emulator/settings/pages
    ```
 
-   <!-- RUN-TODO: a student repository's first gds run with only viewer red; replace the quoted line with that run's line, build version included. -->
+   Yours has its own build version and request ID, and your repository's address at the end.
+
+   <!-- RUN-TODO: a student repository's first gds run with only viewer red, to quote here in place of protocol-emulator's line. -->
 
 Check: `precheck` is green on GitHub, and its table on the run's summary page matches the one
 `make precheck` printed.
