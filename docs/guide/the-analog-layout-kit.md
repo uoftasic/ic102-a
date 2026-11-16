@@ -34,9 +34,9 @@ The DEF also names the two power nets, `VDPWR` (1.8 V) and `VGND`, but doesn't p
 they go is up to you, within the rules below.
 
 The `_3v3` templates add a third power net, `VAPWR`, and are narrower: the 1x2 one is 145.36 µm
-wide, and its analog pins sit at different x positions. That's why setting `uses_vapwr: true` in
-`info.yaml` changes so much at once: precheck then compares your layout with the `_3v3` template,
-as you'll see in Lab 02's breakage 5.
+wide, and its analog pins sit at different x positions. So setting `uses_vapwr: true` in
+`info.yaml` changes a lot at once, because precheck then compares your layout with the `_3v3`
+template; you'll see this in Lab 02's breakage 5.
 
 ## magic_init_project.tcl
 
@@ -144,9 +144,9 @@ power stripes at the left edge, and the two stubs at the bottom right.
    <details>
    <summary>Answer</summary>
 
-   Not without trouble. Each stripe is 2 µm wide and runs from y = 5 µm up, and `ua[0]` is at
-   x = 151.81 to 152.71 µm with its wire running up from the bottom edge, so a stripe from 150 to
-   152 µm would sit on top of that wire, both on metal 4. The rules allow a stripe anywhere; your
-   own wiring decides where it can go.
+   Not without trouble, because of the one at 150 µm. Each stripe is 2 µm wide and runs from
+   y = 5 µm up, and `ua[0]` is at x = 151.81 to 152.71 µm with its wire running up from the bottom
+   edge, so a stripe from 150 to 152 µm would sit on top of that wire, both on metal 4. The rules
+   allow a stripe anywhere, so where you can put one depends on your own wiring.
 
    </details>
