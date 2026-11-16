@@ -1,9 +1,9 @@
 # Lab 01: Your repository from the template
 
 You'll make your own public repository from Tiny Tapeout's analog template and fill in the two
-files its checks read. Then you'll commit a placeholder layout, the template's empty 1x2 frame as
-Tiny Tapeout's own script draws it, and keep going until both of the template's workflows pass on a
-commit you made, the `viewer` job included. You'll come back to this repository in later labs.
+files its checks read. Then you'll commit a placeholder layout, the empty 1x2 frame that Tiny
+Tapeout's own script draws, and keep going until both of the template's workflows pass on a commit
+you made, the `viewer` job included. You'll come back to this repository in later labs.
 
 Package: [`labs/lab-01-your-repo-from-the-template/`](https://github.com/uoftasic/ic102-a/tree/main/labs/lab-01-your-repo-from-the-template)
 
@@ -151,7 +151,7 @@ you've changed anything?
    commit. `docs` fails because `info.yaml` and `docs/info.md` still hold the template's empty
    values and placeholder text. `gds` fails because the template has no layout in it: the `gds`
    job looks for `gds/tt_um_example.gds` and the file doesn't exist. You'll see both messages in
-   Parts 4 and 5.
+   Part 4.
 
    </details>
 
@@ -190,8 +190,8 @@ you've changed anything?
    ```
 
    A setting without `--global` goes into `.git/config` in the repository, which is on your own
-   disk, so it's still there after a restart. You'll repeat these three lines in each repository you clone or create in this
-   course.
+   disk, so it's still there after a restart. You'll repeat these three lines in each repository
+   you clone or create in this course.
 
 6. See which version of Tiny Tapeout's actions your workflows run:
 
@@ -199,9 +199,10 @@ you've changed anything?
    grep -n "uses:" .github/workflows/*.yaml
    ```
 
-   You should see four lines that end in `@ttsky26d`, the docs action in `docs.yaml` and
-   `custom_gds`, `precheck` and `viewer` in `gds.yaml`, plus two `actions/checkout@v4`. That tag is
-   now fixed in your repository's workflow files.
+   You should see four lines that end in `@ttsky26d` (the docs action in `docs.yaml`, and
+   `custom_gds`, `precheck` and `viewer` in `gds.yaml`), plus two that use `actions/checkout@v4`.
+   Your repository's own workflow files now name that tag, and they keep naming it whatever Tiny
+   Tapeout later changes in its template.
    [The analog workflows](../guide/the-analog-workflows.md) goes through what each of the three
    `gds.yaml` jobs does.
 
@@ -220,8 +221,8 @@ Which of the `docs` workflow's complaints can you fix before you push?
    make docs
    ```
 
-   `start.sh` lists what it added (`Makefile`, `layout/`, and a line in `.gitignore`). You should
-   then see:
+   `start.sh` lists what it added (`Makefile`, `layout/`, and a line in `.gitignore`). From
+   `make docs` you should then see:
 
    ```
    ## Errors in info.yaml
@@ -238,12 +239,14 @@ Which of the `docs` workflow's complaints can you fix before you push?
    ```
 
    That's the list that the `docs` run on the team's `hart-1` printed on GitHub, word for word,
-   because `make docs` runs the same function from the same commit of Tiny Tapeout's support tools.
+   because `make docs` runs the same function as the `docs` job, from the same commit of Tiny
+   Tapeout's support tools.
 
 2. Edit `info.yaml`. Fill in `title`, `author` and `description`; the author is public, so write
    whatever you're happy to see in a datasheet. Set `top_module` to `tt_um_` followed by your GitHub
    username and `_ic102`, in lower case with any `-` changed to `_`, because the name becomes a
-   Verilog module name. Give `ua[0]` and `ua[1]` a description each, such as
+   Verilog module name. In the `pinout` section, give `ua[0]` and `ua[1]`, the first two analog
+   pins, a description each, such as
    `"inverter input (not connected yet)"` and `"inverter output (not connected yet)"`. Leave
    `analog_pins: 2` and `tiles: "1x2"` as they are.
 
@@ -269,9 +272,9 @@ Which of the `docs` workflow's complaints can you fix before you push?
 7. Before the runs finish, predict which of the two workflows will be green this time. Then open
    the `gds` run, then its `gds` job, then the failed step, and write down its first error line.
 
-   You should see `docs` green and `gds` red, with the same message that every push to the team's
+   You should see `docs` green and `gds` red, with the message that every push to the team's
    `asic-zoo-template` produced before it had a layout. That repository still had the template's
-   top module, where yours has your own, so its message read:
+   top module, so its message names `tt_um_example` where yours names your own:
 
    ```
    cp: cannot stat 'gds/tt_um_example.gds': No such file or directory
@@ -349,9 +352,9 @@ What's the least layout that passes precheck?
    `.gitignore` and the kit's line in it keep precheck's and Magic's scratch files out of git.
 
 5. Predict which jobs of the new `gds` run will pass, then open it. You should see `gds` and
-   `precheck` green and `viewer` red. The `viewer` job's log will have a line like this one, from
-   `vproHacks/ic102-test-a`, a repository we made from the template to test this lab. Its `gds` run
-   on Nov 16, 2026 took 3 min 52 s:
+   `precheck` green and `viewer` red. We made `vproHacks/ic102-test-a` from the template to test
+   this lab, and its `gds` run on Nov 16, 2026 took 3 min 52 s. Its `viewer` job's log had this
+   line, and yours will have one like it:
 
    ```
    ##[error]Error: Failed to create deployment (status: 404) with build version e9a6f474deb92b2898e062ddb8f54bcf052b1d73. Request ID 5868:1C0C8:4B853B6:F3D6856:6AFAB74A Ensure GitHub Pages has been enabled: https://github.com/vproHacks/ic102-test-a/settings/pages
@@ -395,7 +398,7 @@ You're done when the latest commit on your repository's `main`, a commit you mad
 
 Questions:
 
-1. Your third run was started by hand, not by a push. Which commit did it check?
+1. Your Part 6 run was started by hand, not by a push. Which commit did it check?
 
    <details>
    <summary>Answer</summary>
