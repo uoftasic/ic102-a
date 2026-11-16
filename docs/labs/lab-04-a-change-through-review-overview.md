@@ -125,7 +125,7 @@ What does a layout change look like when you can't read it in a diff?
    repository it was made from unless you change it, and you already have a repository called
    `ttsky-ic102-a-review`. Make sure "Copy the main branch only" is ticked, because without it
    every branch in your partner's repository is copied into your fork as well, and then click
-   **Create fork**. GitHub's own description of this form is in
+   **Create fork**. GitHub describes the form in
    [forking a repository](https://docs.github.com/en/pull-requests/how-tos/work-with-forks/fork-a-repo#forking-a-repository).
 
 2. Clone your fork, set it up as you did your own, and add your partner's repository as a second
@@ -216,7 +216,8 @@ What happens to an open pull request when `main` changes under it?
    ([repository Actions settings](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#controlling-changes-from-forks-to-workflows-in-public-repositories)).
    A `pull_request` run uses the workflow files from the pull request itself, so read
    **Files changed** first and check that nothing under `.github/` changed. Then click
-   **Awaiting approval**, in the upper right corner, to open the **Merge status** panel, and click
+   **Awaiting approval**, in the upper right corner of the page, to open the **Merge status** panel,
+   and click
    **Approve workflows to run** in it
    ([approving workflow runs from forks](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/approve-runs-from-forks#approving-workflow-runs-on-a-pull-request-from-a-public-fork)).
    Do this before you merge anything of your own in step 4, because once the pull request has a
@@ -380,9 +381,9 @@ What happens to an approval when you push again?
    both `slots.tcl` and `info.yaml`.
 
 5. The conflict is gone, so the new commit can have runs again, but they may have to wait for your
-   partner's approval, as theirs waited for yours in Part 3. GitHub checks both the pull request's
-   author and whoever triggered the run, here you with your push, and you still have nothing
-   merged into your partner's repository
+   partner to approve them, the way you approved theirs in Part 3. To decide, GitHub checks both
+   the pull request's author and whoever triggered the run. Here both are you, and you still have
+   nothing merged into your partner's repository
    ([repository Actions settings](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#controlling-changes-from-forks-to-workflows-in-public-repositories)).
    Before you look, predict whether your pull request is still approved.
 
