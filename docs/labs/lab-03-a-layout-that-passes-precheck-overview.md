@@ -2,9 +2,9 @@
 
 You'll replace Lab 01's two stubs with a real circuit: the CMOS inverter from AD104 Lab 03,
 placed in your 1x2 tile, with its input on `ua[0]` and its output on `ua[1]`. The course gives
-you the cell and most of its wiring; you move the power stripes, draw the output wire yourself, and
-check the result three ways, with Magic DRC, with precheck, and with LVS, which precheck doesn't
-do. The change goes into `main` through a pull request in your own repository.
+you the cell and most of its wiring. You move the power stripes and draw the output wire yourself,
+then check the result three ways: with Magic DRC, with precheck, and with LVS, which precheck
+doesn't do. The change goes into `main` through a pull request in your own repository.
 
 Package: [`labs/lab-03-a-layout-that-passes-precheck/`](https://github.com/uoftasic/ic102-a/tree/main/labs/lab-03-a-layout-that-passes-precheck)
 
@@ -43,8 +43,8 @@ Start the change on a branch of its own, so that it reaches `main` only through 
 2. Read the new `layout/wires.tcl` from the top. It places the cell, `layout/cells/ic102_inv.mag`,
    at (140, 10) µm; runs each of its supply rails sideways on metal 1 and up a stack of vias to a
    power stripe on metal 4; and carries the input `A` east on metal 2 to `ua[0]`, up to metal 4 and
-   down to the pin. Near the end there's a TODO where the output wire belongs, and last, a line
-   `tieoff 136` that ties the 24 digital outputs to ground.
+   down to the pin. Near the end there's a TODO where the output wire belongs, and the last line,
+   `tieoff 136`, ties the 24 digital outputs to ground.
 
 3. Look at `layout/lvs/reference.spice`, the circuit the finished tile should contain. Find the
    one line that says what the inverter connects to, and the 24 lines that tie outputs to `VGND`.
@@ -106,9 +106,10 @@ Can you draw a wire that DRC, LVS and precheck all accept?
    full report: layout/build/lvs.report
    ```
 
-   The left column is your layout, the right the reference. The reference has a pin `ua[1]` on
-   the inverter's output; your layout has the inverter's output, `inv0/Y`, connected to no pin at
-   all. Precheck sees the same gap in its own way: `make precheck` fails one check,
+   The left column is your layout and the right column is the reference. The reference has a pin
+   `ua[1]` on the inverter's output, while in your layout the inverter's output, `inv0/Y`, isn't
+   connected to any pin at all. Precheck sees the same gap in its own way: `make precheck` fails
+   one check:
 
    ```
    | Analog pin check | ❌ Fail: Analog pin `ua[1]` is not connected to any adjacent metal but `analog_pins` is set to 2 in `info.yaml`. Either wire up `ua[1]` to your design or decrease `analog_pins` to 1. |
@@ -141,7 +142,7 @@ Can you draw a wire that DRC, LVS and precheck all accept?
 6. Run `make precheck`. You should see `Precheck passed` and all 15 checks ✅.
 
    If you're stuck, `solutions/wires.tcl` in the lab's package has one answer. Yours can differ
-   in every number and still be right; what counts is the three checks.
+   from it in every number and still be right, as long as it passes the three checks.
 
 Check: 0 DRC errors, `Circuits match uniquely.`, and precheck passed, all on the same build.
 
@@ -171,21 +172,22 @@ Which of the three checks catches a short between the input and the output?
    <details>
    <summary>Why do DRC and precheck both pass?</summary>
 
-   Nothing about the metal is illegal: it's wide, well clear of everything else, and joined
-   properly. It's just connected to the wrong thing, and neither DRC nor any of precheck's 15
-   checks compares the layout with what it's meant to be. LVS does: the extracted circuit has the
-   inverter's `A` and `Y` on one net, called `ua[0]`, where the reference has them on two. That's
-   why you run LVS yourself, every time, before you push a layout.
+   The metal itself is legal: it's wide, well clear of everything else, and joined properly. It's
+   just connected to the wrong thing, and neither DRC nor any of precheck's 15 checks compares the
+   layout with what it's meant to be. LVS does: the extracted circuit has the inverter's `A` and
+   `Y` on one net, called `ua[0]`, where the reference has them on two. So run LVS yourself, every
+   time, before you push a layout.
 
    </details>
 
 4. Put the number back, and run `make`, `make lvs` and `make precheck` until you're back to
    `Circuits match uniquely.` and a pass.
 
-5. One more, quickly: comment out the `tieoff 136` line, run `make`, `make lvs` and
-   `make precheck`, and compare. LVS lists the 24 output pins as unmatched; precheck passes again. Tiny
-   Tapeout's analog specs say "Connect any unused uo_out, uio_out and uio_oe pins to GND", and no
-   automatic check holds you to it. Put the line back and rebuild.
+5. Next, try a quicker mistake: comment out the `tieoff 136` line, run `make`,
+   `make lvs` and `make precheck`, and compare. LVS lists the 24 output pins as unmatched, and
+   precheck passes again. Tiny Tapeout's analog specs say
+   "Connect any unused uo_out, uio_out and uio_oe pins to GND", but no automatic check holds you
+   to it. Put the line back and rebuild.
 
 Check: you're back to a layout that passes all three, and you can say which check caught each
 mistake.
@@ -210,20 +212,20 @@ How does a layout change get into `main` in a way someone else can check?
 3. On GitHub, open a pull request from `lab03-inverter` into `main`. Your workflows run on every
    push, so the branch already has a `docs` and a `gds` run, and the pull request shows their
    results. In the description, say what changed, and paste the `Final result` line of
-   `make lvs` and the `Precheck passed` line of `make precheck` (its last line is only the path
-   of its reports), because LVS doesn't run on GitHub and the reviewer has no other way to know
-   you ran it.
+   `make lvs` and the `Precheck passed` line of `make precheck`. (Paste that line rather than
+   precheck's last line, which is only the path of its reports.) LVS doesn't run on GitHub, so
+   the reviewer has no other way to know that you ran it.
 
    ![A pull request in your own repository, with the LVS result in its description, and further down, the four checks the branch's push started: docs, and gds, precheck and viewer.](../assets/img/ic102-a-pr-lvs.png){width=760}
 
-4. When the branch's `gds` run is green, all three jobs, merge the pull request. The merge is a
+4. When the branch's `gds` run is green in all three jobs, merge the pull request. The merge is a
    push to `main`, so both workflows run again; wait for them.
 
 5. Download the `gds_render` artifact from the merge's `gds` run and open the PNG. You should see
    your tile as Tiny Tapeout renders it. The inverter is 3 µm wide in a 161 µm tile, so it's a
-   speck near the bottom right, with its short wires down to `ua[0]` and `ua[1]`. What stands out
-   at this scale is the two stripes and the strap along the top edge that ties the 24 outputs to
-   VGND.
+   speck near the bottom right, with its short wires down to `ua[0]` and `ua[1]`. At this scale
+   the two stripes stand out, and so does the strap along the top edge that ties the 24 outputs
+   to VGND.
 
    ![The tile with the inverter from the reference solution, rendered locally with the same gdstk call the gds_render step uses.](../assets/img/ic102-a-render-inverter-tile.png){width=320}
 
@@ -233,8 +235,8 @@ Check: the pull request is merged, and the `gds` run on the merge commit is gree
 
 ## Finishing
 
-You're done when the merge commit on your `main` has a green `gds` run, `gds`, `precheck` and
-`viewer` all passed, and `make lvs` on it prints `Final result: Circuits match uniquely.`
+You're done when the merge commit on your `main` has a green `gds` run, with `gds`, `precheck` and
+`viewer` all passed, and `make lvs` on that commit prints `Final result: Circuits match uniquely.`
 
 Questions:
 
@@ -244,8 +246,8 @@ Questions:
    <details>
    <summary>Answer</summary>
 
-   We tried it: precheck passes all 15 checks, because the stripes are legal wherever they are,
-   and LVS fails. The cell's two via stacks now land on empty space at x = 136 and 146 µm, so
+   We tried it: precheck passes all 15 checks, because the stripes are just as legal at 1 and
+   4 µm, and LVS fails. The cell's two via stacks now land on empty space at x = 136 and 146 µm, so
    the inverter's supplies connect to nothing, and neither do the 24 tied outputs, whose strap
    ends at the same empty spot. `make lvs` starts its list with
    `(no pin, node is inv0/VPWR)                |VDPWR` and goes on to the 24 outputs.
@@ -259,8 +261,8 @@ Questions:
    <summary>Answer</summary>
 
    The text files that built it (`wires.tcl`, `init.tcl`'s settings, the reference netlist), the
-   runs' results, precheck's table, the `gds_render` picture, and the LVS line you pasted. Lab 04
-   is built around reviewing from those.
+   runs' results, precheck's table, the `gds_render` picture, and the LVS line you pasted. In
+   Lab 04 you review a layout change from those.
 
    </details>
 
