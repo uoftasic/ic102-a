@@ -41,5 +41,5 @@ Two repository settings go with the ruleset:
 - Settings › Actions › General › "Approval for running fork pull request workflows from
   contributors": leave GitHub's default, "Require approval for first-time contributors". That means
   anyone who has never had a commit or pull request merged into the repository, which includes your
-  partner, so their pull request's runs wait until you press the approve button on the pull request.
+  partner, so their pull request's runs wait until you press **Approve and run workflows** on it.
   Read the change before you approve its runs: the runs are what will execute it.
