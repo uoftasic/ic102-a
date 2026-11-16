@@ -221,7 +221,7 @@ What happens to an open pull request when `main` changes under it?
    `gds / precheck (pull_request)`, each marked Required, and `gds / viewer (pull_request)` as
    skipped, and it says "Review required" and "Merging is blocked".
 
-   <!-- Screenshot: vproHacks/ic102-review-sandbox-a#1 on Nov 16, 2026, seen by its owner, who also opened it: the one-account live test used a branch of the same repository in place of a partner's fork, so the merge box also offers the owner's bypass. -->
+   <!-- Screenshot: vproHacks/ic102-review-sandbox-a#3 on Nov 16, 2026 (also used for the bypass shot below), seen by its owner, who also opened it: the one-account live test used a branch of the same repository in place of a partner's fork, so the merge box also offers the owner's bypass. #1 showed the same merge box earlier. -->
    ![A pull request waiting for its approval, with its three required checks passed and viewer skipped.](../assets/img/ic102-a-merge-blocked.png){width=760}
 
    <!-- RUN-TODO (two accounts): a pull_request run from a partner's fork into a student's ttsky-ic102-a-review. Confirm whether each later push to the pull request needs its runs approved again, and the approve button's exact label (GitHub's documentation, read Nov 16, 2026, says "Approve workflows to run"). Also Part 5, step 5: that a push after an approval dismisses it. The one-account live test of Nov 16, 2026 confirmed the rest with a same-repository pull request (vproHacks/ic102-review-sandbox-a#1, runs 43828896448 and 43828896478): viewer is skipped, and the merge box names the required checks as above. -->
