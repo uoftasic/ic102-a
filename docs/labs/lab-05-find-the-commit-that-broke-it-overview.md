@@ -1,9 +1,9 @@
 # Lab 05: Find the commit that broke it
 
-You'll get the history of a small analog project, 33 commits long, whose `gds` workflow went red
-some time after its last good release, by then too long ago for anyone to remember why. You'll
-write a script that `git bisect run` can trust, use it to find the commit that broke Magic DRC, and
-undo that commit through a pull request.
+You'll get the history of a small analog project, 33 commits long. Its `gds` workflow went red some
+time after its last good release, and that release is now too long ago for anyone to remember what
+broke it. You'll write a script that `git bisect run` can trust, use it to find the commit that
+broke Magic DRC, and undo that commit through a pull request.
 
 Package: [`labs/lab-05-find-the-commit-that-broke-it/`](https://github.com/uoftasic/ic102-a/tree/main/labs/lab-05-find-the-commit-that-broke-it)
 
@@ -20,8 +20,8 @@ This lab takes about 55 minutes.
 
 What does the history tell you before you test anything?
 
-1. Clone the history from the bundle file the course ships, into a folder named after the
-   repository it will have on GitHub in Part 5, and set your identity in it:
+1. Clone the history from the bundle file that the course ships, into a folder named after the
+   repository you'll put it in on GitHub in Part 5, and set your identity in it:
 
    ```bash
    mkdir -p /foss/designs/projects && cd /foss/designs/projects
@@ -111,7 +111,7 @@ Can you hand git Magic's exit status and be done?
    git bisect reset
    ```
 
-   You should see the first test pass and the second stop everything:
+   You should see the first test pass and the second stop the whole bisect:
 
    ```
    Bisecting: 12 revisions left to test after this (roughly 4 steps)
@@ -129,8 +129,8 @@ Can you hand git Magic's exit status and be done?
    git accepts 0 (good), 1 to 127 except 125 (bad) and 125 (skip). Anything else, and 255 in
    particular, it treats as the script itself having failed, and it stops. Magic's DRC script exits
    with `exit -1`, which the shell sees as 255, so the first commit with an error stops the bisect.
-   Mapping 255 to 1 would fix that. It wouldn't fix the first test, which is the subject of
-   Part 3.
+   Mapping 255 to 1 would fix that. It wouldn't fix what went wrong in the first test, though, and
+   that's what Part 3 is about.
 
    </details>
 
@@ -177,8 +177,8 @@ What can go wrong at a commit, besides the layout being bad?
    ```
 
    That's `5e0f367 Add a second inverter (WIP)`, a GDS cut short when Magic crashed while writing
-   it. Magic read what was there and reported 58 errors in the fragment, so here a script would
-   call a commit bad that can't be judged at all.
+   it. Magic read what was there and reported 58 errors in the fragment, so a script would call
+   this commit bad when in fact it can't be judged at all.
 
 3. Go back with `git checkout main`, and write your own script, `/foss/designs/projects/bisect.sh`,
    outside the repository so that bisect's checkouts can't change it. It has to exit:
@@ -201,7 +201,8 @@ What can go wrong at a commit, besides the layout being bad?
    ```
 
    You should see `v0.1 0`, `b08fd6d 125`, `5e0f367 125` and `main 1`. If not, fix the script
-   before Part 4: a bisect is only as good as the answers it's given.
+   before Part 4, because git decides from your script's exit status alone, and one wrong answer
+   sends the bisect into the wrong part of the history.
 
 Check: your script gives those four answers.
 
@@ -232,17 +233,18 @@ Check: your script gives those four answers.
    bisect found first bad commit
    ```
 
-   Seven tests, against the five you predicted, because git skipped `b08fd6d` and had to choose
-   another commit near the middle, and because skipping costs a test.
+   That's seven tests against the five you predicted, because git skipped `b08fd6d` and had to
+   choose another commit near the middle, and the skipped test still counts as one of the seven.
 
 2. Run `git bisect reset`, then read the commit: `git show 380836c -- layout/wires.tcl`. The
-   change is one number, the bottom edge of `Y`'s metal 2 moved from 13.26 to 12.85 µm. `A`'s metal 2
+   change is one number: the bottom edge of `Y`'s metal 2 moved from 13.26 to 12.85 µm. `A`'s metal 2
    runs from 12.3 to 12.75 µm. How far apart are they now, and what's the minimum?
 
    <details>
    <summary>Answer</summary>
 
-   12.85 − 12.75 = 0.10 µm, against 0.14 µm for metal 2 (`met2.2` in Magic's report). The
+   12.85 − 12.75 = 0.10 µm, against a minimum of 0.14 µm for metal 2 (`met2.2` in Magic's
+   report). The
    commit's message gives a good reason for a wider wire, and the wire is wider; it just grew
    towards its neighbour. git bisect never reads commit messages, only your script's exit status.
 
@@ -255,8 +257,8 @@ Check: your script gives those four answers.
    <summary>Answer</summary>
 
    `a4605db Put gds/ and lef/ back: the gds workflow reads them from the repository`. The script
-   calls `b08fd6d`, which has no GDS, good, so git looks only after it, and the next commit with a
-   GDS is the one that put it back. That commit's message would make a very convincing culprit. We
+   calls `b08fd6d` good even though it has no GDS, so git looks only at the commits after it, and
+   the next commit with a GDS is the one that put it back. That commit's message would make a very convincing culprit. We
    ran that script on this history to check, and that's the commit it named.
 
    </details>
@@ -280,7 +282,8 @@ Check: your bisect named `380836c`.
 
 2. Turn on Pages (Settings › Pages › Source: **GitHub Actions**), then start a new run: Actions ›
    `gds` › **Run workflow** on `main`, not "Re-run failed jobs". You should see `docs` green, and in
-   `gds`, `gds` and `viewer` green and `precheck` red, which is the state the README describes.
+   the `gds` workflow, the `gds` and `viewer` jobs green and `precheck` red. That's the state the
+   README describes.
 
    When we tested this on Nov 16, 2026 (with the history pushed to a branch of a test repository
    rather than to a repository of its own), the push's `docs` run passed, and its `gds` run had
@@ -292,8 +295,8 @@ Check: your bisect named `380836c`.
    | KLayout BEOL | ❌ Fail: Klayout beol failed with 1 DRC violations |
    ```
 
-   The Run workflow run after Pages was on took 2 min 51 s, with `gds` and `viewer` green and
-   `precheck` red with the same two rows.
+   The run started with Run workflow after Pages was on took 2 min 51 s, with `gds` and `viewer`
+   green and `precheck` red with the same two rows.
 
 3. Make a branch from `main` and revert the commit:
 
@@ -322,7 +325,7 @@ Check: your bisect named `380836c`.
    <summary>Why does the GDS conflict when the text file doesn't?</summary>
 
    Undoing a commit means applying its change backwards to today's files. For `wires.tcl` that's
-   easy, because nobody has touched that line since. Three later commits changed the GDS, and
+   easy, because no later commit changed that line. Three later commits changed the GDS, and
    git can't apply a binary change to a different binary, so it stops and asks.
 
    </details>
@@ -354,12 +357,12 @@ Check: your bisect named `380836c`.
    <!-- Screenshot: vproHacks/ic102-test-a#2 on Nov 16, 2026, whose base is the branch lab05-main that stood in for main of a ttsky-ic102-a-bisect. -->
    ![The revert's pull request, with its description and its four checks green.](../assets/img/ic102-a-pr-revert.png){width=640}
 
-6. When the branch's `gds` run is green, all three jobs, merge the pull request with
+6. When the branch's `gds` run is green in all three jobs, merge the pull request with
    **Create a merge commit**. The merge is a push to `main`, so it gets a run of its own. In our
    test, the branch's `gds` run passed all three jobs in 2 min 44 s (`gds` 45 s, `precheck`
    1 min 54 s, `viewer` 18 s), and the run on the merge passed all three in 3 min 8 s.
 
-Check: the `gds` run on `main` after the merge is green, all three jobs.
+Check: the `gds` run on `main` after the merge is green in all three jobs.
 
 ## Finishing
 
@@ -376,8 +379,8 @@ Questions:
 
    A `top_module` in `info.yaml` that doesn't match the cell inside the GDS, as in Lab 02's
    breakage 3: Magic would look for the wrong cell, find none, and check an empty one. Your script
-   catches that through the "couldn't be read" line, which is a reason to judge by Magic's log and
-   not by guesses about which files exist.
+   catches that through the "couldn't be read" line, and that's one reason to judge from Magic's
+   log rather than from guesses about which files exist.
 
    </details>
 
