@@ -23,8 +23,9 @@ cp /foss/designs/modules/ic102-a/labs/lab-02-read-the-red-x/DIAGNOSIS.md .     #
 | 4 | `layout/wires.tcl`: a 10 µm square of metal 5, then `make` |
 | 5 | `info.yaml`: `uses_vapwr: true` |
 
-The writeup doesn't say what each one does to the workflows; that's what you find out. It refuses
-to run on a working tree with uncommitted changes, so that each breakage gets a commit of its own.
+The writeup doesn't say what each one does to the workflows, because you're meant to find that
+out from the runs. `break.sh` won't run on a working tree with uncommitted changes, so that each breakage gets a
+commit of its own.
 
 ## Files
 

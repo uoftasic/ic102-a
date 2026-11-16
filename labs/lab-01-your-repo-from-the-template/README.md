@@ -2,9 +2,9 @@
 
 Writeup: [uoftasic.com/ic102-a → Lab 01](https://uoftasic.com/ic102-a/labs/lab-01-your-repo-from-the-template-overview.html)
 
-You make your own repository from Tiny Tapeout's analog template, fill it in, and commit a
-placeholder layout, the template's empty 1x2 frame drawn by Tiny Tapeout's own script, until every
-workflow passes. `start.sh` adds the course's layout kit to your repository.
+You make your own repository from Tiny Tapeout's analog template and fill it in. Then you commit a
+placeholder layout, the template's empty 1x2 frame as Tiny Tapeout's own script draws it, and keep
+going until every workflow passes. `start.sh` adds the course's layout kit to your repository.
 
 ## Run it
 

@@ -4,8 +4,9 @@ Writeup: [uoftasic.com/ic102-a → Lab 04](https://uoftasic.com/ic102-a/labs/lab
 
 Each student copies `sandbox/` into a new public repository in their own account,
 `ttsky-ic102-a-review`, and their partner changes it through a pull request from a fork,
-`ttsky-ic102-a-review-fork`. The writeup has the steps. Nothing in this lab uses an organization
-repository, and nobody has to create anything for the students beforehand.
+`ttsky-ic102-a-review-fork`. The writeup has the steps. Both repositories are in the students'
+own accounts, so the lab uses no organization repository, and nobody has to create anything for
+the students beforehand.
 
 ## Checking the sandbox locally
 
