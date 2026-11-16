@@ -1,4 +1,4 @@
-# layout/wires.tcl for the IC102-A cohort sandbox. You don't edit this file in
+# layout/wires.tcl for the IC102-A Lab 04 sandbox. You don't edit this file in
 # Lab 04: you claim a slot in layout/slots.tcl, and the `slot` command below
 # places your cell there and wires it.
 #
