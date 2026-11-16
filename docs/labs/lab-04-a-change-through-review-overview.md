@@ -303,9 +303,9 @@ Can you tell, without reading the GDS, whether a layout change is what its descr
    description that says slot 5 for a pinout that describes `ui[4]` is a mistake that precheck
    can't catch, because it doesn't read the digital pins' descriptions at all.
 
-5. Write the review. On **Files changed**, click **Review changes** above the changed code, type a
-   comment that says what should change and why, select **Request changes**, and click
-   **Submit review**
+5. Write the review. On **Files changed**, click **Submit review** above the changed code. It
+   opens the **Finish your review** dialog: type a comment that says what should change and why,
+   select **Request changes**, and click **Submit review** in the dialog
    ([submitting your review](https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/reviewing-proposed-changes-in-a-pull-request#submitting-your-review)).
    There usually is something, even if it's only a description that's missing the LVS line. Make
    each request specific enough to act on: your partner can act on "Paste the `Final result` line
@@ -418,8 +418,9 @@ the pull request shows no conflict.
 1. When your partner has pushed their merge, look at their pull request again. If its runs are
    waiting for approval again, approve them as you did in Part 3, step 1, reading
    **Files changed** first. Then look at the checks, the new render, and the `slots.tcl` and
-   pinout lines, which now hold both claims. When it's right, approve it (**Review changes** ›
-   **Approve** › **Submit review**), then click **Merge pull request** and **Confirm merge**.
+   pinout lines, which now hold both claims. When it's right, approve it (**Submit review** on
+   **Files changed**, then **Approve** and **Submit review** in the **Finish your review** dialog),
+   then click **Merge pull request** and **Confirm merge**.
    GitHub's
    [merging a pull request](https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/merging-a-pull-request#merging-a-pull-request)
    gives those two clicks for a merge commit, the only kind the ruleset allows. You have to do this
