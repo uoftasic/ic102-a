@@ -1,9 +1,9 @@
 # Lab 02: Read the red X
 
 You'll put five mistakes into your repository from Lab 01, one at a time. Each is one that a real
-analog project has made, or one that a precheck rule exists to catch. For each, you predict which
-job will fail, push, find the job, the step and the first error line on GitHub, and write them
-down in `DIAGNOSIS.md` before you fix it.
+analog project has made, or one that a precheck rule exists to catch. For each one, you predict
+which job will fail and push the commit. Then you find the failed job, the step inside it and the
+first error line on GitHub, and write them down in `DIAGNOSIS.md` before you fix the mistake.
 
 Package: [`labs/lab-02-read-the-red-x/`](https://github.com/uoftasic/ic102-a/tree/main/labs/lab-02-read-the-red-x)
 
@@ -15,9 +15,10 @@ Package: [`labs/lab-02-read-the-red-x/`](https://github.com/uoftasic/ic102-a/tre
 - Finish [Lab 01](lab-01-your-repo-from-the-template-overview.md): every workflow green on your
   latest commit.
 
-This lab takes about 1 h 10 min, a quarter of an hour per breakage, most of it waiting for runs.
-When we ran this lab on a test repository on Nov 16, 2026, each `gds` run took between 2 min 28 s
-and 3 min 11 s from the push to precheck's verdict, so expect about three minutes.
+This lab takes about 1 h 10 min, about a quarter of an hour for each breakage, most of it spent
+waiting for runs. When we ran this lab on a test repository on Nov 16, 2026, each `gds` run took
+between 2 min 28 s and 3 min 11 s from the push until precheck had finished, so expect about three
+minutes.
 
 ## Part 1: The routine
 
@@ -48,9 +49,9 @@ Set up the file you'll fill in, and learn the routine you'll repeat five times.
    4. On GitHub, find the failed run, the job, the step inside it, and the first error line, and
       write them down. Then write the cause in one sentence.
    5. Fix it, fill in the rest of the entry, commit (`DIAGNOSIS.md` included), push, and wait
-      until the run is green before the next breakage. Most fixes undo the breakage's commit,
-      and that commit holds your prediction in `DIAGNOSIS.md` as well as the breakage, so undo
-      it like this:
+      until the run is green before the next breakage. Most fixes are an undo of the breakage's
+      commit. That commit holds your prediction in `DIAGNOSIS.md` as well as the breakage, so
+      undo it like this:
 
       ```bash
       git revert --no-commit HEAD
@@ -60,19 +61,19 @@ Set up the file you'll fill in, and learn the routine you'll repeat five times.
       The first line puts every file back as it was before the breakage, and the second puts
       your notes back. A plain `git revert HEAD` would commit the undo straight away, with your
       prediction gone from `DIAGNOSIS.md`. Then finish the entry and commit, with
-      `git commit -am "Lab 02: fix breakage N"`. `break.sh` refuses to run on uncommitted
+      `git commit -am "Lab 02: fix breakage N"`. `break.sh` won't run while you have uncommitted
       changes, so each breakage gets a commit of its own.
 
    You can check a fix before you push with `make docs` and `make precheck`, which run the same
-   checks as the `docs` and `precheck` jobs. Don't use them to skip the prediction, though: the
-   point is to get faster at reading the runner's answer.
+   checks as the `docs` and `precheck` jobs. Don't use them to skip the prediction, though,
+   because this lab is for getting faster at reading the runner's answer.
 
-3. One thing to know about precheck's log: when a check fails, precheck doesn't stop. It runs all
-   15 and prints the table at the end, so on GitHub the table on the run's summary page is the
-   quickest way in. When something failed, the summary starts with a box headed "Some tests
-   failed", which counts the checks that passed and failed and shows the failure as a Python
-   traceback; the table below it has the same verdicts with plainer messages. Find it there
-   first, then look for the first error line in the log of the step that failed.
+3. When a check fails, precheck doesn't stop. It runs all 15 and prints the table at the end, so
+   on GitHub the quickest way in is the table on the run's summary page. When something failed,
+   the summary starts with a box headed "Some tests failed", which counts the checks that passed
+   and failed and shows the failure as a Python traceback; the table below it has the same results
+   with plainer messages. Find the failed check in the table first, then look for the first error
+   line in the log of the step that failed.
 
    Every precheck log, green or red, has a block near the start of "Run Tiny Tapeout Precheck"
    that begins with `error:` and ends with these two lines:
@@ -94,9 +95,10 @@ What does an empty pinout break?
 
 1. Apply breakage 1, read the diff, predict, commit and push.
 
-2. Find the failures. You should see two red runs this time, and `docs` red first, because it's one
-   short job (27 s in our test) against `gds` followed by `precheck`. The `docs` job's step "Build docs" fails in
-   its inner step "Check info.yaml and docs/info.md" with:
+2. Find the failures. You should see two red runs this time, and `docs` red first, because it's a
+   single short job (27 s in our test), while the `gds` workflow runs `gds` and then `precheck`.
+   The `docs` job's step "Build docs" fails in its inner step "Check info.yaml and docs/info.md"
+   with:
 
    ```
    ## Errors in info.yaml
@@ -118,9 +120,8 @@ What does an empty pinout break?
    Precheck reads `info.yaml` to learn which analog pins you use, because a `ua` pin is connected
    to the outside world only if `analog_pins` says so (the template's comment above the analog
    pins: "make sure to also set "analog_pins" above, else the pins won't be connected"). Its
-   analog pin check insists that the metal at each `ua` pin, `analog_pins` and the pinout all
-   agree, and a pin with metal on it and no description is one of the four ways they can
-   disagree.
+   analog pin check requires the metal at each `ua` pin, `analog_pins` and the pinout to agree,
+   and a pin with metal on it and no description is one of the four ways they can disagree.
 
    </details>
 
@@ -169,10 +170,10 @@ What does precheck say when the name on the outside of the file doesn't match th
    | urpm/nwell check | ❌ Fail: Klayout nwell_urpm failed |
    ```
 
-   and, if you go to the log for the first error line, 53 lines like this one before any other
-   error from the checks (on GitHub, after the Nix block from Part 1, step 3). This is from
-   `make precheck`; on GitHub the path starts with the runner's work folder instead of
-   `/foss/designs/projects`:
+   If you then go to the log for the first error line, you'll find 53 lines like the one below
+   before any other error from the checks (on GitHub, they come after the Nix block from Part 1,
+   step 3). This one is from `make precheck`; on GitHub the path starts with the runner's work
+   folder instead of `/foss/designs/projects`:
 
    ```
    ERROR: Pin clk not found in /foss/designs/projects/ttsky-ic102-a/tt_submission/tt_um_yourname_ic102_v2.lef
@@ -186,9 +187,9 @@ What does precheck say when the name on the outside of the file doesn't match th
    The cause is the mismatch: the GDS's top cell, and the LEF's macro, are still called
    `tt_um_yourname_ic102`, and precheck looks for `tt_um_yourname_ic102_v2`. The pin check looks
    for the pins of a macro by that name and finds none, which is why it prints a "not found" line
-   for every one of the 53 pins, VGND and VDPWR included, and the urpm/nwell check fails because the KLayout script it runs
-   is told to look at a top cell that isn't there. So here the first error line in the log is a
-   consequence, and the table is the better guide.
+   for every one of the 53 pins, VGND and VDPWR included. The urpm/nwell check fails because the
+   KLayout script it runs is told to look at a top cell that isn't there. So in this case the
+   first error line in the log is a consequence, and the table is the better guide.
 
    </details>
 
@@ -207,20 +208,19 @@ What does precheck say when the name on the outside of the file doesn't match th
    No errors found.
    ```
 
-   Magic was asked for a cell the GDS doesn't contain, so it made an empty one and checked that.
-   A check that ran on an empty cell still reports ✅, so when the rows around a ✅ are red, read
-   the log behind it too.
-   You'll meet this again in Lab 05.
+   Magic was asked for a cell that the GDS doesn't contain, so it made an empty one and checked
+   that. A check that ran on an empty cell still reports ✅, so when the rows around a ✅ are red,
+   read the log behind it too. You'll meet this again in Lab 05.
 
    </details>
 
-5. Fix it. The undo from Part 1 reverses the rename. If you'd rather keep the new name, set
+5. Fix it with the undo from Part 1, which reverses the rename. If you'd rather keep the new name, set
    `TOP_LEVEL_CELL` in `layout/init.tcl` to it as well and run `make`, so that the cell inside the
    GDS changes too.
 
 ## Part 5: Breakage 4
 
-Can a layout pass DRC and still be refused?
+Can a layout pass DRC and still fail precheck?
 
 1. Apply breakage 4, which adds a 10 µm square on metal 5 in an empty corner. Predict, commit and
    push.
@@ -233,15 +233,15 @@ Can a layout pass DRC and still be refused?
 
    (That's `make precheck`'s row; on GitHub the path is the runner's.)
 
-3. Why is a square that passes every DRC deck refused?
+3. Why does a square that passes every DRC deck fail precheck?
 
    <details>
    <summary>Answer</summary>
 
    Metal 5 is a legal layer in SKY130, so no DRC deck objects to a clean square of it. Tiny
    Tapeout's analog specs forbid it in your tile, though: "You are not allowed to use the metal 5
-   layer in your design." That's a rule of Tiny Tapeout's, not of the process, and precheck's
-   forbidden layer check is where it's enforced.
+   layer in your design." That's a rule of Tiny Tapeout's, not of the process, and precheck
+   enforces it with its forbidden layer check.
 
    </details>
 
@@ -283,10 +283,9 @@ Check: `DIAGNOSIS.md` has five entries, and the run after each fix is green.
 
 ## Part 7: A red X that isn't yours
 
-Not every failure is in your files. On Nov 9, 2026, a public project, `erik1567/ttsky26d-VCO`,
-had this `precheck` job fail
-([run 42570954316](https://github.com/erik1567/ttsky26d-VCO/actions/runs/42570954316)) in the step
-"Install sky130A PDK", before any check had run:
+Not every failure comes from your files. On Nov 9, 2026, the `precheck` job of a public project,
+`erik1567/ttsky26d-VCO`, failed in the step "Install sky130A PDK" before any check had run
+([run 42570954316](https://github.com/erik1567/ttsky26d-VCO/actions/runs/42570954316)):
 
 ```
 Version 0536d02d875c8f67dd7cca3902ac457e62f20005 not found locally, attempting
@@ -303,20 +302,20 @@ The read operation timed out
    Re-run it. The step failed while downloading the PDK from a server that didn't answer in time,
    which has nothing to do with your commit, and nothing you push would fix it. Use "Re-run failed
    jobs": that re-runs only `precheck`, which downloads the `tt_submission` artifact from the same
-   run and tries again. (The trap with re-running from Lab 01 is in the `viewer` job, which isn't
-   re-run here, because it passed.) If it fails the same way again, wait, or ask on Discord
-   whether others see it.
+   run and tries again. (The problem with re-running that you met in Lab 01 is in the `viewer`
+   job, and `viewer` isn't re-run here, because it passed.) If it fails the same way again, wait,
+   or ask on Discord whether others see it.
 
    </details>
 
-2. In `DIAGNOSIS.md`, under "A mistake no workflow catches", write one value in your repository
-   that would be wrong and that every workflow would still pass. Then check your answer against
-   the one below.
+2. In `DIAGNOSIS.md`, under "A mistake no workflow catches", write down one value in your
+   repository that could be wrong while every workflow still passes. Then check your answer
+   against the one below.
 
    <details>
    <summary>Answer</summary>
 
-   There are many. Swap the two descriptions in the pinout, so that `ua[0]` claims to be the
+   There are many; here are three. Swap the two descriptions in the pinout, so that `ua[0]` claims to be the
    output: precheck checks only that a used pin has a description, not what it says. Or set
    `clock_hz` to a wrong number, as `protocol-emulator` did with `clock_hz: 50`: it's an integer,
    so it passes. Or write a "How to test" in `docs/info.md` that describes a different design.
