@@ -43,5 +43,9 @@ Two repository settings go with the ruleset:
 - Settings › Actions › General › "Approval for running fork pull request workflows from
   contributors": leave GitHub's default, "Require approval for first-time contributors". That means
   anyone who has never had a commit or pull request merged into the repository, which includes your
-  partner, so their pull request's runs wait until you press **Approve and run workflows** on it.
-  Read the change before you approve its runs: the runs are what will execute it.
+  partner, so their pull request's runs wait until you approve them. GitHub's documentation gives
+  the steps
+  ([approving workflow runs from forks](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/approve-runs-from-forks#approving-workflow-runs-on-a-pull-request-from-a-public-fork)).
+  On the pull request's **Files changed** tab, read the change, because the runs will execute it.
+  Then press **Awaiting approval**, in the upper right corner of the page, which opens the
+  **Merge status** panel, and press **Approve workflows to run** in it.
