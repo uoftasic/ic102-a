@@ -126,7 +126,7 @@ Check: one commit on your branch that changes those five files, and nothing else
    wrote part of the change or the description, say which part, and what you checked yourself.
 
 3. Watch the checks. The sandbox's workflows run on `pull_request`, which the analog template
-   doesn't have; [The analog workflows](../guide/the-analog-workflows.md#the-sandbox-is-different)
+   doesn't have; [The analog workflows](../guide/the-analog-workflows.md#pull-requests-in-a-shared-repository)
    explains why the sandbox needs it. You should see `docs`, `gds` and `precheck` run and pass, and
    `viewer` skipped. The merge box says merging is blocked until someone approves.
 

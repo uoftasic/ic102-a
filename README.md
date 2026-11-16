@@ -1,80 +1,62 @@
 # IC102-A — Working in Tiny Tapeout Repos (Analog)
 
-Run an analog Tiny Tapeout project the way the team does: your own repo from the template, a layout that passes precheck, reviewed pull requests, and history you can use.
+Run an analog Tiny Tapeout project the way the team does: your own repo from the template, a
+layout that passes precheck, reviewed pull requests, and history you can use.
 
-This is the course and lab template for the UofT ASIC Team (`uoftasic`). The published site lives under `./docs`, and runnable labs, scripts, notebooks and data stay outside it, in the repo root. Quarto builds the site from the Markdown in `docs/` (configured in `docs/_quarto.yml`), with MathJax for the math and a PDF of every page, and `.github/workflows/site.yml` deploys it to GitHub Pages.
+Part of the UofT ASIC Team education materials (`uoftasic`).
+Course site: <https://uoftasic.com/ic102-a/> · Education hub: <https://edu.uoftasic.com/>
 
-Org: [github.com/uoftasic](https://github.com/uoftasic)
-
-## Live docs
-
-- This template: https://uoftasic.com/course-template/
-- Education hub: https://edu.uoftasic.com/
-- A course made from this template, once Pages is enabled: https://uoftasic.com/ic102-a/
-
-## Use this template
-
-1. On [uoftasic/course-template](https://github.com/uoftasic/course-template), click **Use this template** and create a repo named after the course id (for example `dd103` or `serdes-lab`).
-2. Clone it and fill in the course fields:
-
-```bash
-python3 scripts/init-template.py \
-  --id ic102-a \
-  --title "IC102-A — Working in Tiny Tapeout Repos (Analog)" \
-  --description "Run an analog Tiny Tapeout project the way the team does: your own repo from the template, a layout that passes precheck, reviewed pull requests, and history you can use."
-```
-
-3. Set **Settings → Pages → Source** to **GitHub Actions**.
-
-[TEMPLATE.md](TEMPLATE.md) has the checklist. The org is always `uoftasic`; only the course id, title and description are filled in.
-
-The sample pages already follow the course structure: a course path table on the home page, guide pages for reading, and lab writeups for doing. [AGENTS.md](AGENTS.md) explains it.
+The course is about the repository around an analog design rather than the design itself. Each
+lab ships the layout it needs, so it assumes IC101 and nothing else. The digital version is
+[IC102-D](https://github.com/uoftasic/ic102-d), and eight of the guide pages are shared with it.
 
 ## Quick start
 
+Everything runs inside the team workbench image `hpretl/iic-osic-tools:2026.08`, plus a copy of
+the tool versions Tiny Tapeout's precheck uses on GitHub (Magic 8.3.568, KLayout 0.30.8, sky130A
+at `0536d02d`), which `labs/common/tt-tools` installs next to the image's. Students set up through
+the shared `workspace` and the noVNC desktop from [IC101](https://uoftasic.com/ic101/);
+[Lab 01, Part 1](https://uoftasic.com/ic102-a/labs/lab-01-your-repo-from-the-template-overview.html)
+has the steps. In a terminal on that desktop:
+
 ```bash
-git clone https://github.com/uoftasic/ic102-a.git
-cd ic102-a
-
-# Docs (requires Quarto 1.11)
-quarto preview docs
-# → http://localhost:4200
-quarto render docs --profile pdf --to typst
-# → the whole course as one PDF in docs/_book/
-
-# Sample script
-python3 scripts/hello.py
-
-# Sample lab
-python3 labs/lab-01/src/main.py
+. /foss/designs/common/.designinit
+mod add ic102-a                     # first time only
+mod ic102-a
+cd labs/common/tt-tools
+make install && make selftest       # about 1.8 GB; selftest ends on "Precheck passed"
 ```
 
-Courses that need IIC-OSIC-TOOLS or SKY130 run in the shared [workspace](https://github.com/uoftasic/workspace) that students set up in IC101. Document those setup steps in the course instead of bundling Docker in every repo.
+The labs also need a GitHub account, because half of each one happens on GitHub.
 
-## Layout
+## Lab packages
 
-| Path | On Pages? | Purpose |
-|------|-----------|---------|
-| `docs/` | Yes | The Quarto site students read (`docs/_quarto.yml`) |
-| `docs/guide/` | Yes | Guide pages: reading only |
-| `docs/labs/` | Yes | Lab writeups: the steps students follow |
-| `labs/` | No | Runnable packages (HDL, Python, data, graders) |
-| `scripts/` | No | Team utilities and automation |
-| `notebooks/` | No | Exploratory and assignment notebooks |
-| `data/`, `figures/` | No | Shared datasets and source figures |
+| Path | What it is | Writeup |
+|---|---|---|
+| `labs/common/tt-tools/` | precheck's own tool versions, installed locally, and `make precheck` | used by every lab |
+| `labs/lab-01-your-repo-from-the-template/` | the layout kit a student's repository starts from | Lab 01 |
+| `labs/lab-02-read-the-red-x/` | `break.sh`: five numbered mistakes, and the `DIAGNOSIS.md` template | Lab 02 |
+| `labs/lab-03-a-layout-that-passes-precheck/` | the AD104 inverter, its wiring with one wire left out, and an LVS reference | Lab 03 |
+| `labs/lab-04-a-change-through-review/` | `sandbox/`: the cohort's shared repository, with its ruleset and review checklist | Lab 04 |
+| `labs/lab-05-find-the-commit-that-broke-it/` | a 33-commit layout history as a git bundle, and precheck's Magic DRC as a script | Lab 05 |
 
-## GitHub Pages
+Reference solutions are in each package's `solutions/`.
 
-| Setting | Value |
-|---------|--------|
-| Source | GitHub Actions |
+## Docs
 
-`.github/workflows/site.yml` renders `docs/` with Quarto whenever a push to `main` changes `docs/`, `scripts/check_site.py` or the workflow itself, and deploys `docs/_site`, which includes a PDF of every page and the whole-course PDF.
+The course site is built with Quarto from `./docs`. `docs/_quarto.yml` holds the site, sidebar
+and navbar, and `docs/_quarto-pdf.yml` builds the whole course as one PDF. With
+[Quarto](https://quarto.org/docs/get-started/) 1.11:
 
-## Contributing
+```bash
+quarto preview docs                           # http://localhost:4200
+quarto render docs --profile pdf --to typst   # the whole course as one PDF in docs/_book/
+```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+The eight shared guide pages (`git-in-one-page.md`, `templates-forks-and-clones.md`,
+`what-a-cloud-runner-is.md`, `reading-a-workflow-file.md`, `pull-requests-and-review.md`,
+`branch-rules.md`, `how-open-source-projects-work.md` and `history-as-evidence.md`) are written in
+the IC102-D repository and copied here by its `scripts/sync_shared_pages.py`. Edit them there.
 
-## License
-
-[MIT](LICENSE). Copyright UofT ASIC Team / `uoftasic`.
+[AGENTS.md](AGENTS.md) describes the course structure, and [CONTRIBUTING.md](CONTRIBUTING.md) the
+repository's conventions.

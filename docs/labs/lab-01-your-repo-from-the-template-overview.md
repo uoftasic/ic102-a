@@ -116,6 +116,8 @@ you've changed anything?
    it **Public**, and click **Create repository**. Public matters: GitHub Pages, which the `viewer`
    job needs, works only on public repositories on a free account.
 
+   ![The analog template on GitHub, with its "Use this template" button.](../assets/img/ic102-a-analog-template.png){width=760}
+
    <!-- SCREENSHOT-TODO: github.com, signed in, the "Create a new repository" page reached from "Use this template" on TinyTapeout/ttsky-analog-template, with Owner set to a personal account, the name ttsky-ic102-a, "Public" selected and "Include all branches" unticked. -->
    ![Creating a repository from the analog template.](../assets/img/ic102-a-create-from-template.png){width=640}
 
