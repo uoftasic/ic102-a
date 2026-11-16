@@ -100,14 +100,14 @@ push.
 
    Copy the token into your password manager now, because GitHub shows it only once.
 
-   <!-- SCREENSHOT-TODO: github.com, signed in, Settings > Developer settings > Personal access tokens > Fine-grained tokens > Generate new token: the name "IC102 workbench", the resource owner a personal account, Expiration 60 days, "Repository access" set to "All repositories", and "Repository permissions" with Contents and Workflows set to "Read and write". One account is enough; the same capture serves IC102-D. -->
+   <!-- SCREENSHOT-TODO: github.com, signed in, Settings > Developer settings > Personal access tokens > Fine-grained tokens > Generate new token: the name "IC102 workbench", the resource owner a personal account, Expiration 60 days, "Repository access" set to "All repositories", and "Repository permissions" with Contents and Workflows set to "Read and write". One account is enough; the same capture serves IC102-D. Not taken in the live test of Nov 16, 2026: that test was allowed to open only its two test repositories, the template page and Settings > Emails, and the token form is a security page. -->
    ![A fine-grained token with Contents and Workflows set to read and write.](../assets/img/ic102-token-permissions.png){width=640}
 
    [Getting started](../guide/getting-started.md#pushing-from-the-workbench) explains why it's
    this kind of token, why it needs Workflows as well as Contents, and why it lives in your password
    manager rather than in a file.
 
-   <!-- RUN-TODO: with this token, from the workbench: a push to the student's own ttsky-ic102-a, the first push of the Lab 04 sandbox copy (it adds workflow files) to a new empty ttsky-ic102-a-review, a branch pushed to the student's ttsky-ic102-a-review-fork, and GitHub's exact refusal when Workflows is left off, to quote in Getting started. Needs two accounts for the fork (a second account's ttsky-ic102-a-review to fork); the rest needs one. -->
+   <!-- RUN-TODO: with this token, from the workbench: a push to the student's own ttsky-ic102-a, the first push of the Lab 04 sandbox copy (it adds workflow files) to a new empty ttsky-ic102-a-review, a branch pushed to the student's ttsky-ic102-a-review-fork, and GitHub's exact refusal when Workflows is left off, to quote in Getting started. Needs two accounts for the fork (a second account's ttsky-ic102-a-review to fork); the rest needs one. The live test of Nov 16, 2026 couldn't do this: it wasn't allowed to make a token (an account setting), so its pushes used the GitHub CLI's own sign-in, which proves nothing about this token. -->
 
 Check: you have the no-reply address and the token saved somewhere you can paste from.
 
@@ -123,8 +123,7 @@ you've changed anything?
 
    ![The analog template on GitHub, with its "Use this template" button.](../assets/img/ic102-a-analog-template.png){width=760}
 
-   <!-- SCREENSHOT-TODO: github.com, signed in, the "Create a new repository" page reached from "Use this template" on TinyTapeout/ttsky-analog-template, with Owner set to a personal account, the name ttsky-ic102-a, "Public" selected and "Include all branches" unticked. -->
-   ![Creating a repository from the analog template.](../assets/img/ic102-a-create-from-template.png){width=640}
+   ![Creating a repository from the analog template: your own account as the owner, "Include all branches" off, and Public.](../assets/img/ic102-a-create-from-template.png){width=640}
 
 2. Before you look at the Actions tab, write down how many workflow runs you expect to find there
    already, and whether each will pass. The template's `.github/workflows/` has two files.
@@ -221,7 +220,7 @@ Which of the `docs` workflow's complaints can you fix before you push?
    - Missing 'How it works' section in docs/info.md
    - Missing 'How to test' section in docs/info.md
 
-   make: *** [Makefile:87: docs] Error 1
+   make: *** [Makefile:100: docs] Error 1
    ```
 
    That's the list `hart-1`'s `docs` run printed on GitHub, word for word, because `make docs` runs
@@ -287,6 +286,7 @@ What's the least layout that passes precheck?
    ```
    layout/init.tcl draws a cell called 'tt_um_analog_example', but top_module in info.yaml is 'tt_um_yourname_ic102'.
    Set TOP_LEVEL_CELL in the settings block of layout/init.tcl to tt_um_yourname_ic102.
+   make: *** [Makefile:71: check-top] Error 1
    ```
 
    `layout/init.tcl` is Tiny Tapeout's own `magic_init_project.tcl`, copied unchanged, and its
@@ -337,16 +337,15 @@ What's the least layout that passes precheck?
    `.gitignore` and the kit's line in it keep precheck's and Magic's scratch files out of git.
 
 5. Predict which jobs of the new `gds` run will pass, then open it. You should see `gds` and
-   `precheck` green and `viewer` red, and in the `viewer` job's log a line like the one
-   `protocol-emulator` got on Nov 15, 2026:
+   `precheck` green and `viewer` red, and in the `viewer` job's log a line like the one that
+   `vproHacks/ic102-test-a`, a repository we made from the template to test this lab, got on
+   Nov 16, 2026, when its `gds` run took 3 min 52 s:
 
    ```
-   ##[error]Error: Failed to create deployment (status: 404) with build version 1cfc24b86f90762ad72f47f340634ccdaaa96d5f. Request ID 5018:223A0C:13B2E1A:3F3E2A0:6AFA17C5 Ensure GitHub Pages has been enabled: https://github.com/uoftasic/protocol-emulator/settings/pages
+   ##[error]Error: Failed to create deployment (status: 404) with build version e9a6f474deb92b2898e062ddb8f54bcf052b1d73. Request ID 5868:1C0C8:4B853B6:F3D6856:6AFAB74A Ensure GitHub Pages has been enabled: https://github.com/vproHacks/ic102-test-a/settings/pages
    ```
 
    Yours has its own build version and request ID, and your repository's address at the end.
-
-   <!-- RUN-TODO: a student repository's first gds run with only viewer red, to quote here in place of protocol-emulator's line. -->
 
 Check: `precheck` is green on GitHub, and its table on the run's summary page matches the one
 `make precheck` printed.
@@ -367,15 +366,13 @@ How do you get the `viewer` job green without changing a file?
    story. Start a new run instead: Actions › gds › **Run workflow** › branch `main` › **Run
    workflow**. (A new push would start one too, but you have nothing to push.)
 
-   <!-- SCREENSHOT-TODO: github.com, signed in, a student's repository > Actions > the "gds" workflow selected in the left column, with the "Run workflow" dropdown open showing "Use workflow from Branch: main" and the green "Run workflow" button. -->
-   ![Starting a new gds run by hand.](../assets/img/ic102-a-run-workflow.png){width=640}
+   ![Starting a new gds run by hand: Actions, the gds workflow, and the Run workflow dropdown with branch main.](../assets/img/ic102-a-run-workflow.png){width=640}
 
 3. You should see all three jobs green. The `viewer` job's summary, on the run's summary page, has
    an "Open 3D viewer" link, and `https://YOUR-USERNAME.github.io/ttsky-ic102-a/` now redirects to
    Tiny Tapeout's viewer, with your frame and its two stubs in it.
 
-   <!-- SCREENSHOT-TODO: github.com, signed in, a student's ttsky-ic102-a > Actions > the green gds run started with "Run workflow": the graph with gds, precheck and viewer all green, scrolled to the viewer job's summary with "Open 3D viewer". -->
-   ![A gds run with every job green.](../assets/img/ic102-a-run-all-green.png){width=760}
+   ![A gds run with every job green, started with Run workflow in our test repository, and further down its summary page, the viewer job's links. The 2D preview under them is loaded from the Pages site, so it always shows the layout deployed last.](../assets/img/ic102-a-run-all-green.png){width=760}
 
 Check: the run is green from end to end.
 
