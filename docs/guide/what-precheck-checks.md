@@ -7,7 +7,7 @@ Precheck is a Python program, `precheck/precheck.py` in Tiny Tapeout's support t
 `precheck` job runs it on the GDS from the `tt_submission` artifact. Tiny Tapeout's own guide says
 of it that "All the checks need to be green to submit to the chip". The details on this page come
 from `precheck.py` at commit `9d13ff3`, which is the commit the runner checked out in November 2026,
-and from runs of it on this course's layouts and on one public project's. You'll see most of
+and from runs of it on this course's layouts and on public projects' layouts. You'll see most of
 these rows fail in [Lab 02](../labs/lab-02-read-the-red-x-overview.md), and find two mistakes in
 [Lab 03](../labs/lab-03-a-layout-that-passes-precheck-overview.md) that none of them catch.
 
