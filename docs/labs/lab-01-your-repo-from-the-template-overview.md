@@ -262,8 +262,7 @@ Which of the `docs` workflow's complaints can you fix before you push?
 
    You should see `docs` green and `gds` red, with the same message that every push to the team's
    `asic-zoo-template` produced before it had a layout. That repository still had the template's
-   top module, so its message read as below; yours has your own top module in place of
-   `tt_um_example`:
+   top module, where yours has your own, so its message read:
 
    ```
    cp: cannot stat 'gds/tt_um_example.gds': No such file or directory
