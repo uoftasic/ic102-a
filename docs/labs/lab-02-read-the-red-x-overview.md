@@ -16,8 +16,8 @@ Package: [`labs/lab-02-read-the-red-x/`](https://github.com/uoftasic/ic102-a/tre
   latest commit.
 
 This lab takes about 1 h 10 min, a quarter of an hour per breakage, most of it waiting for runs.
-In one public analog project's `gds` run on Nov 14, 2026, the `gds` job took 1 min 12 s and
-`precheck` 2 min 21 s, so expect about four minutes from a push to precheck's verdict.
+When we ran this lab on a test repository on Nov 16, 2026, each `gds` run took between 2 min 28 s
+and 3 min 11 s from the push to precheck's verdict, so expect about three minutes.
 
 ## Part 1: The routine
 
@@ -47,9 +47,21 @@ Set up the file you'll fill in, and learn the routine you'll repeat five times.
    3. Commit and push it: `git commit -am "Lab 02: breakage N"` and `git push`.
    4. On GitHub, find the failed run, the job, the step inside it, and the first error line, and
       write them down. Then write the cause in one sentence.
-   5. Fix it, commit (`DIAGNOSIS.md` included), push, and wait until the run is green before the
-      next breakage. `break.sh` refuses to run on uncommitted changes, so each breakage gets a
-      commit of its own.
+   5. Fix it, fill in the rest of the entry, commit (`DIAGNOSIS.md` included), push, and wait
+      until the run is green before the next breakage. Most fixes undo the breakage's commit,
+      and that commit holds your prediction in `DIAGNOSIS.md` as well as the breakage, so undo
+      it like this:
+
+      ```bash
+      git revert --no-commit HEAD
+      git checkout HEAD -- DIAGNOSIS.md
+      ```
+
+      The first line puts every file back as it was before the breakage, and the second puts
+      your notes back. A plain `git revert HEAD` would commit the undo straight away, with your
+      prediction gone from `DIAGNOSIS.md`. Then finish the entry and commit, with
+      `git commit -am "Lab 02: fix breakage N"`. `break.sh` refuses to run on uncommitted
+      changes, so each breakage gets a commit of its own.
 
    You can check a fix before you push with `make docs` and `make precheck`, which run the same
    checks as the `docs` and `precheck` jobs. Don't use them to skip the prediction, though: the
@@ -57,11 +69,22 @@ Set up the file you'll fill in, and learn the routine you'll repeat five times.
 
 3. One thing to know about precheck's log: when a check fails, precheck doesn't stop. It runs all
    15 and prints the table at the end, so on GitHub the table on the run's summary page is the
-   quickest way in. Find it there first, then look for the first error line in the log of the
-   step that failed.
+   quickest way in. When something failed, the summary starts with a box headed "Some tests
+   failed", which counts the checks that passed and failed and shows the failure as a Python
+   traceback; the table below it has the same verdicts with plainer messages. Find it there
+   first, then look for the first error line in the log of the step that failed.
 
-   <!-- SCREENSHOT-TODO: github.com, signed in, a student's ttsky-ic102-a > a red gds run's summary page, scrolled to the precheck job's summary with the "Tiny Tapeout Precheck Results" table and one ❌ row. -->
-   ![Precheck's table on a run's summary page.](../assets/img/ic102-a-precheck-summary.png){width=760}
+   Every precheck log, green or red, has a block near the start of "Run Tiny Tapeout Precheck"
+   that begins with `error:` and ends with these two lines:
+
+   ```
+          error: file 'nixpkgs' was not found in the Nix search path (add it using $NIX_PATH or -I)
+   will use bash from your environment
+   ```
+
+   Precheck's setup prints it and carries on, so skip past it when you look for the first error.
+
+   ![Precheck's table on a run's summary page, from breakage 1 in our test repository: the "Some tests failed" box at the top of the precheck summary, and further down, the table with its one ❌ row.](../assets/img/ic102-a-precheck-summary.png){width=760}
 
 Check: `DIAGNOSIS.md` is on GitHub and both workflows are green.
 
@@ -72,7 +95,7 @@ What does an empty pinout break?
 1. Apply breakage 1, read the diff, predict, commit and push.
 
 2. Find the failures. You should see two red runs this time, and `docs` red first, because it's one
-   short job (30 s in a `hart-1` run) against `gds` followed by `precheck`. The `docs` job's step "Build docs" fails in
+   short job (27 s in our test) against `gds` followed by `precheck`. The `docs` job's step "Build docs" fails in
    its inner step "Check info.yaml and docs/info.md" with:
 
    ```
@@ -80,8 +103,8 @@ What does an empty pinout break?
    - Please fill in the 'pinout' section
    ```
 
-   That's the line the team's `crosswalk` got on every push while its pinout was empty. Four
-   minutes later `precheck` fails too, with one ❌ row in its table:
+   That's the line the team's `crosswalk` got on every push while its pinout was empty. About
+   three minutes later `precheck` fails too, with one ❌ row in its table:
 
    ```
    | Analog pin check | ❌ Fail: Analog pin `ua[0]` is connected to some metal but the description of `ua[0]` in the pinout section of `info.yaml` is empty. Either add a description or remove any metal or via adjacent to `ua[0]`. |
@@ -101,8 +124,8 @@ What does an empty pinout break?
 
    </details>
 
-4. Fix it by putting your two descriptions back. `git revert HEAD` does that, and so does editing
-   `info.yaml`; either is fine here.
+4. Fix it by putting your two descriptions back. The undo from Part 1, step 2.5 does that, and so
+   does editing `info.yaml`; either is fine here.
 
 ## Part 3: Breakage 2
 
@@ -125,8 +148,8 @@ What happens when the layout touches an analog pin that `info.yaml` doesn't clai
 
    It depends on what you meant, which precheck can't know. If the metal on `ua[2]` is a mistake,
    remove it. If you meant to use a third pin, set `analog_pins: 3` and describe `ua[2]` in the
-   pinout. Here the stub is a mistake, so remove it: `git revert HEAD`, or delete the line from
-   `layout/wires.tcl` and run `make`.
+   pinout. Here the stub is a mistake, so remove it, with the undo from Part 1, or by deleting
+   the line from `layout/wires.tcl` and running `make`.
 
    </details>
 
@@ -146,9 +169,10 @@ What does precheck say when the name on the outside of the file doesn't match th
    | urpm/nwell check | ❌ Fail: Klayout nwell_urpm failed |
    ```
 
-   and, if you go to the log for the first error line, 53 lines like this one before anything else.
-   This is from `make precheck`; on GitHub the path starts with the runner's work folder instead
-   of `/foss/designs/projects`:
+   and, if you go to the log for the first error line, 53 lines like this one before any other
+   error from the checks (on GitHub, after the Nix block from Part 1, step 3). This is from
+   `make precheck`; on GitHub the path starts with the runner's work folder instead of
+   `/foss/designs/projects`:
 
    ```
    ERROR: Pin clk not found in /foss/designs/projects/ttsky-ic102-a/tt_submission/tt_um_yourname_ic102_v2.lef
@@ -190,7 +214,7 @@ What does precheck say when the name on the outside of the file doesn't match th
 
    </details>
 
-5. Fix it. `git revert HEAD` undoes the rename. If you'd rather keep the new name, set
+5. Fix it. The undo from Part 1 reverses the rename. If you'd rather keep the new name, set
    `TOP_LEVEL_CELL` in `layout/init.tcl` to it as well and run `make`, so that the cell inside the
    GDS changes too.
 
@@ -221,7 +245,7 @@ Can a layout pass DRC and still be refused?
 
    </details>
 
-4. Fix it with `git revert HEAD`.
+4. Fix it with the undo from Part 1.
 
 ## Part 6: Breakage 5
 
@@ -253,7 +277,7 @@ What does one word in `info.yaml` change?
 
    </details>
 
-4. Fix it with `git revert HEAD`, or by setting `uses_vapwr: false` again.
+4. Fix it with the undo from Part 1, or by setting `uses_vapwr: false` again.
 
 Check: `DIAGNOSIS.md` has five entries, and the run after each fix is green.
 
