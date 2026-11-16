@@ -86,8 +86,8 @@ Check: `make check-tools` ends with `All pinned tools are installed at the runne
 Setup for the rest of the course: an address for your commits, and a way for the workbench to
 push.
 
-1. On GitHub, open Settings › Emails, tick "Keep my email addresses private", and copy the
-   no-reply address it shows, of the form `ID+USERNAME@users.noreply.github.com`.
+1. On GitHub, open Settings › Emails, turn on the "Keep my email addresses private" switch, and
+   copy the no-reply address it shows, of the form `ID+USERNAME@users.noreply.github.com`.
    [Git in one page](../guide/git-in-one-page.md#commit-identity) says why.
 
 2. Make a token for the workbench to push with: Settings › Developer settings › Personal access
