@@ -1,7 +1,6 @@
 # IC102-A — Working in Tiny Tapeout Repos (Analog)
 
-Run an analog Tiny Tapeout project the way the team does: your own repo from the template, a
-layout that passes precheck, reviewed pull requests, and history you can use.
+Make an analog Tiny Tapeout project from the template on your own GitHub account and get its layout through precheck.
 
 Part of the UofT ASIC Team education materials (`uoftasic`).
 Course site: <https://uoftasic.com/ic102-a/> · Education hub: <https://edu.uoftasic.com/>

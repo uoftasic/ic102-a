@@ -18,7 +18,7 @@ project:
 
 website:
   title: "IC102-A — Working in Tiny Tapeout Repos (Analog)"
-  description: "Run an analog Tiny Tapeout project the way the team does: your own repo from the template, a layout that passes precheck, reviewed pull requests, and history you can use."
+  description: "Make an analog Tiny Tapeout project from the template on your own GitHub account and get its layout through precheck."
   site-url: https://uoftasic.com/ic102-a/
   repo-url: https://github.com/uoftasic/ic102-a
   repo-subdir: docs
