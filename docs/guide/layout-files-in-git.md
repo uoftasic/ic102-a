@@ -4,11 +4,11 @@ This page answers: *which of an analog project's files can git compare and merge
 and what does that change about committing, reviewing and resolving conflicts?*
 
 [Git in one page](git-in-one-page.md) describes git working on text, line by line. An analog
-repository is mostly not text: its main product, the GDS, is a binary file, and the files around it
-are a mix of sources you edit and outputs a tool writes. Knowing which is which decides what goes
-into a commit, what a reviewer can read, and what you do when two people's changes collide, which
-you'll do in [Lab 04](../labs/lab-04-a-change-through-review-overview.md) and again in
-[Lab 05](../labs/lab-05-find-the-commit-that-broke-it-overview.md).
+repository isn't all text: its main product, the GDS, is a binary file, and the files around it are
+a mix of sources you edit and outputs a tool writes. Which file is which tells you what goes into a
+commit, what a reviewer can read, and what to do when two people's changes collide. You'll resolve
+a conflict like that in [Lab 04](../labs/lab-04-a-change-through-review-overview.md), and another
+in [Lab 05](../labs/lab-05-find-the-commit-that-broke-it-overview.md).
 
 ## Sources and outputs
 
@@ -36,7 +36,7 @@ much with a diff of one: `layout/cells/inv_bob.mag` is 116 lines of rectangles.
 
 ## What a diff of a GDS shows
 
-git decides a file is binary when it contains bytes that aren't text, and then shows only that it
+git treats a file as binary when it contains bytes that aren't text, and then shows only that it
 changed. This is from a rehearsal of Lab 04, a student claiming slot 4 of the sandbox:
 
 ```
@@ -47,9 +47,9 @@ changed. This is from a rehearsal of Lab 04, a student claiming slot 4 of the sa
  lef/tt_um_ic102a_sandbox.lef |  57 ++++++++++-----------
 ```
 
-Five lines of that are readable, in `slots.tcl` and `info.yaml`. The GDS is a size. The LEF is
-text, but it's generated, and its 57 changed lines are Magic's bookkeeping. So a layout change
-is reviewed from other evidence:
+Five lines of that are readable, in `slots.tcl` and `info.yaml`. The GDS shows up only as a change
+in size. The LEF is text, but Magic generates it, and its 57 changed lines are Magic's bookkeeping.
+So a reviewer has to judge a layout change from other evidence:
 
 - the source files that built it, which are text;
 - the `gds_render` artifact, a picture of the layout;
@@ -61,12 +61,13 @@ the same point for reviewers in general, and the sandbox's `REVIEWING.md` turns 
 
 Two more things follow from the GDS being binary. First, every commit that changes it adds another
 whole version of it to the history, and every clone downloads all of them. Ours are about 20 KB,
-which is nothing, but a large layout is worth committing only when it has really changed. Git LFS, which keeps large files outside the history, isn't an option for a
-Tiny Tapeout project, because GitHub's documentation says a template "cannot include files stored
-using Git LFS", and a repository made from one starts without it. Second, Magic writes the time
-into every GDS it saves. Building the same sources twice gives two files that differ in 10 bytes, the
-dates in the file's headers, so `git status` shows your GDS as changed after any `make`, even when
-the layout didn't change. If you didn't mean to change the layout, `git checkout gds/ lef/` puts the
+which is nothing, but a large layout is worth committing only when it has really changed. Git LFS,
+which keeps large files outside the history, isn't an option for a Tiny Tapeout project, because
+GitHub's documentation says a template "cannot include files stored using Git LFS", and a
+repository made from one starts without it. Second, Magic writes the time into every GDS it saves.
+Building the same sources twice gives two files that differ in 10 bytes, the dates in the file's
+headers, so `git status` shows your GDS as changed after any `make`, even when the layout didn't
+change. If you didn't mean to change the layout, `git checkout gds/ lef/` puts the
 committed files back.
 
 ## Conflicts in binary files
