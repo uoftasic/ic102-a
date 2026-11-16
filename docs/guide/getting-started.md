@@ -2,8 +2,8 @@
 
 IC102-A is about the repository around an analog Tiny Tapeout design rather than the design
 itself. Every analog project on a Tiny Tapeout shuttle lives in a GitHub repository made from Tiny
-Tapeout's analog template, and that repository checks your layout on GitHub's machines each time
-you push. In this course you make one of those repositories, learn to read what its checks report,
+Tapeout's analog template, and the workflows in that repository check your layout on GitHub's
+machines each time you push. In this course you make one of those repositories, learn to read what its checks report,
 put a small layout in it that passes them, take a change through review with a partner, and use
 the history to find a commit that broke something.
 
@@ -18,8 +18,9 @@ haven't, nothing here depends on it.
 The [course path](../index.md#course-path) on the home page lists every page in the order to work
 through them. A Read row points to guide pages like this one, which explain things and have no
 commands for you to run. A Do row points to a lab writeup, and every command in the course is in a
-lab. Each lab is split into parts with numbered steps, most parts start with the question they
-answer, and each ends with a "You should see" or "Check" line that tells you whether it worked.
+lab. Each lab is split into parts with numbered steps. Most parts start with the question they
+answer, and every part ends with a "You should see" or "Check" line that tells you whether it
+worked.
 When a step asks a question, its answer is in a collapsed block under it; try it first, then open
 the block. Some steps ask you to predict a result before you see it, which is worth doing honestly,
 because a wrong prediction is the quickest way to find out what you misunderstood.
@@ -30,8 +31,8 @@ with `mod add ic102-a` in Lab 01.
 
 ## Two places your work happens
 
-Your work in this course happens in two places, and it's worth keeping them straight from the
-start.
+Your work in this course happens in two places, the workbench and GitHub, and it's worth keeping
+them straight from the start.
 
 **The workbench** is the IIC-OSIC-TOOLS desktop you set up in [IC101](https://uoftasic.com/ic101/).
 That's where you build layouts with Magic, run checks, and use git: every command in the labs is
@@ -39,20 +40,20 @@ typed into a terminal on that desktop. Your repositories go in a `projects` fold
 workspace, `/foss/designs/projects`, each in a folder with the repository's name. `/foss/designs`
 is the `workspace` folder on your own disk, so they survive when the workbench restarts, and
 `projects/` keeps them apart from `modules/`, where `mod` puts the courses. Anything outside
-`/foss/designs` doesn't survive: the container's home folder is thrown away with the container, and
-that has one consequence you'll meet in Lab 01, which is that git's settings have to be stored in
-each repository rather than in your home folder.
+`/foss/designs` doesn't survive a restart, because the container's home folder is thrown away with
+the container. That's why, in Lab 01, you'll store git's settings in each repository rather than
+in your home folder.
 
 **GitHub** is where your repository lives, and where its workflows run each time you push, on
 GitHub's machines (the *runners*). [What a cloud runner is](what-a-cloud-runner-is.md) explains
-what those are. Some things can only be done there: making the repository, turning on Pages,
-opening and reviewing pull requests, reading a run's results.
+what those are. Some things can only be done on GitHub: making the repository, turning on Pages,
+opening and reviewing pull requests, and reading a run's results.
 
 Tiny Tapeout's precheck, the most important of those results, doesn't use the workbench's tools.
 It installs its own versions of Magic, KLayout and the PDK on the runner, and a layout that passes
 with one set can fail with the other. So in Lab 01 you'll install precheck's versions next to the
-workbench's, and `make precheck` gives you the runner's verdict on your own machine before you
-push. [Your tools and the runner's tools](your-tools-and-the-runners-tools.md) has the details.
+workbench's, and `make precheck` then tells you, on your own machine and before you push, what
+precheck on the runner will say. [Your tools and the runner's tools](your-tools-and-the-runners-tools.md) has the details.
 IC102-A follows Tiny Tapeout's versions on purpose; the other courses use the workbench's.
 
 ## Your GitHub account
@@ -87,7 +88,7 @@ whose resource owner is your own account, for "All repositories", with two permi
 "Read and write":
 
 - **Contents**, which is what pushing commits needs.
-- **Workflows**, because GitHub refuses a push that adds or changes a file in
+- **Workflows**, because GitHub rejects a push that adds or changes a file in
   `.github/workflows/` unless the token has it. You won't edit a workflow in this course, but two
   pushes add workflow files all the same: the first push of your Lab 04 review repository, which
   is a copy of the course's sandbox, and the first push of Lab 05's prepared history.
@@ -96,12 +97,12 @@ whose resource owner is your own account, for "All repositories", with two permi
 make the token in Lab 01. Every push in the course goes to a repository you own: the four in the
 table above, including your fork of your partner's, from which your pull request goes to them. A
 fine-grained token for your own account covers those, and any other repository in your account,
-and nothing outside it. The other kind, a
-classic token with the `public_repo` scope, could push to every public repository your account can
-write to, including those of any organization you belong to (in `uoftasic`, members get write
-access to every repository by default), which is far more than the course needs. What a
-fine-grained token can't do is push to a repository someone else owns, even if they add you as a
-collaborator, so in Lab 04 you send your change to your partner from a fork, which you own.
+and nothing outside it. The other kind, a classic token with the `public_repo` scope, could push to
+every public repository your account can write to, including those of any organization you belong
+to (in `uoftasic`, members get write access to every repository by default), which is far more
+than the course needs. A fine-grained token can't push to a repository someone else owns, even if
+they add you as a collaborator, so in Lab 04 you send your change to your partner from a fork,
+which you own.
 
 When `git push` asks for a username and password, you give your GitHub username and paste the
 token. A line you run in each clone tells git to keep it in memory for 8 hours, so you're asked
@@ -112,8 +113,8 @@ finished the course.
 
 ## Using AI tools
 
-You may use AI tools such as Claude, ChatGPT or Copilot to help with the work in this course, to
-explain an error message, write a script or draft a pull request description. The rules are the
+You may use AI tools such as Claude, ChatGPT or Copilot to help with the work in this course, for
+example to explain an error message, write a script or draft a pull request description. The rules are the
 ones in [Pull requests and review](pull-requests-and-review.md#pull-requests-written-with-ai-tools):
 you answer for every line you submit, however it was written, and you say in a pull request which
 parts a tool wrote and what you checked yourself. The labs are built so that a check tells you
