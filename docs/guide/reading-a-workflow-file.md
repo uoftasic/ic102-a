@@ -4,9 +4,10 @@ This page answers: *what does a workflow file tell GitHub to do, and when a run 
 you find the one line that says why?*
 
 You won't need to write a workflow from scratch in this course, because Tiny Tapeout has written
-them for you. You will read them, though, and read the runs they produce, because a red cross on its
-own tells you only that something failed. The workflow file tells you what was supposed to happen, and the run's log tells
-you where it stopped. With both, most failures take a minute to explain. You'll practise this on
+them for you. You will read them, though, and read the runs they produce, because a red cross on
+its own tells you only that something failed. The workflow file tells you what was supposed to
+happen, and the run's log tells you where it stopped. With both, most failures take a minute to
+explain. You'll practise this on
 five broken commits in [Lab 02](../labs/lab-02-read-the-red-x-overview.md).
 
 ## What a push starts
@@ -86,8 +87,8 @@ Reading it from the top:
   template's workflows list `pull_request`, so opening a pull request doesn't start anything by
   itself; the runs you see on a pull request come from the pushes to its branch.
 - **`jobs`** holds four jobs, named `gds`, `precheck`, `gl_test` and `viewer`. Each runs on its own
-  fresh machine, chosen by **`runs-on: ubuntu-24.04`**, which is why
-  [What a cloud runner is](what-a-cloud-runner-is.md) matters here.
+  fresh machine, chosen by **`runs-on: ubuntu-24.04`**, of the kind that
+  [What a cloud runner is](what-a-cloud-runner-is.md) describes.
 - **`needs: gds`** makes a job wait until `gds` has finished, and run only if it succeeded. Jobs
   without `needs` start at once and in parallel, so the three jobs that need `gds` all start
   together when it's done.
@@ -107,8 +108,8 @@ The analog template's `gds.yaml` has the same shape with two differences. Its `g
 different action, `tt-gds-action/custom_gds`, which copies and converts your layout instead of
 building one. It also has no `gl_test` job.
 
-One step in the digital `test.yaml` is worth reading closely, because it shows how a step decides
-whether it passed:
+One step in the digital `test.yaml` is worth reading closely, because it shows how GitHub decides
+whether a step passed:
 
 ```yaml
       - name: Run tests
@@ -145,8 +146,8 @@ nested inside "Build GDS", so when "Build GDS" fails, you open it and look for t
 failed inside it.
 
 A tag is only a name for a commit, and its owner can move it. Tiny Tapeout's own README for the
-action describes doing exactly that with `git tag -fa` and `git push --force` when they update a
-release. The log records which commit the tag pointed to when your job ran, in a line near the top
+action describes moving a tag that way, with `git tag -fa` and `git push --force`, when they update
+a release. The log records which commit the tag pointed to when your job ran, in a line near the top
 of each job. This is from a `sentry` run on Nov 6, 2026, on the tag the current SKY130 templates
 use:
 
@@ -171,14 +172,13 @@ signing in. Here's the `gds` run that `hart-1` made when pull request #5 was mer
 
 ![A hart-1 gds run that stopped in its first job. The person who pushed is shown as a team member.](../assets/img/ic102-run-gds-stopped-early.png){width=760 fig-alt="A workflow run summary for gds.yaml. The gds job has a red cross and took 54 s. The precheck, gl_test and viewer jobs have grey skipped icons. The Annotations box lists 2 errors, both on gds and both reading Process completed with exit code 1. One artifact, GDS_logs, 56.2 KB, was uploaded."}
 
-The graph tells you two things at once. The `gds` job failed after 54 seconds, which is far too
-short for a layout build, and the other three jobs never ran: their grey icons mean "skipped",
-because each `needs: gds`. The **annotations** box lists the errors GitHub picked out of the log,
+The graph shows that the `gds` job failed after 54 seconds, which is far too short for a layout
+build, and that the other three jobs never ran: their grey icons mean "skipped", because each
+`needs: gds`. The **annotations** box lists the errors GitHub picked out of the log,
 but here both just say `Process completed with exit code 1.` They tell you that two steps failed,
 and not why. For that you need the log itself, which GitHub shows only when you're signed in.
 
-<!-- SCREENSHOT-TODO: hart-1 gds run 43752267356, gds job log, signed in, with the failed "Build GDS" step expanded and scrolled to the line "Error loading /home/runner/work/hart-1/hart-1/info.yaml: Project title cannot be empty, ...". -->
-![The failed step expanded in the log of the same job.](../assets/img/ic102-job-log-failed-step.png){width=760}
+![The same failure in the course's practice repository, where only the title was empty: the failed "Build GDS" step opens by itself, with its two failed sections, "Fetch verilog and build config" and "Linter output", expanded.](../assets/img/ic102-job-log-failed-step.png){width=760}
 
 Inside "Build GDS", the step "Fetch verilog and build config" stops with this, which is the cause:
 
@@ -240,8 +240,7 @@ The GDS action uses this for its linter output, Yosys warnings, a routing summar
 summary, so the numbers you're most likely to want after a build are on the summary page without
 opening any logs.
 
-<!-- SCREENSHOT-TODO: sentry gds run 43796948508, signed in, Summary page scrolled down to the gds job's summary showing the "Routing summary" and "Cell usage summary" sections. -->
-![The gds job's summary on a run's Summary page.](../assets/img/ic102-job-summary.png){width=760}
+![The gds job's summary on a run's Summary page, from the course's practice repository: the linter's result, the routing stats and the cell usage.](../assets/img/ic102-job-summary.png){width=760}
 
 Everything else a job wants to keep, it uploads as an **artifact**: a zip file attached to the run.
 Here is a fully green `gds` run from `sentry` on Nov 15, 2026
@@ -251,8 +250,8 @@ artifacts:
 ![A fully green sentry gds run and its six artifacts. The person who pushed is shown as a team member.](../assets/img/ic102-run-all-green.png){width=760 fig-alt="A workflow run summary for gds.yaml with status Success and total duration 5m 59s. gds took 3m 50s, precheck 2m 4s, gl_test 56s and viewer 17s, all green. The Artifacts table lists GDS_logs 17.2 MB, gatelevel_test_results 77.2 KB, gds_render 306 KB, github-pages 809 KB, precheck_reports 7.08 KB and tt_submission 921 KB."}
 
 `GDS_logs` holds your `src` folder and LibreLane's whole run folder, which is where the summary
-numbers come from. `tt_submission` is what the later jobs download to check and publish. `precheck_reports` and
-`gatelevel_test_results` are the evidence from those two jobs, and `gds_render` is a PNG picture of
+numbers come from. `tt_submission` is what the later jobs download to check and publish.
+`precheck_reports` and `gatelevel_test_results` are the evidence from those two jobs, and `gds_render` is a PNG picture of
 the layout. The `test` workflow uploads one more, `test-results`, with the waveform and the results
 file. Artifacts are deleted after 90 days by default, so download the ones you want to keep.
 
@@ -266,7 +265,6 @@ So a re-run can't pick up a fix you've committed since; for that you push, or st
 the **Run workflow** button. A re-run is for failures that had nothing to do with your files, such
 as a fault on GitHub's side or a repository setting you've since changed.
 
-<!-- SCREENSHOT-TODO: A failed run in a repository you own, signed in, with the "Re-run jobs" menu open showing "Re-run failed jobs" and "Re-run all jobs". -->
 ![The Re-run jobs menu on a failed run.](../assets/img/ic102-rerun-menu.png){width=640}
 
 There's a trap here for the `viewer` job, and `sentry` fell into it on Nov 6, 2026
@@ -289,7 +287,7 @@ new reason, with a count that went up by one each time:
 
 Every attempt uploads a Pages artifact called `github-pages`, and a re-run keeps the artifacts of
 the attempts before it, so from the second attempt on there were two or more with the same name,
-and the deploy step refused to choose. Tiny Tapeout fixed this in their action on Oct 28, 2026
+and the deploy step failed instead of picking one. Tiny Tapeout fixed this in their action on Oct 28, 2026
 (commit `16c727e`, "use a unique pages artifact name per run attempt"). The tags made since then,
 `ttihp27a` among them, have the fix, but `ttsky26d`, the tag in the current SKY130 templates, was
 made on Sep 18 and doesn't. The old artifact doesn't last long, though: the Pages artifact is
@@ -311,7 +309,7 @@ Build and deployment › Source
 ([publishing source](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)).
 A repository made from a template starts with Pages off, as
 [Templates, forks and clones](templates-forks-and-clones.md#what-the-template-gives-you) explains,
-so the first `gds` run in a new repository can build and check a layout perfectly and still end
+so the first `gds` run in a new repository can build and check a layout successfully and still end
 red. That was the state of `protocol-emulator`'s run on Nov 15, 2026
 ([run 43757724629](https://github.com/uoftasic/protocol-emulator/actions/runs/43757724629)):
 
@@ -336,7 +334,6 @@ Failed to deploy to GitHub Pages, please follow the link to troubleshoot: https:
 
 That FAQ entry says to change the Pages "Source from Deploy from a branch to GitHub Actions".
 
-<!-- SCREENSHOT-TODO: Settings > Pages of a repository you own, signed in, with Build and deployment > Source set to "GitHub Actions". -->
 ![Settings › Pages, with the source set to GitHub Actions.](../assets/img/ic102-settings-pages-source.png){width=640}
 
 On GitHub's Free plan, Pages works only in public repositories
