@@ -4,15 +4,16 @@ Writeup: [uoftasic.com/ic102-a → Lab 05](https://uoftasic.com/ic102-a/labs/lab
 
 `history.bundle` is a small analog project's history, 33 commits long, with a tag `v0.1` on the
 last commit everyone agrees was good. Somewhere after it, Magic DRC started failing. You write a
-script that `git bisect run` can trust, find the commit, and revert it in a pull request.
+script that `git bisect run` can trust, find the commit, and revert it in a pull request, in a
+repository of your own, `ttsky-ic102-a-bisect`.
 
 ## Run it
 
 In a workbench terminal:
 
 ```bash
-cd /foss/designs/projects
-git clone /foss/designs/modules/ic102-a/labs/lab-05-find-the-commit-that-broke-it/history.bundle ttsky-ic102-lab05
+mkdir -p /foss/designs/projects && cd /foss/designs/projects
+git clone /foss/designs/modules/ic102-a/labs/lab-05-find-the-commit-that-broke-it/history.bundle ttsky-ic102-a-bisect
 ```
 
 | Script | What it does |

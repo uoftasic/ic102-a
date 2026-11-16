@@ -70,9 +70,10 @@ under the same name:
 
 | Repository | Lab | Made how |
 |---|---|---|
-| `ttsky-ic102-a` | 01 to 03, and 05 | **Use this template** on Tiny Tapeout's analog template |
+| `ttsky-ic102-a` | 01 to 03 | **Use this template** on Tiny Tapeout's analog template |
 | `ttsky-ic102-a-review` | 04 | an empty repository, into which you push a copy of the course's sandbox |
 | `ttsky-ic102-a-review-fork` | 04 | **Fork** on your partner's `ttsky-ic102-a-review`, renamed, because you already have a repository with that name |
+| `ttsky-ic102-a-bisect` | 05 | an empty repository, into which you push a prepared history |
 
 Lab 04 is the one lab you do with a partner from the course. Each of you sends a pull request to
 the other's `ttsky-ic102-a-review`, and reviews the one that arrives in your own.
@@ -89,11 +90,11 @@ whose resource owner is your own account, for "All repositories", with two permi
 - **Workflows**, because GitHub refuses a push that adds or changes a file in
   `.github/workflows/` unless the token has it. You won't edit a workflow in this course, but two
   pushes add workflow files all the same: the first push of your Lab 04 review repository, which
-  is a copy of the course's sandbox, and the push of Lab 05's prepared history to a new branch.
+  is a copy of the course's sandbox, and the first push of Lab 05's prepared history.
 
-"All repositories" is there because the Lab 04 repositories don't exist yet when you make the token
-in Lab 01. Every push in the course goes to a repository you own: your `ttsky-ic102-a`, your review
-repository, and your fork of your partner's, from which your pull request goes to them. A
+"All repositories" is there because the Lab 04 and Lab 05 repositories don't exist yet when you
+make the token in Lab 01. Every push in the course goes to a repository you own: the four in the
+table above, including your fork of your partner's, from which your pull request goes to them. A
 fine-grained token for your own account covers exactly those and nothing else. The other kind, a
 classic token with the `public_repo` scope, could push to every public repository your account can
 write to, including those of any organization you belong to (in `uoftasic`, members get write

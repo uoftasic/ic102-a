@@ -10,23 +10,26 @@ Package: [`labs/lab-05-find-the-commit-that-broke-it/`](https://github.com/uofta
 ## Before you start
 
 - Read [History as evidence](../guide/history-as-evidence.md).
-- Finish [Lab 03](lab-03-a-layout-that-passes-precheck-overview.md). This lab uses your repository
-  from it, with Pages turned on, and the course tools from Lab 01.
+- Finish [Lab 03](lab-03-a-layout-that-passes-precheck-overview.md). This lab uses the course
+  tools from Lab 01 and your token, but not your `ttsky-ic102-a`: the history gets a repository of
+  its own in Part 5.
 
-This lab takes about 45 minutes.
+This lab takes about 55 minutes.
 
 ## Part 1: The history
 
 What does the history tell you before you test anything?
 
-1. Clone the history from the bundle file the course ships, and set your identity in it:
+1. Clone the history from the bundle file the course ships, into a folder named after the
+   repository it will have on GitHub in Part 5, and set your identity in it:
 
    ```bash
-   cd /foss/designs/projects
-   git clone /foss/designs/modules/ic102-a/labs/lab-05-find-the-commit-that-broke-it/history.bundle ttsky-ic102-lab05
-   cd ttsky-ic102-lab05
+   mkdir -p /foss/designs/projects && cd /foss/designs/projects
+   git clone /foss/designs/modules/ic102-a/labs/lab-05-find-the-commit-that-broke-it/history.bundle ttsky-ic102-a-bisect
+   cd ttsky-ic102-a-bisect
    git config user.name "Your Name"
    git config user.email "ID+USERNAME@users.noreply.github.com"
+   git config credential.helper 'cache --timeout=28800'
    ```
 
    A bundle is a whole repository in one file. The commits in it have fixed authors and dates, so
@@ -262,18 +265,26 @@ Check: your bisect named `380836c`.
 
 ## Part 5: Undo it through a pull request
 
-1. Put the history on GitHub as a branch of your own repository, so that its workflows run:
+1. Put the history on GitHub, so that its workflows run. Make a new repository (the **+** menu ›
+   **New repository**) with your own account as the owner, the name `ttsky-ic102-a-bisect`,
+   **Public**, and no README, `.gitignore` or licence. Then point your clone at it, instead of at
+   the bundle, and push `main`:
 
    ```bash
-   git remote add mine https://github.com/YOUR-USERNAME/ttsky-ic102-a.git
-   git push mine main:lab05-history
+   git remote set-url origin https://github.com/YOUR-USERNAME/ttsky-ic102-a-bisect.git
+   git push -u origin main
    ```
 
-   The `gds` run on `lab05-history` goes red on `precheck`, which is the state the README
-   describes. (Its `viewer` job publishes this project to your Pages site; your next push to
-   `main` puts your own back.)
+   The history includes `.github/workflows/`, so this is one of the pushes that needs your token's
+   Workflows permission.
 
-2. Make a branch from `main` and revert the commit:
+2. Turn on Pages (Settings › Pages › Source: **GitHub Actions**), then start a new run: Actions ›
+   `gds` › **Run workflow** on `main`, not "Re-run failed jobs". You should see `docs` green, and in
+   `gds`, `gds` and `viewer` green and `precheck` red, which is the state the README describes.
+
+   <!-- RUN-TODO: the first runs of a student's ttsky-ic102-a-bisect: the push's gds run (precheck red, viewer red with the Pages 404), and the Run workflow run after Pages is on (gds and viewer green, precheck red with the two failed rows), to quote here. One account is enough. -->
+
+3. Make a branch from `main` and revert the commit:
 
    ```bash
    git switch -c lab05-revert
@@ -299,7 +310,7 @@ Check: your bisect named `380836c`.
 
    </details>
 
-3. Resolve it the way you did in Lab 04: rebuild the GDS and LEF from the reverted sources, then
+4. Resolve it the way you did in Lab 04: rebuild the GDS and LEF from the reverted sources, then
    check and finish the revert:
 
    ```bash
@@ -313,27 +324,30 @@ Check: your bisect named `380836c`.
    `--no-edit` keeps git's message, `Revert "Widen Y's wire to ua[1]"`, instead of opening an
    editor. You should see `Final result: Circuits match uniquely.` and `Precheck passed`.
 
-4. Push the branch and open a pull request from `lab05-revert` into `lab05-history`, not into
-   `main`, in your own repository:
+5. Push the branch and open a pull request from `lab05-revert` into `main`:
 
    ```bash
-   git push mine lab05-revert
+   git push -u origin lab05-revert
    ```
 
    In the description, name the commit you're reverting, say how you found it, and paste the
-   `make lvs` and `make precheck` lines. Wait for the branch's `docs` and `gds` runs.
+   `make lvs` and `make precheck` lines. The template's workflows run on every push, so the branch
+   gets its own `docs` and `gds` runs, and the pull request shows them.
 
-   <!-- SCREENSHOT-TODO: github.com, signed in, a student's ttsky-ic102-a > "Open a pull request" with base set to lab05-history and compare set to lab05-revert, showing the base branch dropdown. -->
-   ![A pull request into lab05-history rather than main.](../assets/img/ic102-a-pr-base-branch.png){width=640}
+   <!-- SCREENSHOT-TODO: github.com, signed in, a student's ttsky-ic102-a-bisect > the pull request from lab05-revert into main, with a description naming 380836c and the make lvs and make precheck lines, and the checks box showing docs and gds green. One account is enough. -->
+   ![The revert's pull request, with its checks green.](../assets/img/ic102-a-pr-revert.png){width=640}
 
-   <!-- RUN-TODO: the gds run on a student's lab05-revert branch, all three jobs green; and the red precheck on lab05-history, to quote here. -->
+6. When the branch's `gds` run is green, all three jobs, merge the pull request with
+   **Create a merge commit**. The merge is a push to `main`, so it gets a run of its own.
 
-Check: the pull request's checks are green.
+   <!-- RUN-TODO: the gds run on a student's lab05-revert branch, all three jobs green, and the run on main after the merge, to quote here. One account is enough. -->
+
+Check: the `gds` run on `main` after the merge is green, all three jobs.
 
 ## Finishing
 
-You're done when your bisect has named `380836c`, and the pull request that reverts it, from
-`lab05-revert` into `lab05-history` in your repository, has green `docs` and `gds` runs.
+You're done when your bisect has named `380836c`, and `main` of your `ttsky-ic102-a-bisect`, with
+the revert merged, has a green `docs` run and a green `gds` run with all three jobs.
 
 Questions:
 
