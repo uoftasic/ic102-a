@@ -96,7 +96,7 @@ Can you hand git Magic's exit status and be done?
     142.600 12.710 142.740 12.750
    ```
 
-   and ends with `[INFO]: COUNT: 4`.
+   and, two lines from its end, `[INFO]: COUNT: 4`.
 
 2. Read `$LAB/first-try.sh`. It runs that script at whatever commit git has checked out and exits
    with its status. Before you run it, read the rule from the git manual that
@@ -282,7 +282,18 @@ Check: your bisect named `380836c`.
    `gds` › **Run workflow** on `main`, not "Re-run failed jobs". You should see `docs` green, and in
    `gds`, `gds` and `viewer` green and `precheck` red, which is the state the README describes.
 
-   <!-- RUN-TODO: the first runs of a student's ttsky-ic102-a-bisect: the push's gds run (precheck red, viewer red with the Pages 404), and the Run workflow run after Pages is on (gds and viewer green, precheck red with the two failed rows), to quote here. One account is enough. -->
+   When we tested this on Nov 16, 2026 (with the history pushed to a branch of a test repository
+   rather than to a repository of its own), the push's `docs` run passed, and its `gds` run had
+   `gds` green, `viewer` red with `Failed to create deployment (status: 404)`, and `precheck` red
+   with the two rows from Part 1:
+
+   ```
+   | Magic DRC | ❌ Fail: Magic DRC failed |
+   | KLayout BEOL | ❌ Fail: Klayout beol failed with 1 DRC violations |
+   ```
+
+   The Run workflow run after Pages was on took 2 min 51 s, with `gds` and `viewer` green and
+   `precheck` red with the same two rows.
 
 3. Make a branch from `main` and revert the commit:
 
@@ -299,6 +310,12 @@ Check: your bisect named `380836c`.
    CONFLICT (content): Merge conflict in gds/tt_um_ic102_lab05.gds
    Auto-merging layout/wires.tcl
    error: could not revert 380836c... Widen Y's wire to ua[1]
+   hint: After resolving the conflicts, mark them with
+   hint: "git add/rm <pathspec>", then run
+   hint: "git revert --continue".
+   hint: You can instead skip this commit with "git revert --skip".
+   hint: To abort and get back to the state before "git revert",
+   hint: run "git revert --abort".
    ```
 
    <details>
@@ -334,13 +351,13 @@ Check: your bisect named `380836c`.
    `make lvs` and `make precheck` lines. The template's workflows run on every push, so the branch
    gets its own `docs` and `gds` runs, and the pull request shows them.
 
-   <!-- SCREENSHOT-TODO: github.com, signed in, a student's ttsky-ic102-a-bisect > the pull request from lab05-revert into main, with a description naming 380836c and the make lvs and make precheck lines, and the checks box showing docs and gds green. One account is enough. -->
-   ![The revert's pull request, with its checks green.](../assets/img/ic102-a-pr-revert.png){width=640}
+   <!-- Screenshot: vproHacks/ic102-test-a#2 on Nov 16, 2026, whose base is the branch lab05-main that stood in for main of a ttsky-ic102-a-bisect. -->
+   ![The revert's pull request, with its description and its four checks green.](../assets/img/ic102-a-pr-revert.png){width=640}
 
 6. When the branch's `gds` run is green, all three jobs, merge the pull request with
-   **Create a merge commit**. The merge is a push to `main`, so it gets a run of its own.
-
-   <!-- RUN-TODO: the gds run on a student's lab05-revert branch, all three jobs green, and the run on main after the merge, to quote here. One account is enough. -->
+   **Create a merge commit**. The merge is a push to `main`, so it gets a run of its own. In our
+   test, the branch's `gds` run passed all three jobs in 2 min 44 s (`gds` 45 s, `precheck`
+   1 min 54 s, `viewer` 18 s), and the run on the merge passed all three in 3 min 8 s.
 
 Check: the `gds` run on `main` after the merge is green, all three jobs.
 
