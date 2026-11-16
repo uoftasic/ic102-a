@@ -32,19 +32,19 @@ it from there.
 
 `.mag` files sit in between. Magic writes them, but for a cell drawn by hand in Magic's editor they
 are the only source there is, and they're text, so git can compare them. A reviewer still can't do
-much with a diff of one: `layout/cells/inv_alice.mag` is 116 lines of rectangles.
+much with a diff of one: `layout/cells/inv_bob.mag` is 116 lines of rectangles.
 
 ## What a diff of a GDS shows
 
 git decides a file is binary when it contains bytes that aren't text, and then shows only that it
-changed. This is Lab 04's rehearsal, a student claiming slot 3 of the sandbox:
+changed. This is from a rehearsal of Lab 04, a student claiming slot 4 of the sandbox:
 
 ```
- gds/tt_um_uoftasic_ic102a_sandbox.gds | Bin 19736 -> 24794 bytes
- info.yaml                             |   4 +-
- layout/cells/inv_alice.mag            | 116 ++++++++++++++++++++++++++++++++++
- layout/slots.tcl                      |   1 +
- lef/tt_um_uoftasic_ic102a_sandbox.lef |  57 +++++++++--------
+ gds/tt_um_ic102a_sandbox.gds | Bin 19716 -> 24770 bytes
+ info.yaml                    |   4 +-
+ layout/cells/inv_bob.mag     | 116 +++++++++++++++++++++++++++++++++++++++++++
+ layout/slots.tcl             |   1 +
+ lef/tt_um_ic102a_sandbox.lef |  57 ++++++++++-----------
 ```
 
 Five lines of that are readable, in `slots.tcl` and `info.yaml`. The GDS is a size. The LEF is
@@ -76,14 +76,14 @@ between `<<<<<<<` and `>>>>>>>` markers. When they both change a binary file, th
 show, and git says so:
 
 ```
-warning: Cannot merge binary files: gds/tt_um_uoftasic_ic102a_sandbox.gds (HEAD vs. upstream/main)
-Auto-merging gds/tt_um_uoftasic_ic102a_sandbox.gds
-CONFLICT (content): Merge conflict in gds/tt_um_uoftasic_ic102a_sandbox.gds
+warning: Cannot merge binary files: gds/tt_um_ic102a_sandbox.gds (HEAD vs. upstream/main)
+Auto-merging gds/tt_um_ic102a_sandbox.gds
+CONFLICT (content): Merge conflict in gds/tt_um_ic102a_sandbox.gds
 ```
 
 git can offer you one side's file or the other's (`git checkout --ours` or `--theirs`), and both
 are wrong after a merge, because neither is the layout of the merged sources. In Lab 04's rehearsal,
-one side's GDS had `alice`'s inverter and not `bob`'s, and the other had `bob`'s and not `alice`'s;
+one side's GDS had `bob`'s inverter and not `alice`'s, and the other had `alice`'s and not `bob`'s;
 either would have passed precheck, so nothing on GitHub would have caught the loss. The right answer
 is to merge the sources, which are text, and build the GDS again from the result. The LEF needs the
 same treatment even though it's text, because git merges it line by line into a file that describes

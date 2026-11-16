@@ -118,10 +118,13 @@ off, so `viewer` fails on the first run that gets that far:
 ##[error]Error: Failed to create deployment (status: 404) with build version ... Ensure GitHub Pages has been enabled: https://github.com/uoftasic/protocol-emulator/settings/pages
 ```
 
+The fix is to turn Pages on (Settings › Pages › Build and deployment › Source: **GitHub Actions**)
+and then start a new run, with **Run workflow** or a new push, rather than re-running the failed
+one: at the `ttsky26d` tag, a re-run of `viewer` within a day of the first attempt fails with
+`Multiple artifacts named "github-pages"`.
 [Reading a workflow file](reading-a-workflow-file.md#github-pages-and-the-viewer) has the rest of
-that log and the fix, and the trap in re-running `viewer` on the `ttsky26d` tag. When it works, the
-job's summary has links to the 3D viewer and to Tiny Tapeout's GDS explorer, and your Pages site
-redirects to the viewer.
+that log and the story of that trap. When it works, the job's summary has links to the 3D viewer
+and to Tiny Tapeout's GDS explorer, and your Pages site redirects to the viewer.
 
 `viewer` doesn't depend on `precheck`, so it passes even when precheck fails, and a run can end
 with `precheck` red and `viewer` green:
@@ -146,14 +149,16 @@ from feature branches routinely; its `gds` run of Nov 16, 2026 on the branch
 
 ## Pull requests in a shared repository
 
-Lab 04's sandbox is shared by a whole cohort, and changes reach it as pull requests from forks.
-That needs two changes to the template's `gds.yaml` and `docs.yaml`, which the sandbox makes:
+In Lab 04 your partner's change reaches your review repository as a pull request from a fork, and
+that needs two changes to the template's `gds.yaml` and `docs.yaml`, which the course's sandbox
+makes:
 
 - **A `pull_request` trigger.** GitHub's documentation says "Workflows don't run in forked
   repositories by default", so a push to your fork starts nothing. A pull request from the fork
-  into the sandbox does start the sandbox's `pull_request` workflows, which check the commit GitHub
-  would make if the pull request were merged ("`GITHUB_SHA` for this event is the last merge
-  commit of the pull request merge branch"). The sandbox also limits its `push` trigger to `main`.
+  into the repository it came from does start that repository's `pull_request` workflows, which
+  check the commit GitHub would make if the pull request were merged ("`GITHUB_SHA` for this event
+  is the last merge commit of the pull request merge branch"). The sandbox also limits its `push`
+  trigger to `main`.
 - **`viewer` skipped on pull requests**, with `if: github.event_name != 'pull_request'`. In a pull
   request from a fork, "The `GITHUB_TOKEN` has read-only permissions", so a deploy would fail, and
   a pull request shouldn't replace `main`'s page anyway. A skipped job doesn't fail the run.
