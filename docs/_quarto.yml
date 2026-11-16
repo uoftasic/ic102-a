@@ -100,7 +100,7 @@ website:
             href: https://github.com/uoftasic/ic102-a/tree/main/labs
           - text: "Precheck's tools"
             href: https://github.com/uoftasic/ic102-a/tree/main/labs/common/tt-tools
-          - text: "The cohort sandbox"
+          - text: "The review sandbox"
             href: https://github.com/uoftasic/ic102-a/tree/main/labs/lab-04-a-change-through-review/sandbox
 
 filters:
