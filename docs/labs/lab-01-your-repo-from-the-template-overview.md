@@ -420,10 +420,10 @@ Questions:
 
    </details>
 
-2. The `gds` job in Part 4 failed in well under a minute, and when it passed it still took only
-   about a minute: 61 s on the Part 5 push and 62 s in the Part 6 run, in our test of this lab
-   (your run's summary page gives your own times). A digital project's `gds` job took between
-   207 s and 1,056 s in the team's repositories. Why is the analog one so much faster even when it
+2. The `gds` job in Part 4 failed in well under a minute. When it passed, in Parts 5 and 6, it
+   still took only about a minute: 61 s on the Part 5 push and 62 s in the Part 6 run in our test
+   of this lab, and each run's summary page gives your own times. A digital project's `gds` job
+   took between 207 s and 1,056 s in the team's repositories. Why is the analog one so much faster even when it
    passes?
 
    <details>
