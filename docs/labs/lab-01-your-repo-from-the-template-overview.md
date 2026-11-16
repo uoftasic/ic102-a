@@ -3,8 +3,7 @@
 You'll make your own public repository from Tiny Tapeout's analog template and fill in the two
 files its checks read. Then you'll commit a placeholder layout, the template's empty 1x2 frame as
 Tiny Tapeout's own script draws it, and keep going until both of the template's workflows pass on a
-commit you made, the `viewer` job included. You'll keep building on this repository in the labs
-that follow.
+commit you made, the `viewer` job included. You'll come back to this repository in later labs.
 
 Package: [`labs/lab-01-your-repo-from-the-template/`](https://github.com/uoftasic/ic102-a/tree/main/labs/lab-01-your-repo-from-the-template)
 
