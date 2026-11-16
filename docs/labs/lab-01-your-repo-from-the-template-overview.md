@@ -105,21 +105,27 @@ a way for the workbench to push to GitHub.
 2. Make a token for the workbench to push with: Settings › Developer settings › Personal access
    tokens › **Fine-grained tokens** › **Generate new token**. Give it:
 
-   - Token name `IC102 workbench`, Resource owner your own account, and Expiration 60 days;
-   - Repository access: **All repositories**;
-   - Repository permissions: **Contents** and **Workflows**, both "Read and write". GitHub adds
-     Metadata, read-only, by itself. Leave everything else as it is.
+   - Token name `IC102 workbench`, and Resource owner your own account, which is what the form
+     starts with.
+   - Expiration 60 days. The form starts at 30 days, so pick 60 days from its menu.
+   - Repository access: **All repositories**. The form starts at "Public repositories", which
+     gives read access only.
+   - Permissions: with the **Repositories** tab selected, click **+ Add permissions** and tick
+     **Contents** and **Workflows** in the list that opens. Workflows comes in at "Read and
+     write", the only choice it has, but Contents comes in at "Read-only", so change its Access
+     menu to "Read and write". GitHub adds Metadata by itself, marked "Required" and "Read-only".
+     Leave everything else as it is.
 
-   Copy the token into your password manager now, because GitHub shows it only once.
+   ![The new-token form filled in as above, before Generate token is pressed. The resource owner is the account we tested with, and its avatar is replaced with a grey disc.](../assets/img/ic102-token-permissions.png){width=640 fig-alt="GitHub's form titled New fine-grained personal access token. Token name: IC102 workbench, with a green note that the name is available. Description: empty. Resource owner: vproHacks. Expiration: 60 days (Jan 15, 2027). Under Repository access, All repositories is selected; the other choices are Public repositories and Only select repositories. Under Permissions, the Repositories tab shows 3 and the Account tab 0, next to an Add permissions button. The three rows are Contents, Access: Read and write; Metadata, marked Required, Access: Read-only; and Workflows, Access: Read and write. Below them are the Generate token and Cancel buttons."}
 
-   <!-- SCREENSHOT-TODO: github.com, signed in, Settings > Developer settings > Personal access tokens > Fine-grained tokens > Generate new token: the name "IC102 workbench", the resource owner a personal account, Expiration 60 days, "Repository access" set to "All repositories", and "Repository permissions" with Contents and Workflows set to "Read and write". One account is enough; the same capture serves IC102-D. Allowed on Nov 16, 2026, but still not taken: github.com/settings/personal-access-tokens/new showed GitHub's sudo prompt ("Confirm access", GitHub Mobile or password) instead of the form, and the browser run stopped there. Someone signed in as vproHacks has to confirm access once in that browser profile; the prompt says sudo mode then lasts a few hours. -->
-   ![A fine-grained token with Contents and Workflows set to read and write.](../assets/img/ic102-token-permissions.png){width=640}
+   Press **Generate token**, and copy the token into your password manager now, because GitHub
+   shows it only once.
 
    [Getting started](../guide/getting-started.md#pushing-from-the-workbench) explains why it's
    this kind of token, why it needs Workflows as well as Contents, and why it lives in your password
    manager rather than in a file.
 
-   <!-- RUN-TODO: with a fine-grained token like this one, from the workbench: a push to the student's own ttsky-ic102-a, the first push of the Lab 04 sandbox copy (it adds workflow files) to a new empty ttsky-ic102-a-review, and GitHub's exact refusal when Workflows is left off, to quote in Getting started. One account is enough. A test token may be limited to the test repositories; say so where the result is quoted, since the students' token covers all their repositories. A push to a fork is dropped: it needs a second account, and that was decided against on Nov 16, 2026. Still open: making a token was allowed on Nov 16, 2026, but the new-token page showed GitHub's sudo prompt, so no token was made and nothing was pushed (the live test before that used the GitHub CLI's own sign-in, which proves nothing about this token). -->
+   <!-- RUN-TODO: with a fine-grained token like this one, from the workbench: a push to the student's own ttsky-ic102-a, the first push of the Lab 04 sandbox copy (it adds workflow files) to a new empty ttsky-ic102-a-review, and GitHub's exact refusal when Workflows is left off, to quote in Getting started. One account is enough. A test token may be limited to the test repositories (the planned ones were limited to ic102-test-a, ic102-test-d, ic102-review-sandbox-a and ic102-review-sandbox-d); say so where the result is quoted, since the students' token covers all their repositories. A push to a fork is dropped: it needs a second account, and that was decided against on Nov 16, 2026. Still open after the evening run of Nov 16, 2026, and not because of GitHub: the new-token form opened without GitHub's sudo prompt and the screenshot above was taken, but this session's permission system refused the command that would have pressed Generate token, so no token was made and nothing was pushed. The live test before that used the GitHub CLI's own sign-in, which proves nothing about this token. -->
 
 Check: you have the no-reply address and the token saved somewhere you can paste from.
 
