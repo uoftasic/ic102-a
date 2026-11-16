@@ -18,6 +18,13 @@ The result is reproducible: authors, dates and the tag are fixed, and the build 
 writes into each GDS is replaced with the commit's date (BGNLIB and BGNSTR records), so running
 this again gives the same commit hashes. Precheck doesn't read those dates. If you change a step,
 the hashes from that commit on change, and the writeup's expected outputs must be re-run.
+
+The history's Makefile is the kit's Makefile as it was at commit 541dff9 of this repository, read
+from git, and not the kit's current one. The kit's Makefile changed after the bundle was built
+(commit 5244157 changed how `make drc` and `make lvs` decide that the GDS is out of date), and
+copying the current one would change every hash from commit 5 on. Lab 05's steps don't depend on
+that change: its `make lvs` runs straight after a `make`. So this script needs a git checkout of
+the course, not a copy of its files.
 """
 import os
 import shutil
@@ -32,6 +39,8 @@ TOP = "tt_um_ic102_lab05"
 COURSE = Path(__file__).resolve().parents[3]          # the ic102-a checkout
 KIT = COURSE / "labs/lab-01-your-repo-from-the-template"
 LAB03 = COURSE / "labs/lab-03-a-layout-that-passes-precheck"
+# The commit whose kit Makefile history.bundle was built with (see the docstring).
+KIT_MAKEFILE_COMMIT = "541dff95c348f6cd263d7c6112c8f8c1dbb72a85"
 
 AVERY = ("Avery Example", "avery@example.com")
 SAM = ("Sam Example", "sam@example.com")
@@ -137,6 +146,9 @@ def main():
     step(AVERY, "Rename the module in src/project.v to match top_module", 1, 19, 44)
 
     run([str(KIT / "start.sh"), str(repo)], work)
+    makefile = run(["git", "show", f"{KIT_MAKEFILE_COMMIT}:labs/lab-01-your-repo-from-the-template/kit/Makefile"],
+                   COURSE).stdout
+    (repo / "Makefile").write_text(makefile)
     edit(repo, "layout/init.tcl", "set TOP_LEVEL_CELL     tt_um_analog_example", f"set TOP_LEVEL_CELL     {TOP}")
     step(AVERY, "Add the IC102-A layout kit: the 1x2 frame and stubs on ua[0] and ua[1]", 1, 20, 15,
          layout=True)
