@@ -114,12 +114,12 @@ lvs: check-gds
 	  $(PIN_PDK)/sky130A/libs.tech/netgen/sky130A_setup.tcl $(BUILD)/lvs.report > $(BUILD)/netgen.log 2>&1 || true
 	@[ -f $(BUILD)/lvs.report ] || { echo "netgen wrote no report; read $(BUILD)/netgen.log"; exit 1; }
 	@grep '^Final result' $(BUILD)/lvs.report | sed 's/^/  /'
-	@grep -E 'no pin|no matching|Mismatch' $(BUILD)/lvs.report | sort -u | head -20 | sed 's/^/  /' || true
+	@grep -E 'no pin|no matching|Mismatch' $(BUILD)/lvs.report | sort -u | head -40 | sed 's/^/  /' || true
 	@echo "full report: $(BUILD)/lvs.report"
 
 view:
 	@[ -f $(BUILD)/$(TOP).mag ] || { echo "nothing to show yet; run: make"; exit 1; }
-	@cd $(BUILD) && PDK_ROOT=$(WB_PDK) magic -d XR -rcfile $(call RC,$(WB_PDK)) $(TOP) &
+	@cd $(BUILD) && PDK_ROOT=$(WB_PDK) magic -d X11 -rcfile $(call RC,$(WB_PDK)) $(TOP) &
 
 clean:
 	rm -rf $(BUILD)
