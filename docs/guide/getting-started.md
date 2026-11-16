@@ -95,12 +95,13 @@ whose resource owner is your own account, for "All repositories", with two permi
 "All repositories" is there because the Lab 04 and Lab 05 repositories don't exist yet when you
 make the token in Lab 01. Every push in the course goes to a repository you own: the four in the
 table above, including your fork of your partner's, from which your pull request goes to them. A
-fine-grained token for your own account covers exactly those and nothing else. The other kind, a
+fine-grained token for your own account covers those, and any other repository in your account,
+and nothing outside it. The other kind, a
 classic token with the `public_repo` scope, could push to every public repository your account can
 write to, including those of any organization you belong to (in `uoftasic`, members get write
-access to every repository by default), which is far more than the course needs. The one thing a
-fine-grained token can't do is push to someone else's personal repository, even as a
-collaborator, and that's why Lab 04 has you send your change from a fork.
+access to every repository by default), which is far more than the course needs. What a
+fine-grained token can't do is push to a repository someone else owns, even if they add you as a
+collaborator, so in Lab 04 you send your change to your partner from a fork, which you own.
 
 When `git push` asks for a username and password, you give your GitHub username and paste the
 token. A line you run in each clone tells git to keep it in memory for 8 hours, so you're asked
