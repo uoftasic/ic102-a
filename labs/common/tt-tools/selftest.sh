@@ -42,12 +42,20 @@ save $TOP.mag
 gds write gds/$TOP.gds
 lef write lef/$TOP.lef -hide -pinonly
 EOF
+# The workbench's Magic 8.3.681 sometimes segfaults as it exits in batch mode,
+# after it has written its files (two runs in three here), so judge each step
+# by its output and not by its exit status, and send the shell's crash notice
+# to the step's log. The frame's own GDS and LEF are deleted between the steps
+# so that a stubs step that failed can't leave them behind looking finished.
 (
   cd "$W"
   RC=/foss/pdks/sky130A/libs.tech/magic/sky130A.magicrc
-  PDK_ROOT=/foss/pdks magic -dnull -noconsole -rcfile "$RC" init.tcl < /dev/null > magic-init.log 2>&1
-  PDK_ROOT=/foss/pdks magic -dnull -noconsole -rcfile "$RC" stubs.tcl < /dev/null > magic-stubs.log 2>&1
+  (ulimit -c 0; PDK_ROOT=/foss/pdks magic -dnull -noconsole -rcfile "$RC" init.tcl < /dev/null > magic-init.log 2>&1) 2>> magic-init.log || true
+  [ -f "$TOP.mag" ] || { echo "selftest: Magic didn't save $TOP.mag; see $W/magic-init.log"; exit 1; }
+  rm -f "gds/$TOP.gds" "lef/$TOP.lef"
+  (ulimit -c 0; PDK_ROOT=/foss/pdks magic -dnull -noconsole -rcfile "$RC" stubs.tcl < /dev/null > magic-stubs.log 2>&1) 2>> magic-stubs.log || true
 )
-[ -f "$W/gds/$TOP.gds" ] && [ -f "$W/lef/$TOP.lef" ] || { echo "selftest: Magic didn't write the layout; see $W/magic-*.log"; exit 1; }
+[ -s "$W/gds/$TOP.gds" ] && grep -q "^END LIBRARY" "$W/lef/$TOP.lef" 2>/dev/null \
+  || { echo "selftest: Magic didn't write the layout; see $W/magic-*.log"; exit 1; }
 
 "$HERE/precheck.sh" "$W"

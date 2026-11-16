@@ -80,6 +80,9 @@ find "$PRE/reports" -mindepth 1 ! -name .gitignore -delete
 status=0
 (cd "$PRE" && python precheck.py --gds "$SUB/$TOP.gds" --tech sky130A) || status=$?
 cp -r "$PRE/reports" "$SUB/precheck_reports"
+# The same table the runner adds to the job summary ("Capture test results").
 echo
-echo "Reports: $SUB/precheck_reports/ (results.md is the table above)"
+grep '^|' "$SUB/precheck_reports/results.md" 2>/dev/null || echo "precheck.sh: precheck stopped before it wrote results.md"
+echo
+echo "Reports: $SUB/precheck_reports/"
 exit $status
