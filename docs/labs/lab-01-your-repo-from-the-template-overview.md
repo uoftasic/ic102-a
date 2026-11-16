@@ -1,9 +1,10 @@
 # Lab 01: Your repository from the template
 
-You'll make your own public repository from Tiny Tapeout's analog template, fill in the two files
-its checks read, and commit a placeholder layout, the template's empty 1x2 frame drawn by Tiny
-Tapeout's own script, until both of its workflows pass on a commit you made, `viewer` job included.
-This is the repository you'll use for the rest of the course.
+You'll make your own public repository from Tiny Tapeout's analog template and fill in the two
+files its checks read. Then you'll commit a placeholder layout, the template's empty 1x2 frame as
+Tiny Tapeout's own script draws it, and keep going until both of the template's workflows pass on a
+commit you made, the `viewer` job included. You'll keep building on this repository in the labs
+that follow.
 
 Package: [`labs/lab-01-your-repo-from-the-template/`](https://github.com/uoftasic/ic102-a/tree/main/labs/lab-01-your-repo-from-the-template)
 
@@ -17,7 +18,7 @@ Package: [`labs/lab-01-your-repo-from-the-template/`](https://github.com/uoftasi
 This lab takes about 1 h 15 min. Half of that is waiting for GitHub's runners, which is a good time
 to read ahead.
 
-In the outputs below the top module is `tt_um_yourname_ic102`, and yours will have your own
+In the outputs below, the top module is `tt_um_yourname_ic102`, and yours will have your own
 username in it. The repository is `ttsky-ic102-a`, the name the rest of the course uses for it.
 
 ## Part 1: Load the course
@@ -37,12 +38,14 @@ If you haven't set up the workbench yet, do
    mod ic102-a
    ```
 
-   You should see the `ASIC-EDU: PDK=sky130A ...` banner and, last, `cwd: /foss/designs/modules/ic102-a`.
+   You should see the `ASIC-EDU: PDK=sky130A ...` banner and, as the last line,
+   `cwd: /foss/designs/modules/ic102-a`.
 
    <!-- RUN-TODO: the output of `mod add ic102-a` once github.com/uoftasic/ic102-a is published. -->
 
-3. Install the course's copy of precheck's tools. They go next to the workbench's, in
-   `labs/common/tt-tools/.local`, which is on your own disk, so you do this once:
+3. Install the course's copy of precheck's tools. They're installed alongside the workbench's own
+   tools, in `labs/common/tt-tools/.local`. That folder is on your own disk, so you only do this
+   once:
 
    ```bash
    cd labs/common/tt-tools
@@ -50,7 +53,7 @@ If you haven't set up the workbench yet, do
    make check-tools
    ```
 
-   `make install` took 85 s on one CPU core with a fast connection and uses 1.8 GB.
+   `make install` took 85 s on one CPU core with a fast connection, and the tools take up 1.8 GB.
    [Your tools and the runner's tools](../guide/your-tools-and-the-runners-tools.md) explains why
    the course installs these at all. `make check-tools` should end with this table:
 
@@ -83,11 +86,12 @@ Check: `make check-tools` ends with `All pinned tools are installed at the runne
 
 ## Part 2: Your GitHub settings
 
-Setup for the rest of the course: an address for your commits, and a way for the workbench to
-push.
+This part sets up two things the rest of the course needs: an email address for your commits, and
+a way for the workbench to push to GitHub.
 
 1. On GitHub, open Settings › Emails, turn on the "Keep my email addresses private" switch, and
-   copy the no-reply address it shows, of the form `ID+USERNAME@users.noreply.github.com`.
+   copy the no-reply address that GitHub then shows, which has the form
+   `ID+USERNAME@users.noreply.github.com`.
    [Git in one page](../guide/git-in-one-page.md#commit-identity) says why.
 
 2. Make a token for the workbench to push with: Settings › Developer settings › Personal access
@@ -118,8 +122,8 @@ you've changed anything?
 
 1. Open <https://github.com/TinyTapeout/ttsky-analog-template>, click **Use this template** ›
    **Create a new repository**, choose your own account as the owner, name it `ttsky-ic102-a`, make
-   it **Public**, and click **Create repository**. Public matters: GitHub Pages, which the `viewer`
-   job needs, works only on public repositories on a free account.
+   it **Public**, and click **Create repository**. It has to be public, because GitHub Pages, which
+   the `viewer` job needs, works only on public repositories on a free account.
 
    ![The analog template on GitHub, with its "Use this template" button.](../assets/img/ic102-a-analog-template.png){width=760}
 
@@ -129,7 +133,8 @@ you've changed anything?
    already, and whether each will pass. The template's `.github/workflows/` has two files.
 
 3. Open your repository's **Actions** tab. You should see two runs, `docs` and `gds`, both on the
-   commit "Initial commit", and both red, as the team's `asic-zoo-template` had on Nov 11, 2026.
+   commit "Initial commit", and both red, as they were on the team's `asic-zoo-template` on Nov 11,
+   2026.
 
    <details>
    <summary>Answer</summary>
@@ -177,7 +182,7 @@ you've changed anything?
    ```
 
    A setting without `--global` goes into `.git/config` in the repository, which is on your own
-   disk and stays. You'll repeat these three lines in each repository you clone or create in this
+   disk, so it's still there after a restart. You'll repeat these three lines in each repository you clone or create in this
    course.
 
 6. See which version of Tiny Tapeout's actions your workflows run:
@@ -188,8 +193,9 @@ you've changed anything?
 
    You should see four lines that end in `@ttsky26d`, the docs action in `docs.yaml` and
    `custom_gds`, `precheck` and `viewer` in `gds.yaml`, plus two `actions/checkout@v4`. That tag is
-   frozen into your repository now; [The analog workflows](../guide/the-analog-workflows.md) goes
-   through what each of the three `gds.yaml` jobs does.
+   now fixed in your repository's workflow files.
+   [The analog workflows](../guide/the-analog-workflows.md) goes through what each of the three
+   `gds.yaml` jobs does.
 
 Check: `git log --oneline` shows one commit, and `git config user.email` prints your no-reply
 address.
@@ -198,8 +204,8 @@ address.
 
 Which of the `docs` workflow's complaints can you fix before you push?
 
-1. Add the course's layout kit to your repository. It brings a `Makefile` whose `make docs` runs
-   the same check as the `docs` job:
+1. Add the course's layout kit to your repository. The kit includes a `Makefile` whose `make docs`
+   runs the same check as the `docs` job:
 
    ```bash
    /foss/designs/modules/ic102-a/labs/lab-01-your-repo-from-the-template/start.sh .
@@ -223,8 +229,8 @@ Which of the `docs` workflow's complaints can you fix before you push?
    make: *** [Makefile:100: docs] Error 1
    ```
 
-   That's the list `hart-1`'s `docs` run printed on GitHub, word for word, because `make docs` runs
-   the same function from the same commit of Tiny Tapeout's support tools.
+   That's the list that the `docs` run on the team's `hart-1` printed on GitHub, word for word,
+   because `make docs` runs the same function from the same commit of Tiny Tapeout's support tools.
 
 2. Edit `info.yaml`. Fill in `title`, `author` and `description`; the author is public, so write
    whatever you're happy to see in a datasheet. Set `top_module` to `tt_um_` followed by your GitHub
@@ -255,15 +261,14 @@ Which of the `docs` workflow's complaints can you fix before you push?
 7. Before the runs finish, predict which of the two workflows will be green this time. Then open
    the `gds` run, then its `gds` job, then the failed step, and write down its first error line.
 
-   You should see `docs` green and `gds` red, with the message that every push to the team's
-   `asic-zoo-template` produced before it had a layout. Theirs, still with the template's top
-   module, read:
+   You should see `docs` green and `gds` red, with the same message that every push to the team's
+   `asic-zoo-template` produced before it had a layout. That repository still had the template's
+   top module, so its message read as below; yours has your own top module in place of
+   `tt_um_example`:
 
    ```
    cp: cannot stat 'gds/tt_um_example.gds': No such file or directory
    ```
-
-   Yours names your own top module.
 
    ![The same failure in uoftasic/asic-zoo-template: gds red after 42 s, precheck and viewer skipped. The person who pushed is shown as a team member.](../assets/img/ic102-a-run-no-gds.png){width=760}
 
@@ -337,9 +342,9 @@ What's the least layout that passes precheck?
    `.gitignore` and the kit's line in it keep precheck's and Magic's scratch files out of git.
 
 5. Predict which jobs of the new `gds` run will pass, then open it. You should see `gds` and
-   `precheck` green and `viewer` red, and in the `viewer` job's log a line like the one that
-   `vproHacks/ic102-test-a`, a repository we made from the template to test this lab, got on
-   Nov 16, 2026, when its `gds` run took 3 min 52 s:
+   `precheck` green and `viewer` red. The `viewer` job's log will have a line like this one, from
+   `vproHacks/ic102-test-a`, a repository we made from the template to test this lab. Its `gds` run
+   on Nov 16, 2026 took 3 min 52 s:
 
    ```
    ##[error]Error: Failed to create deployment (status: 404) with build version e9a6f474deb92b2898e062ddb8f54bcf052b1d73. Request ID 5868:1C0C8:4B853B6:F3D6856:6AFAB74A Ensure GitHub Pages has been enabled: https://github.com/vproHacks/ic102-test-a/settings/pages
@@ -362,8 +367,8 @@ How do you get the `viewer` job green without changing a file?
 2. Don't press "Re-run failed jobs" on the red run. The `viewer` action at `ttsky26d` uploads an
    artifact called `github-pages` on every attempt, and a re-run keeps the first attempt's, so the
    re-run fails with `Multiple artifacts named "github-pages"`.
-   [Reading a workflow file](../guide/reading-a-workflow-file.md#re-running-a-run) has the
-   story. Start a new run instead: Actions › gds › **Run workflow** › branch `main` › **Run
+   [Reading a workflow file](../guide/reading-a-workflow-file.md#re-running-a-run) explains why.
+   Start a new run instead: Actions › gds › **Run workflow** › branch `main` › **Run
    workflow**. (A new push would start one too, but you have nothing to push.)
 
    ![Starting a new gds run by hand: Actions, the gds workflow, and the Run workflow dropdown with branch main.](../assets/img/ic102-a-run-workflow.png){width=640}
@@ -400,9 +405,10 @@ Questions:
    <details>
    <summary>Answer</summary>
 
-   It builds nothing. A digital project's `gds` job runs LibreLane to turn Verilog into a layout;
-   the analog template's `custom_gds` step copies the GDS and LEF you committed, converts the GDS to
-   OASIS and renders a picture of it. All the layout work happened on your machine, in `make`.
+   Because it doesn't build anything. A digital project's `gds` job runs LibreLane to turn Verilog
+   into a layout, whereas the analog template's `custom_gds` step only copies the GDS and LEF you
+   committed, converts the GDS to OASIS and renders a picture of it. All the layout work happened
+   on your machine, when you ran `make`.
 
    </details>
 
