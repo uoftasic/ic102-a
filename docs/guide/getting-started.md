@@ -58,11 +58,11 @@ IC102-A follows Tiny Tapeout's versions on purpose; the other courses use the wo
 
 ## Your GitHub account
 
-You'll work in your own GitHub account throughout, so all you need is a free account; nothing in
-the course uses the team's organization. Every repository you make is public, because GitHub
-Pages, which the template's `viewer` job needs, works only in public repositories on a free
-account, and because GitHub's runners are free and unlimited for public repositories. Remember
-that everything in a public repository is public: your commits, the `author` field in `info.yaml`,
+You'll work in your own GitHub account throughout, so all you need is a free account: every
+repository you make in this course belongs to your account, and none goes in the team's
+organization. Every one of them is public, because GitHub Pages, which the template's `viewer` job
+needs, works only in public repositories on a free account, and because GitHub's runners are free
+and unlimited for public repositories. Remember that everything in a public repository is public: your commits, the `author` field in `info.yaml`,
 and the email address in every commit. Lab 01 has you use GitHub's no-reply address for that
 reason.
 
