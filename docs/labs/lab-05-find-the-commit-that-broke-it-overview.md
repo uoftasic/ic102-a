@@ -241,7 +241,7 @@ Check: your script gives those four answers.
 
    12.85 − 12.75 = 0.10 µm, against 0.14 µm for metal 2 (`met2.2` in Magic's report). The
    commit's message gives a good reason for a wider wire, and the wire is wider; it just grew
-   towards its neighbour. A bisect doesn't read the message, only the test.
+   towards its neighbour. git bisect never reads commit messages, only your script's exit status.
 
    </details>
 

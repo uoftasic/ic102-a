@@ -184,7 +184,8 @@ What does precheck say when the name on the outside of the file doesn't match th
    ```
 
    Magic was asked for a cell the GDS doesn't contain, so it made an empty one and checked that.
-   A ✅ from a check that ran on nothing is still a ✅, which is why you read the other rows too.
+   A check that ran on an empty cell still reports ✅, so when the rows around a ✅ are red, read
+   the log behind it too.
    You'll meet this again in Lab 05.
 
    </details>
@@ -248,7 +249,7 @@ What does one word in `info.yaml` change?
    one, which has a VAPWR pin and is 145.36 µm wide instead of 161.00. Against that template your
    161 µm tile is too wide, its pins are in the wrong places, and `ua[0]` is at a different x, so
    the stub you drew is no longer on it. The power pin check reads `src/project.v`, where the
-   template left `VAPWR` commented out. One setting, four symptoms, one cause.
+   template left `VAPWR` commented out. All four rows come from the one setting.
 
    </details>
 
@@ -295,7 +296,8 @@ The read operation timed out
    output: precheck checks only that a used pin has a description, not what it says. Or set
    `clock_hz` to a wrong number, as `protocol-emulator` did with `clock_hz: 50`: it's an integer,
    so it passes. Or write a "How to test" in `docs/info.md` that describes a different design.
-   The workflows check form, and a reviewer checks meaning, which is what Lab 04 is about.
+   The workflows check only that values are present and well formed; whether they're right is
+   for a reviewer to catch, and Lab 04 is about reviewing.
 
    </details>
 

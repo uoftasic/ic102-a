@@ -79,8 +79,8 @@ cp: cannot stat 'gds/tt_um_example.gds': No such file or directory
 
 That's from the team's `asic-zoo-template`, which had no layout yet. The same line comes from a
 `top_module` in `info.yaml` that doesn't match the file's name, because the path is built from
-`top_module`. Notice what this job doesn't do: it doesn't open your GDS, so a layout that's wrong
-in every way passes it, as long as the two files exist.
+`top_module`. This job never opens your GDS, so a layout that's wrong in every way passes it as
+long as the two files exist.
 
 ### The precheck job
 
