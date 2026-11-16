@@ -210,18 +210,20 @@ How does a layout change get into `main` in a way someone else can check?
 3. On GitHub, open a pull request from `lab03-inverter` into `main`. Your workflows run on every
    push, so the branch already has a `docs` and a `gds` run, and the pull request shows their
    results. In the description, say what changed, and paste the `Final result` line of
-   `make lvs` and the last line of `make precheck`, because LVS doesn't run on GitHub and the
-   reviewer has no other way to know you ran it.
+   `make lvs` and the `Precheck passed` line of `make precheck` (its last line is only the path
+   of its reports), because LVS doesn't run on GitHub and the reviewer has no other way to know
+   you ran it.
 
-   <!-- SCREENSHOT-TODO: github.com, signed in, a student's ttsky-ic102-a > "Open a pull request" from lab03-inverter into main, with a description that includes "Final result: Circuits match uniquely." and the precheck line, and the checks box below showing docs and gds green. -->
-   ![A pull request in your own repository, with the LVS result in its description.](../assets/img/ic102-a-pr-lvs.png){width=760}
+   ![A pull request in your own repository, with the LVS result in its description, and further down, the four checks the branch's push started: docs, and gds, precheck and viewer.](../assets/img/ic102-a-pr-lvs.png){width=760}
 
 4. When the branch's `gds` run is green, all three jobs, merge the pull request. The merge is a
    push to `main`, so both workflows run again; wait for them.
 
 5. Download the `gds_render` artifact from the merge's `gds` run and open the PNG. You should see
    your tile as Tiny Tapeout renders it. The inverter is 3 µm wide in a 161 µm tile, so it's a
-   speck near the bottom; the stripes and the two long wires to the pins are what you can see.
+   speck near the bottom right, with its short wires down to `ua[0]` and `ua[1]`. What stands out
+   at this scale is the two stripes and the strap along the top edge that ties the 24 outputs to
+   VGND.
 
    ![The tile with the inverter from the reference solution, rendered locally with the same gdstk call the gds_render step uses.](../assets/img/ic102-a-render-inverter-tile.png){width=320}
 
