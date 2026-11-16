@@ -1,10 +1,11 @@
 # Lab 04: A change through review
 
 You and a partner each make a review repository from the course's sandbox, a small analog project
-with eight empty slots for an inverter. You'll claim a slot in your partner's repository through a
-pull request from a fork, and review the one your partner opens in yours. Because you also claim
-the slot next to theirs in your own repository, their pull request will conflict with `main`, and
-they'll resolve it the way a layout repository needs.
+with eight empty slots, each for one inverter. You'll claim a slot in your partner's repository
+through a pull request from a fork, and review the one your partner opens in yours. Because you
+also claim the slot next to theirs in your own repository, their pull request will conflict with
+`main`, and they'll resolve the conflict the way a layout repository needs it resolved, by
+building the GDS and LEF again from the merged sources.
 
 Package: [`labs/lab-04-a-change-through-review/`](https://github.com/uoftasic/ic102-a/tree/main/labs/lab-04-a-change-through-review)
 
@@ -22,8 +23,8 @@ Package: [`labs/lab-04-a-change-through-review/`](https://github.com/uoftasic/ic
   was made for "All repositories".
 
 This lab takes about 1 h 30 min of your own time, spread over a day or two, because each of you
-waits for the other: your partner's pull request has to be open before Part 3, and yours can only
-merge once your partner approves it.
+waits for the other: your partner's pull request has to be open before Part 3, and yours can't be
+merged until your partner approves it.
 
 ## Part 1: Your review repository
 
@@ -70,9 +71,9 @@ Set up the repository your partner will send a pull request to, with rules on it
    ![The imported ruleset before Create, with the repository admin on the bypass list, "Allow for pull requests only".](../assets/img/ic102-a-ruleset-import.png){width=640}
 
    GitHub takes the file as written: the bypass entry shows as "Repository admin" with "Allow for
-   pull requests only", and the rules below it match `RULESET.md`. The one box ticked that the
-   file doesn't mention, "Require an additional approval for unattributed Copilot pull requests",
-   is GitHub's default, and it only matters for a pull request that Copilot opens by itself.
+   pull requests only", and the rules below it match `RULESET.md`. One box is ticked that the file
+   doesn't mention, "Require an additional approval for unattributed Copilot pull requests".
+   That's GitHub's default, and it matters only for a pull request that Copilot opens by itself.
 
 5. You're the repository's admin, and the admin role is on the bypass list. Before you try it,
    write down whether a commit pushed straight to `main` will be accepted. Then try one that
@@ -104,7 +105,7 @@ Set up the repository your partner will send a pull request to, with rules on it
    ```
 
    The bypass is "For pull requests only": it lets you merge a pull request of your own without
-   an approval (you'll use that in Part 3), and nothing else.
+   an approval (you'll use that in Part 3), but it doesn't let you push to `main` directly.
 
    </details>
 
@@ -184,10 +185,10 @@ What does a layout change look like when you can't read it in a diff?
    <summary>Which of these lines can a reviewer actually read?</summary>
 
    `slots.tcl` and `info.yaml`, five changed lines between them. The cell is 116 lines of Magic's
-   format, which nobody reviews line by line, and which is a copy of a cell that already passed
-   LVS. The GDS is binary, shown only as a change of size. The LEF is text, but it's generated, so
-   its 57 lines say nothing a reviewer can act on. That's why your description has to carry the
-   evidence, and why the reviewer looks at the render and the precheck table, as
+   format, which reviewers don't read line by line, and it's a copy of a cell that already passed
+   LVS. The GDS is binary, so the diff shows only a change of size. The LEF is text, but it's
+   generated, so its 57 lines say nothing a reviewer can act on. That's why your description has
+   to carry the evidence, and why the reviewer looks at the render and the precheck table, as
    [Layout files in git](../guide/layout-files-in-git.md) says.
 
    </details>
@@ -195,9 +196,9 @@ What does a layout change look like when you can't read it in a diff?
 7. Push the branch to your fork with `git push -u origin slot-K-YOUR-USERNAME`. git prints a link
    for opening a pull request; open it, and check that the base is your partner's repository and
    its `main`. Fill in the description from the template: which slot, the cell's name, the
-   `Final result` line of `make lvs` and the `Precheck passed` line of `make precheck`. If an AI tool wrote part of the change or the
-   description, say which part, and what you checked yourself. Create the pull request and tell
-   your partner its number.
+   `Final result` line of `make lvs` and the `Precheck passed` line of `make precheck`. If an AI
+   tool wrote part of the change or the description, say which part, and what you checked
+   yourself. Create the pull request and tell your partner its number.
 
 Check: your pull request is open on your partner's repository, with one commit that changes those
 five files.
@@ -207,8 +208,8 @@ five files.
 What happens to an open pull request when `main` changes under it?
 
 1. Open your partner's pull request in your repository. Its checks haven't started, because GitHub
-   holds the runs of anyone who has never had a change merged into a repository until someone with
-   write access approves them. A `pull_request` run uses the workflow files from the pull request
+   holds the runs of anyone who has never had a change merged into a repository, until someone
+   with write access approves them. A `pull_request` run uses the workflow files from the pull request
    itself, so read **Files changed** first and check that nothing under `.github/` changed. Then
    press **Approve and run workflows**. Do this before you merge anything of your own in step 4,
    because once the pull request has a conflict it gets no runs at all.
@@ -280,28 +281,29 @@ Can you tell, without reading the GDS, whether a layout change is what its descr
    You should see `Final result: Circuits match uniquely.` if the slot is right.
 
 4. Compare the slot in the render with the line in `slots.tcl` and the two pinout lines. A
-   description that says slot 5 for a pinout that describes `ui[4]` is exactly the kind of mistake
-   precheck can't see: it doesn't read the digital pins' descriptions at all.
+   description that says slot 5 for a pinout that describes `ui[4]` is a mistake that precheck
+   can't catch, because it doesn't read the digital pins' descriptions at all.
 
 5. Write the review: **Files changed** › **Review changes** › **Request changes**, with a comment
    that says what should change and why. There usually is something, even if it's only a
-   description that's missing the LVS line. Requests have to be specific: "Paste the
-   `Final result` line of `make lvs` from the latest commit" can be acted on; "looks off" can't.
+   description that's missing the LVS line. Make each request specific enough to act on: your
+   partner can act on "Paste the `Final result` line of `make lvs` from the latest commit", but not
+   on "looks off".
 
    <!-- SCREENSHOT-TODO: github.com, signed in as the owner, a pull request from a fork in ttsky-ic102-a-review > Files changed > "Review changes" open, with a comment typed and "Request changes" selected. Needs a second account, which opened the pull request: GitHub doesn't let the author of a pull request approve it or request changes on it, so the one-account live test of Nov 16, 2026 could only leave a comment review. -->
    ![Requesting a change.](../assets/img/ic102-a-request-changes.png){width=640}
 
 Check: you've submitted a review on your partner's pull request that requests a specific change.
 
-## Part 5: Answer the review, and resolve the conflict
+## Part 5: Answer the review and resolve the conflict
 
 What happens to an approval when you push again?
 
 1. Back in your fork's clone, make the change your partner asked for, commit it, and push. That
    push starts no runs, because the pull request still has its conflict; the checks run again after
-   step 4. Reply to each of their comments and resolve it, because the ruleset won't merge with a
-   conversation still open. Ask your partner to look again; they can approve a pull request that
-   has a conflict.
+   step 4. Reply to each of their comments and resolve it, because the ruleset blocks the merge
+   while a conversation is still open. Ask your partner to look again; they can approve a pull
+   request that has a conflict.
 
 2. Once they've approved, bring their `main` into your branch. Predict which files will conflict
    first, then:
@@ -352,8 +354,8 @@ What happens to an approval when you push again?
    keeps whichever side has a description; in `layout/slots.tcl`, keep both `slot` lines, in slot
    order. Delete every `<<<<<<<`, `=======` and `>>>>>>>` line.
 
-4. Don't resolve `gds/` or `lef/` at all. Run `make`, which builds both again from the merged
-   sources, check the result, then finish the merge and push:
+4. Don't resolve `gds/` or `lef/` by taking either side's version. Instead run `make`, which
+   builds both again from the merged sources, check the result, and then finish the merge and push:
 
    ```bash
    make && make lvs && make precheck
@@ -362,12 +364,13 @@ What happens to an approval when you push again?
    git push
    ```
 
-   The commit is `Merge remote-tracking branch 'upstream/main' into slot-K-YOUR-USERNAME`. If
-   `make` stops with `make: can't read project.top_module from info.yaml`, there's a conflict
-   marker left in `info.yaml`, and `make` lists the lines. If it stops with
+   The merge commit's message is
+   `Merge remote-tracking branch 'upstream/main' into slot-K-YOUR-USERNAME`. If `make` stops with
+   `make: can't read project.top_module from info.yaml`, there's a conflict marker left in
+   `info.yaml`, and `make` lists the lines. If it stops with
    `Error parsing "../build.tcl": slot 3 is claimed twice in slots.tcl` (with your slot number),
-   you and your partner claimed the same slot, and you pick another, in `slots.tcl` and
-   `info.yaml` both.
+   you and your partner claimed the same slot, and you need to pick another one and change it in
+   both `slots.tcl` and `info.yaml`.
 
 5. The conflict is gone, so the checks run again on the new commit. Before you look, predict
    whether your pull request is still approved.
@@ -389,8 +392,9 @@ the pull request shows no conflict.
 1. When your partner has pushed their merge, look at their pull request again: the checks, the
    new render, and the `slots.tcl` and pinout lines, which now hold both claims. When it's right,
    approve it and press **Merge pull request** (a merge commit is the only kind the ruleset
-   allows); your partner can't, having no write access to your repository. The merge is a push to `main`, so the workflows run there, `viewer`
-   included, and your Pages site shows the layout with both slots.
+   allows). You have to do this yourself, because your partner has no write access to your
+   repository. The merge is a push to `main`, so the workflows run there, `viewer` included, and
+   your Pages site shows the layout with both slots.
 
 2. Look at your repository's history:
 
@@ -422,15 +426,16 @@ the pull request shows no conflict.
    * 9672e13 Start from the IC102-A sandbox
    ```
 
-   `6ee85be` is the change the review asked for, pushed while the pull request still conflicted.
+   `6ee85be` is the change the review asked for, pushed while the pull request still had its
+   conflict.
 
 Check: your partner's pull request is merged, and the `gds` run on your `main` is green with all
 three jobs.
 
 ## Part 7: A pull request written by an AI tool (optional)
 
-About 20 minutes. The package has a pull request that an AI coding tool wrote, with problems the
-course left in it on purpose, and every check passes on it. Each of you opens it on the other's
+This part takes about 20 minutes. The package has a pull request that an AI coding tool wrote. We
+left problems in it on purpose, and every check passes on it. Each of you opens it on the other's
 repository and reviews the copy opened on your own.
 
 1. In your fork's clone, with your own pull request merged, run:
@@ -443,14 +448,14 @@ repository and reviews the copy opened on your own.
 
    It branches from your partner's `main`, commits the change to a free slot, pushes the branch to
    your fork, and prints a title and a description. Open a pull request from that branch into your
-   partner's `main` with them, without reading the change yourself.
+   partner's `main`, using that title and description, without reading the change yourself.
 
 2. When your partner's copy arrives in your repository, approve its runs if GitHub holds them
-   (it shouldn't, now that your partner has had a pull request merged), and review it as you
+   (it shouldn't, now that your partner has had a pull request merged). Review it as you
    reviewed theirs, but treat every statement in its description as a claim to check, as
    [Pull requests and review](../guide/pull-requests-and-review.md#pull-requests-written-with-ai-tools)
-   suggests. Request changes, naming each problem you find with its file and line. Don't approve it
-   or merge it; close it when you're done.
+   suggests. Request changes, and name each problem you find with its file and line. Don't approve
+   it or merge it; close it when you're done.
 
    <details>
    <summary>Answer</summary>
@@ -494,8 +499,8 @@ Questions:
    <details>
    <summary>Answer</summary>
 
-   `viewer` is skipped on pull requests, so it never reports on one. It runs when the merge is
-   pushed to `main`.
+   `viewer` is skipped on pull requests, so it never reports a pass or a fail on one. It runs when
+   the merge is pushed to `main`.
 
    </details>
 
