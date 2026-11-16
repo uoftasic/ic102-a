@@ -20,10 +20,11 @@ module that only declares the pins.
 ## docs
 
 `docs.yaml` has one job, `docs`, with two steps: it checks out your repository, then runs Tiny
-Tapeout's docs action. Inside that action, the step that matters is "Check info.yaml and
-docs/info.md", which runs `tt_tool.py --check-docs` from Tiny Tapeout's support tools. That reads
-`info.yaml` with the same validator the rest of Tiny Tapeout uses, and `docs/info.md` for the
-template's placeholder sentences, and prints every problem it finds before it fails:
+Tapeout's docs action. Inside that action, the checking is done by one step, "Check info.yaml and
+docs/info.md", which runs `tt_tool.py --check-docs` from Tiny Tapeout's support tools. That program
+reads `info.yaml` with the same validator the rest of Tiny Tapeout uses, looks through
+`docs/info.md` for the template's placeholder sentences, and prints every problem it finds before
+it fails:
 
 ```
 ## Errors in info.yaml
@@ -77,10 +78,10 @@ cp: cannot stat 'gds/tt_um_example.gds': No such file or directory
 ##[error]Process completed with exit code 1.
 ```
 
-That's from the team's `asic-zoo-template`, which had no layout yet. The same line comes from a
-`top_module` in `info.yaml` that doesn't match the file's name, because the path is built from
-`top_module`. This job never opens your GDS, so a layout that's wrong in every way passes it as
-long as the two files exist.
+That's from the team's `asic-zoo-template`, which had no layout yet. You get the same line when
+`top_module` in `info.yaml` doesn't match the file's name, because the path is built from
+`top_module`. Nothing in this job checks your GDS (it only copies, converts and renders it), so a
+layout that's wrong in every way passes it as long as the two files exist.
 
 ### The precheck job
 
@@ -92,8 +93,9 @@ needs, and that's most of its run time:
    `ciel` action.
 3. It builds Magic and KLayout through Nix, at versions fixed by two Nix package commits: Magic
    8.3.568 and KLayout 0.30.8.
-4. "Run precheck" runs `precheck.py` on your GDS: 15 checks for `sky130A`, all of them, even
-   after one fails. [What precheck checks](what-precheck-checks.md) goes through them.
+4. "Run precheck" runs `precheck.py` on your GDS, which runs all 15 checks for `sky130A` and
+   carries on after one of them fails. [What precheck checks](what-precheck-checks.md) goes
+   through them.
 5. Three more steps run whether or not the checks passed (`if: always()`). "Test Summary" and
    "Capture test results" put precheck's table of results on the run's summary page, and "Upload
    reports" uploads the reports folder as the `precheck_reports` artifact.
@@ -123,7 +125,8 @@ and then start a new run, with **Run workflow** or a new push, rather than re-ru
 one: at the `ttsky26d` tag, a re-run of `viewer` within a day of the first attempt fails with
 `Multiple artifacts named "github-pages"`.
 [Reading a workflow file](reading-a-workflow-file.md#github-pages-and-the-viewer) has the rest of
-that log and the story of that trap. When it works, the job's summary has links to the 3D viewer
+that log, and its section [Re-running a run](reading-a-workflow-file.md#re-running-a-run) explains
+why a re-run fails that way. When it works, the job's summary has links to the 3D viewer
 and to Tiny Tapeout's GDS explorer, and your Pages site redirects to the viewer.
 
 `viewer` doesn't depend on `precheck`, so it passes even when precheck fails, and a run can end
@@ -137,8 +140,8 @@ In this course a workflow counts as passing only when all three jobs are green.
 
 The template's two workflows start on every push, to any branch, and on `workflow_dispatch`, the
 **Run workflow** button. There is no `pull_request` trigger. A pull request between two branches of
-your own repository still shows checks, because each push to its branch started runs on the
-branch's latest commit, and GitHub shows those.
+your own repository still shows checks, though: every push to the pull request's branch started
+runs of both workflows, and GitHub shows the runs for the branch's latest commit.
 
 Every push runs `viewer` too, whichever branch it's on, so your Pages site shows the layout from
 the last run whose `viewer` job deployed, not necessarily `main`'s. The team's `sentry` deploys
@@ -176,8 +179,8 @@ the same lines is merged, your pull request's checks stop until you resolve the 
    <summary>Answer</summary>
 
    "Copy GDS / LEF files to tt_submission", inside "Create and publish the GDS artifact". It's
-   the only step in the job that reads your files, and a short failure there means one of them
-   isn't where the workflow looks: no layout committed yet, or a `top_module` in `info.yaml` that
+   the step that copies your GDS and LEF, and a short failure there means one of them isn't
+   where the workflow looks: no layout committed yet, or a `top_module` in `info.yaml` that
    doesn't match the files' names. The other two jobs are grey because they `need` this one.
 
    </details>
