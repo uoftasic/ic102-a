@@ -5,9 +5,9 @@ still not tell you?*
 
 Precheck is a Python program, `precheck/precheck.py` in Tiny Tapeout's support tools, and the
 `precheck` job runs it on the GDS from the `tt_submission` artifact. Tiny Tapeout's own guide says
-of it that "All the checks need to be green to submit to the chip". Everything on this page comes
-from `precheck.py` at commit `9d13ff3`, the one the runner checked out in November 2026, and from
-runs of it on this course's layouts. You'll see most of these rows fail in
+of it that "All the checks need to be green to submit to the chip". The details on this page come
+from `precheck.py` at commit `9d13ff3`, which is the commit the runner checked out in November 2026,
+and from runs of it on this course's layouts and on one public project's. You'll see most of these rows fail in
 [Lab 02](../labs/lab-02-read-the-red-x-overview.md), and find two mistakes in
 [Lab 03](../labs/lab-03-a-layout-that-passes-precheck-overview.md) that none of them catch.
 
@@ -59,9 +59,8 @@ can disagree. Each says which pin and suggests two fixes:
 - `… is not connected to any adjacent metal but the description of `ua[n]` in the pinout section of `info.yaml` is non-empty.`
 
 "Connected" here means metal 4 reaching into a band from 0.1 to 0.5 µm around the pin's
-rectangle, or a via 3 on the pin itself.
-Precheck doesn't follow the metal any further, so a stub that goes nowhere counts, which is why
-Lab 01's placeholder passes.
+rectangle, or a via 3 on the pin itself. Precheck doesn't follow the metal any further, so a stub
+that goes nowhere counts, which is why Lab 01's placeholder passes.
 
 ## Reading the table and the log
 
@@ -71,7 +70,8 @@ every later check compares against. The table on the run's summary page is the q
 start: read every ❌ row, and look for the one that explains the others.
 
 The log isn't always ordered the way the table is. Some checks print their errors as they go and
-some only fail at the end, so the first `ERROR:` line in the log can be a consequence. In Lab 02's
+some only fail at the end, so the first `ERROR:` line in the log can be a consequence of another
+check's failure. In Lab 02's
 breakage 3, a renamed `top_module` with an unchanged GDS, the log's first 53 error lines are the
 pin check's, one per pin:
 
@@ -94,10 +94,10 @@ Creating new cell
 No errors found.
 ```
 
-It made an empty cell, checked that, and found nothing wrong. A check can pass because it ran on
-nothing, and only the log tells you. You'll write a script in
-[Lab 05](../labs/lab-05-find-the-commit-that-broke-it-overview.md) that has to tell those cases
-apart.
+It made an empty cell, checked that, and found nothing wrong, so the table shows a ✅ for Magic DRC,
+and only the log tells you that the check ran on an empty cell. You'll write a script in
+[Lab 05](../labs/lab-05-find-the-commit-that-broke-it-overview.md) that has to tell a pass like
+this one from a real pass.
 
 ## What precheck leaves to you
 
@@ -120,9 +120,9 @@ you meant, and several things a reviewer cares about are outside every one of it
 - **Whether the GDS is the one your sources build.** Precheck checks the file you committed. If you
   changed `wires.tcl` and forgot to run `make`, it checks the old layout, and passes it.
 
-Between them, the `docs` job and precheck check that your files are complete and legal. Whether
-they describe the circuit you meant is for you and your reviewer to check, and
-[Pull requests and review](pull-requests-and-review.md) is about that part.
+Between them, the `docs` job and precheck check that your files are complete and legal. Checking
+that they describe the circuit you meant is left to you and your reviewer, and
+[Pull requests and review](pull-requests-and-review.md) is about how you do that.
 
 ## Check yourself
 
