@@ -37,10 +37,19 @@ If you haven't set up the workbench yet, do
    mod ic102-a
    ```
 
-   You should see the `ASIC-EDU: PDK=sky130A ...` banner and, as the last line,
-   `cwd: /foss/designs/modules/ic102-a`.
+   You should see the `ASIC-EDU: PDK=sky130A ...` banner, then this from `mod add`:
 
-   <!-- RUN-TODO: the output of `mod add ic102-a` once github.com/uoftasic/ic102-a is published. -->
+   ```
+   Cloning https://github.com/uoftasic/ic102-a.git
+        into /foss/designs/modules/ic102-a
+   Cloning into '/foss/designs/modules/ic102-a'...
+   OK  module ready: /foss/designs/modules/ic102-a
+       run: mod ic102-a
+   cwd: /foss/designs/modules/ic102-a
+   ```
+
+   `mod add` leaves you in the course folder, and `mod ic102-a` prints the same `cwd:` line
+   again, as the last line.
 
 3. Install the course's copy of precheck's tools. They're installed alongside the workbench's own
    tools, in `labs/common/tt-tools/.local`. That folder is on your own disk, so you only do this
