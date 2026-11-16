@@ -212,7 +212,7 @@ Which of the `docs` workflow's complaints can you fix before you push?
    - Missing 'How it works' section in docs/info.md
    - Missing 'How to test' section in docs/info.md
 
-   make: *** [Makefile:84: docs] Error 1
+   make: *** [Makefile:87: docs] Error 1
    ```
 
    That's the list `hart-1`'s `docs` run printed on GitHub, word for word, because `make docs` runs

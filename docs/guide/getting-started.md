@@ -90,8 +90,9 @@ You may use AI tools such as Claude, ChatGPT or Copilot to help with the work in
 explain an error message, write a script or draft a pull request description. The rules are the
 ones in [Pull requests and review](pull-requests-and-review.md#pull-requests-written-with-ai-tools):
 you answer for every line you submit, however it was written, and you say in a pull request which
-parts a tool wrote and what you checked yourself. The labs are built so that the checks, not the
-tool, tell you when you're right: an LVS report doesn't care who drew the wire.
+parts a tool wrote and what you checked yourself. The labs are built so that a check tells you
+when your work is right, whoever or whatever wrote it: LVS compares your layout with the
+reference either way.
 
 ## Where the course stops
 

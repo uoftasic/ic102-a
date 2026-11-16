@@ -120,8 +120,9 @@ you meant, and several things a reviewer cares about are outside every one of it
 - **Whether the GDS is the one your sources build.** Precheck checks the file you committed. If you
   changed `wires.tcl` and forgot to run `make`, it checks the old layout, and passes it.
 
-The `docs` job and `precheck` between them check form; meaning is for you and your reviewer.
-[Pull requests and review](pull-requests-and-review.md) is about that half.
+Between them, the `docs` job and precheck check that your files are complete and legal. Whether
+they describe the circuit you meant is for you and your reviewer to check, and
+[Pull requests and review](pull-requests-and-review.md) is about that part.
 
 ## Check yourself
 
