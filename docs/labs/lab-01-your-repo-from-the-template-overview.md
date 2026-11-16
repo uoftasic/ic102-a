@@ -346,16 +346,22 @@ What's the least layout that passes precheck?
    It takes about 45 s. You should see `INFO: Precheck passed for .../tt_um_yourname_ic102.gds! 🎉`
    and a table of 15 checks, every one ✅, from `Magic DRC` to `Verilog syntax check`.
 
-4. Commit `layout/`, `gds/` and `lef/`, and push:
+4. Before you commit, check what git will take:
+
+   ```bash
+   git status
+   ```
+
+   It should list your change to `layout/init.tcl` and the new `gds/` and `lef/` folders, but not
+   `tt_submission/` or `layout/build/`. The template's `.gitignore` and the kit's line in it keep
+   precheck's and Magic's scratch files out of git, so `git add -A` leaves them behind. Then commit
+   `layout/`, `gds/` and `lef/`, and push:
 
    ```bash
    git add -A
    git commit -m "Add the 1x2 frame with stubs on ua[0] and ua[1]"
    git push
    ```
-
-   `git status` afterwards shouldn't list `tt_submission/` or `layout/build/`: the template's
-   `.gitignore` and the kit's line in it keep precheck's and Magic's scratch files out of git.
 
 5. Predict which jobs of the new `gds` run will pass, then open it. You should see `gds` and
    `precheck` green and `viewer` red. We made `vproHacks/ic102-test-a` from the template to test
@@ -414,7 +420,9 @@ Questions:
 
    </details>
 
-2. The `gds` job in Part 4 failed in well under a minute. A digital project's `gds` job took between
+2. The `gds` job in Part 4 failed in well under a minute, and when it passed it still took only
+   about a minute: 61 s on the Part 5 push and 62 s in the Part 6 run, in our test of this lab
+   (your run's summary page gives your own times). A digital project's `gds` job took between
    207 s and 1,056 s in the team's repositories. Why is the analog one so much faster even when it
    passes?
 
