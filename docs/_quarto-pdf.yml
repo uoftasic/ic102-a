@@ -8,7 +8,7 @@ project:
 
 book:
   title: "IC102-A — Working in Tiny Tapeout Repos (Analog)"
-  subtitle: "Run an analog Tiny Tapeout project the way the team does: your own repo from the template, a layout that passes precheck, reviewed pull requests, and history you can use."
+  subtitle: "Make an analog Tiny Tapeout project from the template on your own GitHub account and get its layout through precheck."
   author: "UofT ASIC Team"
   output-file: "ic102-a-course"
   chapters:
