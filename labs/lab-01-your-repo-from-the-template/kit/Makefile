@@ -55,7 +55,8 @@ help:
 check-top:
 	@[ -x "$(PIN_MAGIC)" ] && [ -f "$(call RC,$(PIN_PDK))" ] || { \
 	  echo "precheck's Magic and PDK aren't installed in $(TT_TOOLS)/.local; run: make -C $(TT_TOOLS) install"; exit 1; }
-	@[ -n "$(TOP)" ] || { echo "make: can't read project.top_module from info.yaml"; exit 1; }
+	@[ -n "$(TOP)" ] || { echo "make: can't read project.top_module from info.yaml"; \
+	  ! grep -n '^<<<<<<<\|^=======\|^>>>>>>>' info.yaml || echo "info.yaml still has conflict markers on the lines above"; exit 1; }
 	@[ "$(INIT_TOP)" = "$(TOP)" ] || { \
 	  echo "layout/init.tcl draws a cell called '$(INIT_TOP)', but top_module in info.yaml is '$(TOP)'."; \
 	  echo "Set TOP_LEVEL_CELL in the settings block of layout/init.tcl to $(TOP)."; exit 1; }
@@ -66,12 +67,14 @@ layout: check-top
 	@cp layout/tt_analog_1x2.def $(BUILD)/
 	@echo "magic: the kit's frame and power stripes (layout/init.tcl)"
 	@$(call magic_batch,../init.tcl,init.log)
-	@[ -f $(BUILD)/$(TOP).mag ] || { echo "init.tcl didn't save $(TOP).mag; read $(BUILD)/init.log"; exit 1; }
+	@[ -f $(BUILD)/$(TOP).mag ] || { echo "init.tcl didn't save $(TOP).mag; read $(BUILD)/init.log"; \
+	       grep -m3 '^Error' $(BUILD)/init.log | sed 's/^/  /'; exit 1; }
 	@rm -f gds/$(TOP).gds lef/$(TOP).lef
 	@echo "magic: your additions (layout/wires.tcl), then GDS and LEF"
 	@$(call magic_batch,../build.tcl,build.log)
 	@[ -s gds/$(TOP).gds ] && grep -q '^END LIBRARY' lef/$(TOP).lef 2>/dev/null \
-	  || { echo "build.tcl didn't write gds/$(TOP).gds and lef/$(TOP).lef; read $(BUILD)/build.log"; exit 1; }
+	  || { echo "build.tcl didn't write gds/$(TOP).gds and lef/$(TOP).lef; read $(BUILD)/build.log"; \
+	       grep -m3 '^Error' $(BUILD)/build.log | sed 's/^/  /'; exit 1; }
 	@echo "wrote gds/$(TOP).gds and lef/$(TOP).lef"
 
 check-gds: check-top
@@ -95,17 +98,22 @@ drc: check-gds
 	@[ -f $(BUILD)/drc.txt ] || { echo "drc.tcl wrote no report; read $(BUILD)/drc.log"; exit 1; }
 	@cat $(BUILD)/drc.txt
 
+# The reference netlist is layout/lvs/reference.spice, or, in a repository that
+# has layout/lvs/reference.py (the Lab 04 sandbox), whatever that script writes.
+LVS_REF := $(if $(wildcard layout/lvs/reference.py),$(BUILD)/reference.spice,layout/lvs/reference.spice)
+
 lvs: check-gds
-	@[ -f layout/lvs/reference.spice ] || { echo "no layout/lvs/reference.spice yet: Lab 03 adds it"; exit 1; }
+	@[ -f layout/lvs/reference.py ] && python3 layout/lvs/reference.py $(TOP) > $(LVS_REF) || true
+	@[ -f $(LVS_REF) ] || { echo "no layout/lvs/reference.spice yet: Lab 03 adds it"; exit 1; }
 	@echo "magic: extract a netlist from gds/$(TOP).gds"
 	@rm -f $(BUILD)/$(TOP).spice $(BUILD)/lvs.report
 	@$(call magic_batch,../extract.tcl,extract.log)
 	@[ -f $(BUILD)/$(TOP).spice ] || { echo "extract.tcl wrote no netlist; read $(BUILD)/extract.log"; exit 1; }
-	@echo "netgen: the extracted netlist against layout/lvs/reference.spice"
-	@netgen -batch lvs "$(BUILD)/$(TOP).spice $(TOP)" "layout/lvs/reference.spice $(TOP)" \
+	@echo "netgen: the extracted netlist against $(LVS_REF)"
+	@netgen -batch lvs "$(BUILD)/$(TOP).spice $(TOP)" "$(LVS_REF) $(TOP)" \
 	  $(PIN_PDK)/sky130A/libs.tech/netgen/sky130A_setup.tcl $(BUILD)/lvs.report > $(BUILD)/netgen.log 2>&1 || true
 	@[ -f $(BUILD)/lvs.report ] || { echo "netgen wrote no report; read $(BUILD)/netgen.log"; exit 1; }
-	@grep -A1 '^Final result' $(BUILD)/lvs.report | sed 's/^/  /'
+	@grep '^Final result' $(BUILD)/lvs.report | sed 's/^/  /'
 	@grep -E 'no pin|no matching|Mismatch' $(BUILD)/lvs.report | sort -u | head -20 | sed 's/^/  /' || true
 	@echo "full report: $(BUILD)/lvs.report"
 
