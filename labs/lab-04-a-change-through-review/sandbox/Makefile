@@ -42,8 +42,21 @@ define magic_batch
 endef
 
 # drc and lvs check the files you commit, gds/ and lef/, as precheck does, so
-# they warn when a layout source is newer than the GDS.
-STALE = $(shell for f in layout/*.tcl layout/cells/*; do [ -e "$$f" ] && [ "$$f" -nt gds/$(TOP).gds ] && echo "$$f"; done 2>/dev/null)
+# they warn when a layout source changed after the GDS was built. While every
+# layout source and the GDS are as committed, "after" means in a later commit:
+# git gives each file it writes on a switch or a pull the time it wrote it, so
+# then the files' own times say nothing about which was built from which. Once
+# you've changed one of them, the files' times are compared instead.
+STALE = $(shell g=gds/$(TOP).gds; \
+  if git rev-parse -q --verify HEAD >/dev/null && git diff --quiet HEAD -- layout $$g \
+     && [ -z "$$(git ls-files --others --exclude-standard -- layout)" ]; then \
+    tg=$$(git log -1 --format=%ct -- $$g); \
+    for f in layout/*.tcl layout/cells/*; do \
+      [ -e "$$f" ] || continue; tf=$$(git log -1 --format=%ct -- "$$f"); \
+      [ -n "$$tg" ] && [ -n "$$tf" ] && [ "$$tf" -gt "$$tg" ] && echo "$$f"; done; \
+  else \
+    for f in layout/*.tcl layout/cells/*; do [ -e "$$f" ] && [ "$$f" -nt $$g ] && echo "$$f"; done; \
+  fi 2>/dev/null)
 
 .PHONY: all layout check-top check-gds docs precheck drc lvs view clean help
 
