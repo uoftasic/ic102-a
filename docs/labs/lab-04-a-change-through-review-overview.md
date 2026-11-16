@@ -34,6 +34,8 @@ Set up the repository your partner will send a pull request to, with rules on it
    the owner, the name `ttsky-ic102-a-review`, **Public**, and no README, `.gitignore` or licence,
    so that it starts empty.
 
+   ![The new-repository form filled in for the review repository: your own account as the owner, Public, no template, Add README off, and no .gitignore or licence.](../assets/img/ic102-a-new-empty-repo.png){width=560}
+
 2. Copy the sandbox into your projects folder, make it a git repository, and push it:
 
    ```bash
