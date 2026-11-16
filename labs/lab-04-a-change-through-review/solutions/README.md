@@ -2,7 +2,9 @@
 
 `ai-pr/ai-pr.sh` writes the pull request onto the lowest free slot K whose neighbour K+1 is also
 free, on the partner's `main`. The writeup gives the same answers in a collapsed block, under
-Part 7. Outputs below are from a rehearsal where K was 0.
+Part 7. Outputs below are from a rehearsal where K was 0, and the live test of Nov 16, 2026
+(vproHacks/ic102-review-sandbox-a#3, K also 0) gave the same ones, with every check on GitHub
+green.
 
 | Where | Problem | How a reviewer finds it |
 |---|---|---|

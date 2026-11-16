@@ -57,19 +57,22 @@ Set up the repository your partner will send a pull request to, with rules on it
    because Pages is off in a new repository. Turn it on (Settings › Pages › Source: **GitHub
    Actions**), then start a new run: Actions › `gds` › **Run workflow** on `main`. As in Lab 01,
    don't use "Re-run failed jobs" for this. You should see `docs` green, and `gds`, `precheck` and
-   `viewer` green in the new run.
-
-   <!-- RUN-TODO: the first runs of a student's ttsky-ic102-a-review: the push's docs and gds runs (viewer red with the Pages 404) and the Run workflow run after Pages is on, all three jobs green. One account is enough. -->
+   `viewer` green in the new run. In our test of this lab on Nov 16, 2026, the push's `docs` run
+   passed in 42 s; its `gds` run had `gds` and `precheck` green and `viewer` red after 8 s, with
+   `Failed to create deployment (status: 404)`; and the Run workflow run after Pages was on passed
+   all three jobs in 2 min 42 s.
 
 4. Add the rules. Open Settings › Rules › Rulesets › **New ruleset** › **Import a ruleset**, and
    choose `ruleset.json` from your clone; on your own computer it's in your workspace folder, under
    `projects/ttsky-ic102-a-review/`. Check what the page shows against the table in `RULESET.md`,
    then press **Create**.
 
-   <!-- SCREENSHOT-TODO: github.com, signed in, YOUR-USERNAME/ttsky-ic102-a-review > Settings > Rules > Rulesets, the ruleset imported from ruleset.json before Create: name "main: one approval and green checks", Enforcement Active, target Default, and the Bypass list showing "Repository admin" with "For pull requests only". One account is enough. -->
-   ![The imported ruleset, with the repository admin on the bypass list for pull requests only.](../assets/img/ic102-a-ruleset-import.png){width=640}
+   ![The imported ruleset before Create, with the repository admin on the bypass list, "Allow for pull requests only".](../assets/img/ic102-a-ruleset-import.png){width=640}
 
-   <!-- RUN-TODO: import ruleset.json into a personal repository and confirm GitHub accepts it as written (RepositoryRole 5 with "pull_request" bypass mode, required checks docs, gds and precheck, merge method "merge"). One account is enough. -->
+   GitHub takes the file as written: the bypass entry shows as "Repository admin" with "Allow for
+   pull requests only", and the rules below it match `RULESET.md`. The one box ticked that the
+   file doesn't mention, "Require an additional approval for unattributed Copilot pull requests",
+   is GitHub's default, and it only matters for a pull request that Copilot opens by itself.
 
 5. You're the repository's admin, and the admin role is on the bypass list. Before you try it,
    write down whether a commit pushed straight to `main` will be accepted. Then try one that
@@ -81,14 +84,27 @@ Set up the repository your partner will send a pull request to, with rules on it
    git reset --hard origin/main
    ```
 
-   <!-- RUN-TODO: the full output of `git push` when the ruleset refuses a direct push to main (the GH013 rule-violation lines), from a student's ttsky-ic102-a-review. One account is enough. -->
-
    <details>
    <summary>Answer</summary>
 
-   It's refused, and GitHub's message names the rule that requires a pull request. The bypass is
-   "For pull requests only": it lets you merge a pull request of your own without an approval
-   (you'll use that in Part 3), and nothing else.
+   It's refused, and GitHub's message names the rule that requires a pull request. In our test
+   repository, `git push` printed:
+
+   ```
+   remote: error: GH013: Repository rule violations found for refs/heads/main.
+   remote: Review all repository rules at https://github.com/vproHacks/ic102-review-sandbox-a/rules?ref=refs%2Fheads%2Fmain
+   remote:
+   remote: - Changes must be made through a pull request.
+   remote:
+   remote: - 3 of 3 required status checks are expected.
+   remote:
+   To https://github.com/vproHacks/ic102-review-sandbox-a.git
+    ! [remote rejected] main -> main (push declined due to repository rule violations)
+   error: failed to push some refs to 'https://github.com/vproHacks/ic102-review-sandbox-a.git'
+   ```
+
+   The bypass is "For pull requests only": it lets you merge a pull request of your own without
+   an approval (you'll use that in Part 3), and nothing else.
 
    </details>
 
@@ -105,7 +121,7 @@ What does a layout change look like when you can't read it in a diff?
    `ttsky-ic102-a-review-fork`, because you already have a repository called
    `ttsky-ic102-a-review`.
 
-   <!-- SCREENSHOT-TODO: github.com, signed in, the "Create a new fork" page for PARTNER-USERNAME/ttsky-ic102-a-review: Owner set to a personal account, Repository name changed to ttsky-ic102-a-review-fork, "Copy the main branch only" ticked. Needs a second account, whose repository is forked. -->
+   <!-- SCREENSHOT-TODO: github.com, signed in, the "Create a new fork" page for PARTNER-USERNAME/ttsky-ic102-a-review: Owner set to a personal account, Repository name changed to ttsky-ic102-a-review-fork, "Copy the main branch only" ticked. Needs a second account, whose repository is forked: GitHub doesn't let an account fork its own repository, so the one-account live test of Nov 16, 2026 couldn't take it. -->
    ![Forking your partner's review repository under a new name.](../assets/img/ic102-a-fork.png){width=640}
 
 2. Clone your fork, set it up as you did your own, and add your partner's repository as a second
@@ -178,8 +194,8 @@ What does a layout change look like when you can't read it in a diff?
 
 7. Push the branch to your fork with `git push -u origin slot-K-YOUR-USERNAME`. git prints a link
    for opening a pull request; open it, and check that the base is your partner's repository and
-   its `main`. Fill in the description from the template: which slot, the cell's name, and the last
-   lines of `make lvs` and `make precheck`. If an AI tool wrote part of the change or the
+   its `main`. Fill in the description from the template: which slot, the cell's name, the
+   `Final result` line of `make lvs` and the `Precheck passed` line of `make precheck`. If an AI tool wrote part of the change or the
    description, say which part, and what you checked yourself. Create the pull request and tell
    your partner its number.
 
@@ -197,16 +213,18 @@ What happens to an open pull request when `main` changes under it?
    press **Approve and run workflows**. Do this before you merge anything of your own in step 4,
    because once the pull request has a conflict it gets no runs at all.
 
-   <!-- SCREENSHOT-TODO: github.com, signed in as the repository's owner, a pull request from a fork in ttsky-ic102-a-review, scrolled to the merge box with the workflows awaiting approval and the button that approves them. Needs a second account, which opened the pull request. -->
+   <!-- SCREENSHOT-TODO: github.com, signed in as the repository's owner, a pull request from a fork in ttsky-ic102-a-review, scrolled to the merge box with the workflows awaiting approval and the button that approves them. Needs a second account, which opened the pull request: GitHub holds the runs only of someone else's fork, so the one-account live test of Nov 16, 2026 couldn't take it. -->
    ![A first-time contributor's pull request, with its workflows waiting for approval.](../assets/img/ic102-a-approve-runs.png){width=640}
 
    You should see `docs`, `gds` and `precheck` run and pass, and `viewer` skipped. The merge box
-   says merging is blocked until the pull request is approved.
+   lists `docs / docs (pull_request)`, `gds / gds (pull_request)` and
+   `gds / precheck (pull_request)`, each marked Required, and `gds / viewer (pull_request)` as
+   skipped, and it says "Review required" and "Merging is blocked".
 
-   <!-- SCREENSHOT-TODO: github.com, signed in, a pull request from a fork in ttsky-ic102-a-review with docs, gds and precheck green and viewer skipped, and the merge box saying review is required and merging is blocked. Needs a second account, which opened the pull request. -->
-   ![A pull request waiting for its approval.](../assets/img/ic102-a-merge-blocked.png){width=760}
+   <!-- Screenshot: vproHacks/ic102-review-sandbox-a#1 on Nov 16, 2026, seen by its owner, who also opened it: the one-account live test used a branch of the same repository in place of a partner's fork, so the merge box also offers the owner's bypass. -->
+   ![A pull request waiting for its approval, with its three required checks passed and viewer skipped.](../assets/img/ic102-a-merge-blocked.png){width=760}
 
-   <!-- RUN-TODO: a pull_request run from a fork into a student's ttsky-ic102-a-review: confirm that viewer shows as skipped, that the required checks are named docs, gds and precheck in the merge box, whether each later push to the pull request needs its runs approved again, and the approve button's exact label (GitHub's documentation, read Nov 16, 2026, says "Approve workflows to run"). Needs two accounts. -->
+   <!-- RUN-TODO (two accounts): a pull_request run from a partner's fork into a student's ttsky-ic102-a-review. Confirm whether each later push to the pull request needs its runs approved again, and the approve button's exact label (GitHub's documentation, read Nov 16, 2026, says "Approve workflows to run"). Also Part 5, step 5: that a push after an approval dismisses it. The one-account live test of Nov 16, 2026 confirmed the rest with a same-repository pull request (vproHacks/ic102-review-sandbox-a#1, runs 43828896448 and 43828896478): viewer is skipped, and the merge box names the required checks as above. -->
 
 2. Now claim the slot next to your partner's in your own repository: if they took slot K, take
    K + 1, or K − 1 if they took 7. In your own clone (`cd /foss/designs/projects/ttsky-ic102-a-review`),
@@ -217,11 +235,11 @@ What happens to an open pull request when `main` changes under it?
    own `main`. Wait for its three checks to go green.
 
 4. Your partner can't approve it: only an approval from someone with write access counts, and on a
-   repository in your account that's only you. Merge it yourself with the bypass: tick the box in
-   the merge box that merges without waiting for the requirements, and choose
-   **Create a merge commit**.
+   repository in your account that's only you. Merge it yourself with the bypass: tick
+   **Merge without waiting for requirements to be met (bypass rules)**, and the button below it
+   turns into **Bypass rules and merge**. The ruleset allows only merge commits, so there's no
+   merge method to choose.
 
-   <!-- SCREENSHOT-TODO: github.com, signed in as the owner, the owner's own pull request in ttsky-ic102-a-review with its checks green, scrolled to the merge box with the bypass checkbox ticked and "Create a merge commit". One account is enough. -->
    ![Merging your own pull request with the bypass.](../assets/img/ic102-a-bypass-merge.png){width=640}
 
 5. Before you look at your partner's pull request again, predict which of its five files will
@@ -229,7 +247,8 @@ What happens to an open pull request when `main` changes under it?
    must be resolved", and no new runs, because GitHub's documentation says "Workflows will not run
    on `pull_request` activity if the pull request has a merge conflict."
 
-   <!-- SCREENSHOT-TODO: github.com, signed in as the owner, the partner's pull request in ttsky-ic102-a-review with the merge box saying "This branch has conflicts that must be resolved" and listing the conflicting files. Needs a second account. -->
+   <!-- Screenshot: vproHacks/ic102-review-sandbox-a#1 on Nov 16, 2026, after #2 was merged; a branch of the same repository stood in for the partner's fork. -->
+   ![Your partner's pull request once your claim is merged: the checks it had, and the four files that conflict.](../assets/img/ic102-a-pr-conflict.png){width=640}
 
 Check: your claim is merged into your `main`, and your partner's pull request shows a conflict.
 
@@ -269,7 +288,7 @@ Can you tell, without reading the GDS, whether a layout change is what its descr
    description that's missing the LVS line. Requests have to be specific: "Paste the
    `Final result` line of `make lvs` from the latest commit" can be acted on; "looks off" can't.
 
-   <!-- SCREENSHOT-TODO: github.com, signed in as the owner, a pull request from a fork in ttsky-ic102-a-review > Files changed > "Review changes" open, with a comment typed and "Request changes" selected. Needs a second account, which opened the pull request. -->
+   <!-- SCREENSHOT-TODO: github.com, signed in as the owner, a pull request from a fork in ttsky-ic102-a-review > Files changed > "Review changes" open, with a comment typed and "Request changes" selected. Needs a second account, which opened the pull request: GitHub doesn't let the author of a pull request approve it or request changes on it, so the one-account live test of Nov 16, 2026 could only leave a comment review. -->
    ![Requesting a change.](../assets/img/ic102-a-request-changes.png){width=640}
 
 Check: you've submitted a review on your partner's pull request that requests a specific change.
@@ -278,9 +297,11 @@ Check: you've submitted a review on your partner's pull request that requests a 
 
 What happens to an approval when you push again?
 
-1. Back in your fork's clone, make the change your partner asked for, commit it, and push. Reply to
-   each of their comments and resolve it, because the ruleset won't merge with a conversation still
-   open. Ask your partner to look again; they can approve a pull request that has a conflict.
+1. Back in your fork's clone, make the change your partner asked for, commit it, and push. That
+   push starts no runs, because the pull request still has its conflict; the checks run again after
+   step 4. Reply to each of their comments and resolve it, because the ruleset won't merge with a
+   conversation still open. Ask your partner to look again; they can approve a pull request that
+   has a conflict.
 
 2. Once they've approved, bring their `main` into your branch. Predict which files will conflict
    first, then:
@@ -367,8 +388,8 @@ the pull request shows no conflict.
 
 1. When your partner has pushed their merge, look at their pull request again: the checks, the
    new render, and the `slots.tcl` and pinout lines, which now hold both claims. When it's right,
-   approve it and merge it with **Create a merge commit**; your partner can't, having no write
-   access to your repository. The merge is a push to `main`, so the workflows run there, `viewer`
+   approve it and press **Merge pull request** (a merge commit is the only kind the ruleset
+   allows); your partner can't, having no write access to your repository. The merge is a push to `main`, so the workflows run there, `viewer`
    included, and your Pages site shows the layout with both slots.
 
 2. Look at your repository's history:
@@ -380,23 +401,28 @@ the pull request shows no conflict.
    git log --oneline --graph
    ```
 
-   In the rehearsal it looked like this, with the oldest commit at the bottom:
+   In our test of this lab it looked like this, with the oldest commit at the bottom. One account
+   played both parts, so both claims are `vproHacks`'s, and slot 2's branch stood in for a
+   partner's fork:
 
    ```
-   *   a265da4 Merge pull request #1 from bob/slot-4-bob
+   *   195a352 Merge pull request #1 from vproHacks/slot-2-vproHacks
    |\
-   | *   64ea717 Merge remote-tracking branch 'upstream/main' into slot-4-bob
+   | *   adea902 Merge remote-tracking branch 'upstream/main' into slot-2-vproHacks
    | |\
    | |/
    |/|
-   * |   d5d5e2a Merge pull request #2 from alice/slot-5-alice
+   * |   fbb2e43 Merge pull request #2 from vproHacks/slot-3-vproHacks
    |\ \
-   | * | fe2e3cc Claim slot 5 for alice's inverter
+   | * | 40dd01d Claim slot 3 for vproHacks's inverter
    |/ /
-   | * 5bfcf29 Claim slot 4 for bob's inverter
+   | * 6ee85be Name the slot in the pinout descriptions
+   | * f8867cd Claim slot 2 for vproHacks's inverter
    |/
-   * 6eda35f Start from the IC102-A sandbox
+   * 9672e13 Start from the IC102-A sandbox
    ```
+
+   `6ee85be` is the change the review asked for, pushed while the pull request still conflicted.
 
 Check: your partner's pull request is merged, and the `gds` run on your `main` is green with all
 three jobs.
