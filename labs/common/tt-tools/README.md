@@ -116,7 +116,7 @@ The workbench's own tools gave the same 11 tables, so on these layouts the newer
 | If you see | Do this |
 |---|---|
 | `The read operation timed out` while the PDK downloads | The download server didn't answer in time; precheck on GitHub has failed the same way (erik1567/ttsky26d-VCO, run 42570954316). Run `make install` again. It resumes at the part that failed. |
-| `make: *** [Makefile:30: precheck] Error 1` after the table | That is precheck's failure passed on by `make`. Read the ❌ rows in the table above it. |
+| `make: *** [Makefile:30: precheck] Error 1` after the table, or, when you ran `make precheck` from your repository, `make[1]: *** [Makefile:30: precheck] Error 1` and then `make: *** [Makefile:104: precheck] Error 2` | That is precheck's failure passed on by `make`: once by this folder's Makefile, and once more by your repository's, which runs it. Read the ❌ rows in the table above it. |
 | `Segmentation fault` in a log under `.local/selftest/` | The workbench's Magic 8.3.681 sometimes crashes as it exits in batch mode, after it has written its files. `make selftest` checks the files instead of the exit status, so the crash doesn't fail the test. |
 
 ## Targets
