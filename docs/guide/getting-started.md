@@ -4,8 +4,8 @@ IC102-A is about the repository around an analog Tiny Tapeout design rather than
 itself. Every analog project on a Tiny Tapeout shuttle lives in a GitHub repository made from Tiny
 Tapeout's analog template, and that repository checks your layout on GitHub's machines each time
 you push. In this course you make one of those repositories, learn to read what its checks report,
-put a small layout in it that passes them, get a change reviewed in a repository you share with
-your cohort, and use the history to find a commit that broke something.
+put a small layout in it that passes them, take a change through review with a partner, and use
+the history to find a commit that broke something.
 
 You don't need to know how to draw layout. Each lab ships the layout it needs: Tiny Tapeout's
 empty frame in Lab 01, the CMOS inverter from AD104 Lab 03 in Lab 03, and a prepared project in
@@ -36,10 +36,12 @@ start.
 **The workbench** is the IIC-OSIC-TOOLS desktop you set up in [IC101](https://uoftasic.com/ic101/).
 That's where you build layouts with Magic, run checks, and use git: every command in the labs is
 typed into a terminal on that desktop. Your repositories go in a `projects` folder of your
-workspace, `/foss/designs/projects`, which is the `workspace` folder on your own disk, so they
-survive when the workbench restarts. Anything outside `/foss/designs` doesn't: the container's
-home folder is thrown away with the container, and that has one consequence you'll meet in Lab 01,
-which is that git's settings have to be stored in each repository rather than in your home folder.
+workspace, `/foss/designs/projects`, each in a folder with the repository's name. `/foss/designs`
+is the `workspace` folder on your own disk, so they survive when the workbench restarts, and
+`projects/` keeps them apart from `modules/`, where `mod` puts the courses. Anything outside
+`/foss/designs` doesn't survive: the container's home folder is thrown away with the container, and
+that has one consequence you'll meet in Lab 01, which is that git's settings have to be stored in
+each repository rather than in your home folder.
 
 **GitHub** is where your repository lives, and where its workflows run each time you push, on
 GitHub's machines (the *runners*). [What a cloud runner is](what-a-cloud-runner-is.md) explains
@@ -55,34 +57,56 @@ IC102-A follows Tiny Tapeout's versions on purpose; the other courses use the wo
 
 ## Your GitHub account
 
-You'll work in your own GitHub account throughout, so all you need is a free account. Your
-repository for the labs is public, because GitHub Pages, which the template's `viewer` job needs,
-works only in public repositories on a free account, and because GitHub's runners are free and
-unlimited for public repositories. Remember that everything in a public repository is public: your
-commits, the `author` field in `info.yaml`, and the email address in every commit. Lab 01 has you
-use GitHub's no-reply address for that reason.
+You'll work in your own GitHub account throughout, so all you need is a free account; nothing in
+the course uses the team's organization. Every repository you make is public, because GitHub
+Pages, which the template's `viewer` job needs, works only in public repositories on a free
+account, and because GitHub's runners are free and unlimited for public repositories. Remember
+that everything in a public repository is public: your commits, the `author` field in `info.yaml`,
+and the email address in every commit. Lab 01 has you use GitHub's no-reply address for that
+reason.
 
-You'll also become a member of the team's GitHub organization, `uoftasic`. That's how you get into
-Lab 04's shared repository and, later, into the team's own projects. Membership gives you write
-access to every one of the organization's repositories, which is a lot of trust;
-[Branch rules](branch-rules.md) says what that means in practice.
+These are the repositories you'll make, and each one's clone goes in `/foss/designs/projects/`
+under the same name:
+
+| Repository | Lab | Made how |
+|---|---|---|
+| `ttsky-ic102-a` | 01 to 03, and 05 | **Use this template** on Tiny Tapeout's analog template |
+| `ttsky-ic102-a-review` | 04 | an empty repository, into which you push a copy of the course's sandbox |
+| `ttsky-ic102-a-review-fork` | 04 | **Fork** on your partner's `ttsky-ic102-a-review`, renamed, because you already have a repository with that name |
+
+Lab 04 is the one lab you do with a partner from the course. Each of you sends a pull request to
+the other's `ttsky-ic102-a-review`, and reviews the one that arrives in your own.
 
 ## Pushing from the workbench
 
 GitHub doesn't accept your account's password for `git push`. From the workbench you push over
 HTTPS with a **personal access token**, a long random string that stands in for a password and that
 you can limit to particular repositories and permissions. Lab 01 has you make a fine-grained token
-with two permissions, both "Read and write":
+whose resource owner is your own account, for "All repositories", with two permissions, both
+"Read and write":
 
 - **Contents**, which is what pushing commits needs.
 - **Workflows**, because GitHub refuses a push that adds or changes a file in
-  `.github/workflows/` unless the token has it. You won't edit a workflow in this course, but in
-  Lab 05 you push a whole project's history, workflow files included, to a new branch.
+  `.github/workflows/` unless the token has it. You won't edit a workflow in this course, but two
+  pushes add workflow files all the same: the first push of your Lab 04 review repository, which
+  is a copy of the course's sandbox, and the push of Lab 05's prepared history to a new branch.
 
-When `git push` asks for a password, you paste the token. A line in Lab 01 tells git to keep it in
-memory for ten hours, so you're asked once a session. Keep the token in a password manager, not in
-a file under `/foss/designs`: that folder is your workspace, itself a git repository, and a token
-saved there is one careless `git add` away from being published.
+"All repositories" is there because the Lab 04 repositories don't exist yet when you make the token
+in Lab 01. Every push in the course goes to a repository you own: your `ttsky-ic102-a`, your review
+repository, and your fork of your partner's, from which your pull request goes to them. A
+fine-grained token for your own account covers exactly those and nothing else. The other kind, a
+classic token with the `public_repo` scope, could push to every public repository your account can
+write to, including those of any organization you belong to (in `uoftasic`, members get write
+access to every repository by default), which is far more than the course needs. The one thing a
+fine-grained token can't do is push to someone else's personal repository, even as a
+collaborator, and that's why Lab 04 has you send your change from a fork.
+
+When `git push` asks for a username and password, you give your GitHub username and paste the
+token. A line you run in each clone tells git to keep it in memory for 8 hours, so you're asked
+about once a session, and again after the workbench restarts. Keep the token in a password manager,
+not in a file under `/foss/designs`: that folder is your workspace, itself a git repository, and a
+token saved there is one careless `git add` away from being published. Delete the token when you've
+finished the course.
 
 ## Using AI tools
 
@@ -99,7 +123,7 @@ reference either way.
 IC102-A takes a project as far as "ready to submit": every workflow green, including precheck, on
 a commit you made and can name. It doesn't cover submitting to a shuttle. You won't create a
 project on `app.tinytapeout.com`, pay, or use a coupon, and nothing in the course depends on a
-shuttle being open. Every project you make here is practice, and Lab 04's shared repository is
+shuttle being open. Every project you make here is practice, and Lab 04's review repositories are
 never submitted.
 
 ## Getting help

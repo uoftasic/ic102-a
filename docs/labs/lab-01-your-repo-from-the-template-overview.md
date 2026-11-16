@@ -17,9 +17,8 @@ Package: [`labs/lab-01-your-repo-from-the-template/`](https://github.com/uoftasi
 This lab takes about 1 h 15 min. Half of that is waiting for GitHub's runners, which is a good time
 to read ahead.
 
-In the outputs below the top module is `tt_um_yourname_ic102` and the repository is
-`ttsky-ic102-a`. Yours will have your own username in the first, and whatever name you choose for
-the second.
+In the outputs below the top module is `tt_um_yourname_ic102`, and yours will have your own
+username in it. The repository is `ttsky-ic102-a`, the name the rest of the course uses for it.
 
 ## Part 1: Load the course
 
@@ -92,17 +91,23 @@ push.
    [Git in one page](../guide/git-in-one-page.md#commit-identity) says why.
 
 2. Make a token for the workbench to push with: Settings › Developer settings › Personal access
-   tokens › Fine-grained tokens › Generate new token. Give it a name (`ic102-workbench`), an
-   expiry that covers the course, "All repositories" under Repository access, and two repository
-   permissions, Contents and Workflows, both "Read and write". Copy the token into your password
-   manager now, because GitHub shows it only once.
+   tokens › **Fine-grained tokens** › **Generate new token**. Give it:
 
-   <!-- SCREENSHOT-TODO: github.com, signed in, Settings > Developer settings > Personal access tokens > Fine-grained tokens > Generate new token, scrolled to "Repository access" set to "All repositories" and "Repository permissions" with Contents and Workflows set to "Read and write". -->
-   ![A fine-grained token with Contents and Workflows set to read and write.](../assets/img/ic102-a-token-permissions.png){width=640}
+   - Token name `IC102 workbench`, Resource owner your own account, and Expiration 60 days;
+   - Repository access: **All repositories**;
+   - Repository permissions: **Contents** and **Workflows**, both "Read and write". GitHub adds
+     Metadata, read-only, by itself. Leave everything else as it is.
 
-   [Getting started](../guide/getting-started.md#pushing-from-the-workbench) explains why the
-   token needs Workflows as well as Contents, and why it lives in your password manager rather than
-   in a file.
+   Copy the token into your password manager now, because GitHub shows it only once.
+
+   <!-- SCREENSHOT-TODO: github.com, signed in, Settings > Developer settings > Personal access tokens > Fine-grained tokens > Generate new token: the name "IC102 workbench", the resource owner a personal account, Expiration 60 days, "Repository access" set to "All repositories", and "Repository permissions" with Contents and Workflows set to "Read and write". One account is enough; the same capture serves IC102-D. -->
+   ![A fine-grained token with Contents and Workflows set to read and write.](../assets/img/ic102-token-permissions.png){width=640}
+
+   [Getting started](../guide/getting-started.md#pushing-from-the-workbench) explains why it's
+   this kind of token, why it needs Workflows as well as Contents, and why it lives in your password
+   manager rather than in a file.
+
+   <!-- RUN-TODO: with this token, from the workbench: a push to the student's own ttsky-ic102-a, the first push of the Lab 04 sandbox copy (it adds workflow files) to a new empty ttsky-ic102-a-review, a branch pushed to the student's ttsky-ic102-a-review-fork, and GitHub's exact refusal when Workflows is left off, to quote in Getting started. One account is enough, except that the fork needs a second account's repository to fork. -->
 
 Check: you have the no-reply address and the token saved somewhere you can paste from.
 
@@ -151,15 +156,18 @@ you've changed anything?
    commit", whose hash is your own. The template's own history has been left behind, as
    [Templates, forks and clones](../guide/templates-forks-and-clones.md) says it would.
 
-5. Tell git who you are, in this repository:
+5. Tell git who you are, and to remember your token, in this repository:
 
    ```bash
    git config user.name "Your Name"
    git config user.email "ID+USERNAME@users.noreply.github.com"
+   git config credential.helper 'cache --timeout=28800'
    ```
 
-   Leave out `--global`. A global setting goes into the container's home folder, which is thrown
-   away whenever the workbench restarts, and your next commit would then stop with this:
+   The third line keeps your token in memory for 8 hours after you first type it, so you're asked
+   for it about once a session. Leave out `--global`. A global setting goes into the container's
+   home folder, which is thrown away whenever the workbench restarts, and your next commit would
+   then stop with this:
 
    ```
    Author identity unknown
@@ -170,7 +178,8 @@ you've changed anything?
    ```
 
    A setting without `--global` goes into `.git/config` in the repository, which is on your own
-   disk and stays. You'll repeat these two lines in each repository you clone in this course.
+   disk and stays. You'll repeat these three lines in each repository you clone or create in this
+   course.
 
 6. See which version of Tiny Tapeout's actions your workflows run:
 
@@ -237,13 +246,12 @@ Which of the `docs` workflow's complaints can you fix before you push?
    ```bash
    git add -A
    git commit -m "Fill in info.yaml and docs/info.md, and add the IC102-A layout kit"
-   git config --global credential.helper 'cache --timeout=36000'
    git push
    ```
 
    git asks for a username and a password: give your GitHub username, and paste the token as the
-   password. The `credential.helper` line keeps it in memory for ten hours, so you're asked once a
-   session.
+   password. The cache you set up in Part 3 keeps it for 8 hours, and forgets it when the workbench
+   restarts.
 
 7. Before the runs finish, predict which of the two workflows will be green this time. Then open
    the `gds` run, then its `gds` job, then the failed step, and write down its first error line.
@@ -357,7 +365,7 @@ How do you get the `viewer` job green without changing a file?
    re-run fails with `Multiple artifacts named "github-pages"`.
    [Reading a workflow file](../guide/reading-a-workflow-file.md#re-running-a-run) has the
    story. Start a new run instead: Actions › gds › **Run workflow** › branch `main` › **Run
-   workflow**.
+   workflow**. (A new push would start one too, but you have nothing to push.)
 
    <!-- SCREENSHOT-TODO: github.com, signed in, a student's repository > Actions > the "gds" workflow selected in the left column, with the "Run workflow" dropdown open showing "Use workflow from Branch: main" and the green "Run workflow" button. -->
    ![Starting a new gds run by hand.](../assets/img/ic102-a-run-workflow.png){width=640}
