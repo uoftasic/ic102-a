@@ -1,14 +1,14 @@
 # IC102-A — Working in Tiny Tapeout Repos (Analog)
 
-In this course you run an analog Tiny Tapeout project the way the team's projects should be run:
-your own repository made from Tiny Tapeout's analog template, a layout in it that passes precheck,
-a change that reaches `main` through a reviewed pull request, and a history you can use to find
-the commit that broke something.
+In this course you run an analog Tiny Tapeout project the way the team's projects should be run.
+You make your own repository from Tiny Tapeout's analog template, put a layout in it that passes
+precheck, take a change to `main` through a reviewed pull request, and use the repository's history
+to find the commit that broke something.
 
 IC102-A is part of the UofT ASIC Team education materials, published at <https://uoftasic.com/ic102-a/>.
-The labs run in the workbench, the IIC-OSIC-TOOLS container you start from the `workspace` clone
-you set up in [IC101](https://uoftasic.com/ic101/), and on GitHub. You get this course's files with
-the workbench's `mod` command (`mod add ic102-a`);
+The labs run partly on GitHub and partly in the workbench, which is the IIC-OSIC-TOOLS container
+you start from the `workspace` clone you set up in [IC101](https://uoftasic.com/ic101/). You get
+this course's files with the workbench's `mod` command (`mod add ic102-a`);
 [Lab 01, Part 1](labs/lab-01-your-repo-from-the-template-overview.md#part-1-load-the-course) walks
 you through it.
 
@@ -18,8 +18,8 @@ Anyone who will push to an analog Tiny Tapeout repository: an ASIC Zoo designer,
 team project with an analog block, or someone starting one of their own. It's the course to take
 after IC101 and before your first push, and it assumes nothing beyond IC101: no Verilog and no
 layout. Each lab ships the layout it needs, from Tiny Tapeout's empty frame to the CMOS inverter
-from AD104, and the work you do is around it: filling in the template, reading failed runs, wiring
-the cell to the tile's pins, reviewing and merging, and searching a history.
+from AD104, and the work you do is the work around it: you fill in the template, read failed runs,
+wire the cell to the tile's pins, review and merge pull requests, and search a history.
 
 IC102 comes in two versions. Take this one, IC102-A, if you draw your layout yourself in Magic and
 commit the GDS, as in ASIC Zoo and CrossWalk's analog blocks. Take
@@ -46,13 +46,13 @@ have read.
 | # | | What | Time |
 |---|---|---|---|
 | 1 | Read | [Getting started](guide/getting-started.md) · [Git in one page](guide/git-in-one-page.md) · [Templates, forks and clones](guide/templates-forks-and-clones.md) | 40 min |
-| 2 | Do | [Lab 01: Your repository from the template](labs/lab-01-your-repo-from-the-template-overview.md). Make your own repository from Tiny Tapeout's analog template, fill it in, commit Tiny Tapeout's empty frame as a placeholder layout, and turn on Pages until every job of every workflow is green. | 1 h 15 min |
+| 2 | Do | [Lab 01: Your repository from the template](labs/lab-01-your-repo-from-the-template-overview.md). Make your own repository from Tiny Tapeout's analog template, fill it in, commit Tiny Tapeout's empty frame as a placeholder layout, and turn on Pages and start a new run, so that every job of every workflow ends green. | 1 h 15 min |
 | 3 | Read | [What a cloud runner is](guide/what-a-cloud-runner-is.md) · [Reading a workflow file](guide/reading-a-workflow-file.md) · [The analog workflows](guide/the-analog-workflows.md) | 45 min |
-| 4 | Do | [Lab 02: Read the red X](labs/lab-02-read-the-red-x-overview.md). Push five broken versions of your repository, from the team's mistakes and precheck's rules, and for each write down the job, the step and the first error line before you fix it. | 1 h 10 min |
+| 4 | Do | [Lab 02: Read the red X](labs/lab-02-read-the-red-x-overview.md). Push five broken versions of your repository, based on mistakes the team has made and on precheck's rules, and for each one write down the job, the step and the first error line before you fix it. | 1 h 10 min |
 | 5 | Read | [The analog layout kit](guide/the-analog-layout-kit.md) · [What precheck checks](guide/what-precheck-checks.md) · [Your tools and the runner's tools](guide/your-tools-and-the-runners-tools.md) | 30 min |
 | 6 | Do | [Lab 03: A layout that passes precheck](labs/lab-03-a-layout-that-passes-precheck-overview.md). Place the AD104 inverter in your tile, move the power stripes, draw its output wire to `ua[1]`, and get DRC, LVS and precheck to pass before you merge it through a pull request. | 1 h 45 min |
 | 7 | Read | [Pull requests and review](guide/pull-requests-and-review.md) · [Branch rules](guide/branch-rules.md) · [Layout files in git](guide/layout-files-in-git.md) · [How open-source projects work](guide/how-open-source-projects-work.md) | 45 min |
-| 8 | Do | [Lab 04: A change through review](labs/lab-04-a-change-through-review-overview.md). Claim a slot in your partner's review repository with a pull request from a fork, review the one your partner opens in yours from the render, LVS and the precheck table, and rebuild the layout after a conflict. | 1 h 30 min |
+| 8 | Do | [Lab 04: A change through review](labs/lab-04-a-change-through-review-overview.md). Claim a slot in your partner's review repository with a pull request from a fork, review the one your partner opens in yours using the render, the LVS result and the precheck table, and rebuild the layout after a conflict. | 1 h 30 min |
 | 9 | Read | [History as evidence](guide/history-as-evidence.md) | 15 min |
 | 10 | Do | [Lab 05: Find the commit that broke it](labs/lab-05-find-the-commit-that-broke-it-overview.md). Write a DRC script that `git bisect run` can trust, find the commit that broke a 33-commit layout history, and revert it through a pull request in a repository of its own. | 55 min |
 
