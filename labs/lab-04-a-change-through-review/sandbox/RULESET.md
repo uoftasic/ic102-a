@@ -2,8 +2,9 @@
 
 A repository you create gets no rules of its own, so you set this ruleset up by hand, under
 Settings › Rules › Rulesets › New ruleset › **Import a ruleset**, which reads
-[ruleset.json](ruleset.json) from your clone. Nobody has imported this file into a real repository
-yet, so check what the page shows against this table before you press **Create**.
+[ruleset.json](ruleset.json) from your clone. We imported it into a test repository on Nov 16,
+2026, and GitHub took it as written; check what the page shows against this table before you
+press **Create** all the same.
 
 | Part | Setting | Why |
 |---|---|---|
@@ -16,10 +17,11 @@ yet, so check what the page shows against this table before you press **Create**
 | Dismiss stale approvals when new commits are pushed | On | An approval covers the commit it was given on; a merge that rebuilt the GDS is a new layout |
 | Require approval of the most recent reviewable push | On | Someone other than the person who pushed the last commit has to approve it, so a change pushed after an approval can't ride on that approval |
 | Require conversation resolution before merging | On | A requested change has to be answered before the merge |
+| Require an additional approval for unattributed Copilot pull requests | On | GitHub's default, not in the file; it matters only for a pull request that Copilot opens by itself |
 | Allowed merge methods | Merge | Keeps each claim, and the merge that resolved its conflict, in the history |
 | Require status checks to pass | `docs`, `gds`, `precheck` | The three jobs that run on a pull request |
 | Require branches to be up to date before merging | Off | A pull request that conflicts can't be merged anyway, and resolving the conflict is what brings it up to date |
-| Bypass list | Repository admin, "For pull requests only" | Explained below |
+| Bypass list | Repository admin, "Allow for pull requests only" (the menu calls it "For pull requests only") | Explained below |
 
 Only an approval from someone with write access to the repository counts towards the one the rule
 asks for. On a repository in your own account that's you, as its admin, and nobody else, so your

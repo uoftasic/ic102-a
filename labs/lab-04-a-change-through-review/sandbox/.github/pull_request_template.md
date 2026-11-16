@@ -4,7 +4,8 @@
 
 ## How I checked it
 
-<!-- Paste the last lines of each, from a run on this pull request's latest commit. -->
+<!-- Paste precheck's "Precheck passed" line and LVS's "Final result" line, from runs on this
+pull request's latest commit. -->
 
 - `make precheck`:
 - `make lvs`:
