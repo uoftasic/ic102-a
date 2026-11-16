@@ -69,6 +69,8 @@ Set up the repository your partner will send a pull request to, with rules on it
    <!-- SCREENSHOT-TODO: github.com, signed in, YOUR-USERNAME/ttsky-ic102-a-review > Settings > Rules > Rulesets, the ruleset imported from ruleset.json before Create: name "main: one approval and green checks", Enforcement Active, target Default, and the Bypass list showing "Repository admin" with "For pull requests only". One account is enough. -->
    ![The imported ruleset, with the repository admin on the bypass list for pull requests only.](../assets/img/ic102-a-ruleset-import.png){width=640}
 
+   <!-- RUN-TODO: import ruleset.json into a personal repository and confirm GitHub accepts it as written (RepositoryRole 5 with "pull_request" bypass mode, required checks docs, gds and precheck, merge method "merge"). One account is enough. -->
+
 5. You're the repository's admin, and the admin role is on the bypass list. Before you try it,
    write down whether a commit pushed straight to `main` will be accepted. Then try one that
    changes nothing, and throw it away afterwards:
@@ -192,7 +194,7 @@ What happens to an open pull request when `main` changes under it?
    holds the runs of anyone who has never had a change merged into a repository until someone with
    write access approves them. A `pull_request` run uses the workflow files from the pull request
    itself, so read **Files changed** first and check that nothing under `.github/` changed. Then
-   approve the runs (**Approve workflows to run**, in GitHub's documentation).
+   press **Approve and run workflows**.
 
    <!-- SCREENSHOT-TODO: github.com, signed in as the repository's owner, a pull request from a fork in ttsky-ic102-a-review, scrolled to the merge box with the workflows awaiting approval and the button that approves them. Needs a second account, which opened the pull request. -->
    ![A first-time contributor's pull request, with its workflows waiting for approval.](../assets/img/ic102-a-approve-runs.png){width=640}
@@ -203,7 +205,7 @@ What happens to an open pull request when `main` changes under it?
    <!-- SCREENSHOT-TODO: github.com, signed in, a pull request from a fork in ttsky-ic102-a-review with docs, gds and precheck green and viewer skipped, and the merge box saying review is required and merging is blocked. Needs a second account, which opened the pull request. -->
    ![A pull request waiting for its approval.](../assets/img/ic102-a-merge-blocked.png){width=760}
 
-   <!-- RUN-TODO: a pull_request run from a fork into a student's ttsky-ic102-a-review: confirm that viewer shows as skipped, that the required checks are named docs, gds and precheck in the merge box, and whether each later push to the pull request needs its runs approved again. Needs two accounts. -->
+   <!-- RUN-TODO: a pull_request run from a fork into a student's ttsky-ic102-a-review: confirm that viewer shows as skipped, that the required checks are named docs, gds and precheck in the merge box, whether each later push to the pull request needs its runs approved again, and the approve button's exact label (GitHub's documentation, read Nov 16, 2026, says "Approve workflows to run"). Needs two accounts. -->
 
 2. Now claim the slot next to your partner's in your own repository: if they took slot K, take
    K + 1, or K − 1 if they took 7. In your own clone (`cd /foss/designs/projects/ttsky-ic102-a-review`),
