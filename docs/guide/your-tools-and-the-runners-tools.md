@@ -4,13 +4,13 @@ This page answers: *which versions of Magic, KLayout and the PDK check your layo
 do they differ from the workbench's, and why does the course install a second set?*
 
 [What a cloud runner is](what-a-cloud-runner-is.md#your-tools-and-the-runners-tools) explains that
-a runner installs its tools fresh for every job, at whatever versions the workflow asks for. For an
-analog project, the versions that matter are precheck's, because precheck decides whether your
-layout passes, and they aren't the workbench's.
+a runner installs its tools fresh for every job, at whatever versions the workflow asks for. In an
+analog project, the tools that decide whether your layout passes are precheck's, and their versions
+aren't the workbench's.
 
 ## Three sets of tools
 
-Three sets of layout tools touch your GDS between your keyboard and a green run:
+Your GDS goes through three sets of layout tools on its way from your keyboard to a green run:
 
 | Where | Magic | KLayout | sky130A PDK | Used for |
 |---|---|---|---|---|
@@ -34,14 +34,15 @@ that the design rules live in the PDK's technology files and Magic reads them. A
 or the same Magic with a different PDK, is in principle a different check.
 
 In practice the differences are smaller than that sounds. When the course's tools were set up, we
-ran precheck on 11 commits of 6 public analog projects whose runs on GitHub were still readable,
-six that had failed precheck and five that had passed, once with the runner's versions and once
-with the workbench's. With the runner's versions, the table matched the runner's every time, row
-for row and message for message; for two of the failing runs, the Magic report was the same file
-as the one the runner uploaded, byte for byte. The workbench's versions reached the same 11
-verdicts, but not by the same route: on one layout, KLayout 0.30.11 counted 7,089 edge pairs at one
-rule of the deck where 0.30.8 and the runner counted 7,053, and 1,303 where they counted 1,258,
-before both arrived at the same 1,740 violations. Only one of the 11 layouts had a Magic DRC error,
+ran precheck on 11 commits from 6 public analog projects whose runs on GitHub were still readable:
+six commits that had failed precheck and five that had passed. We ran each one twice, once with the
+runner's versions and once with the workbench's. With the runner's versions, the table matched the
+runner's every time, row for row and message for message; for two of the failing runs, the Magic
+report was the same file as the one the runner uploaded, byte for byte. The workbench's versions
+gave the same pass or fail on all 11, though some counts along the way differed: on one layout,
+KLayout 0.30.11 counted 7,089 edge pairs at one rule of the deck where 0.30.8 and the runner
+counted 7,053, and 1,303 where they counted 1,258, and both still ended at the same 1,740
+violations. Only one of the 11 layouts had a Magic DRC error,
 which is too few to say that Magic 8.3.681 always agrees with 8.3.568. The technology files of the
 two PDK commits differ by one line in their `wiring` section and in the version string; the DRC
 section is identical.
@@ -78,27 +79,29 @@ Which tools each of your `make` targets uses:
 | `make drc` | the workbench's 8.3.681 | – | the workbench's `026824c7` |
 | `make view` | the workbench's 8.3.681, with a display | – | the workbench's |
 
-`make drc` is there to compare. On the layouts we tried it on while writing the course, it agreed
+`make drc` is there so you can compare the workbench's Magic and PDK with precheck's. On the
+layouts we tried it on while writing the course, it agreed
 with precheck's Magic DRC row about whether there were errors: 0 on Lab 01's frame, on Lab 03's
 finished inverter and on the empty sandbox, and 8 on a Lab 03 wire with its metal 2 moved off its
 via, where precheck's row was ❌.
 
 The course builds your layout with precheck's Magic, rather than the workbench's, for two reasons.
 It's the version precheck checks with, which is what the specs' "matches the PDK" asks for. And the
-workbench's Magic 8.3.681 sometimes crashes when it runs a script in batch mode: the course's tools
-found it crashing on exit after writing its files, and while this course was being written it
-crashed once halfway through writing a LEF, leaving a file 222 lines short. Every `make` target
-therefore judges a Magic run by the files it wrote, never by its exit status, a habit you'll need in
-[Lab 05](../labs/lab-05-find-the-commit-that-broke-it-overview.md).
+workbench's Magic 8.3.681 sometimes crashes when it runs a script in batch mode. When we set up
+the course's tools, we saw it crash on exit after it had written its files, and while this course
+was being written it crashed once halfway through writing a LEF and left the file 222 lines short.
+So every `make` target judges a Magic run by the files it wrote and never by its exit status, and
+you'll need the same habit in [Lab 05](../labs/lab-05-find-the-commit-that-broke-it-overview.md).
 
 ## When Tiny Tapeout moves the tag
 
-All of this was read from the tag `ttsky26d`, and tags move. Each new shuttle brings a new template
-with a new tag, and Tiny Tapeout sometimes moves an existing tag to a new commit, as
+All of this was read from the tag `ttsky26d`, and it can change: each new shuttle brings a new
+template with a new tag, and Tiny Tapeout sometimes moves an existing tag to a new commit, as
 [Reading a workflow file](reading-a-workflow-file.md#composite-actions) describes. Your repository
 keeps the tag it was made with, so its runs keep the same PDK commit, though the support tools still
 follow `main`. The course's pins live in one file, `labs/common/tt-tools/pins.env`, with the steps
-for reading them again at its top; whoever maintains the course re-reads them for each new tag.
+for reading them again at its top, and whoever maintains the course reads them again for each new
+tag.
 
 ## Check yourself
 
