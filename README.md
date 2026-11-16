@@ -37,7 +37,7 @@ The labs also need a GitHub account, because half of each one happens on GitHub.
 | `labs/lab-01-your-repo-from-the-template/` | the layout kit a student's repository starts from | Lab 01 |
 | `labs/lab-02-read-the-red-x/` | `break.sh`: five numbered mistakes, and the `DIAGNOSIS.md` template | Lab 02 |
 | `labs/lab-03-a-layout-that-passes-precheck/` | the AD104 inverter, its wiring with one wire left out, and an LVS reference | Lab 03 |
-| `labs/lab-04-a-change-through-review/` | `sandbox/`: the cohort's shared repository, with its ruleset and review checklist | Lab 04 |
+| `labs/lab-04-a-change-through-review/` | `sandbox/`: the starting point of each student's review repository, with its ruleset and review checklist; `ai-pr/`: the AI-written pull request for the optional part | Lab 04 |
 | `labs/lab-05-find-the-commit-that-broke-it/` | a 33-commit layout history as a git bundle, and precheck's Magic DRC as a script | Lab 05 |
 
 Reference solutions are in each package's `solutions/`.
