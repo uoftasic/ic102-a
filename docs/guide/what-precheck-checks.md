@@ -7,8 +7,8 @@ Precheck is a Python program, `precheck/precheck.py` in Tiny Tapeout's support t
 `precheck` job runs it on the GDS from the `tt_submission` artifact. Tiny Tapeout's own guide says
 of it that "All the checks need to be green to submit to the chip". The details on this page come
 from `precheck.py` at commit `9d13ff3`, which is the commit the runner checked out in November 2026,
-and from runs of it on this course's layouts and on one public project's. You'll see most of these rows fail in
-[Lab 02](../labs/lab-02-read-the-red-x-overview.md), and find two mistakes in
+and from runs of it on this course's layouts and on one public project's. You'll see most of
+these rows fail in [Lab 02](../labs/lab-02-read-the-red-x-overview.md), and find two mistakes in
 [Lab 03](../labs/lab-03-a-layout-that-passes-precheck-overview.md) that none of them catch.
 
 ## How it runs
@@ -71,9 +71,8 @@ start: read every ❌ row, and look for the one that explains the others.
 
 The log isn't always ordered the way the table is. Some checks print their errors as they go and
 some only fail at the end, so the first `ERROR:` line in the log can be a consequence of another
-check's failure. In Lab 02's
-breakage 3, a renamed `top_module` with an unchanged GDS, the log's first 53 error lines are the
-pin check's, one per pin:
+check's failure. In Lab 02's breakage 3, a renamed `top_module` with an unchanged GDS, the log's
+first 53 error lines are the pin check's, one per pin:
 
 ```
 ERROR: Pin clk not found in /foss/designs/projects/ttsky-ic102-a/tt_submission/tt_um_yourname_ic102_v2.lef
