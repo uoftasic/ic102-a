@@ -1,0 +1,38 @@
+# The Python packages Tiny Tapeout's precheck job installed on 2026-11-15,
+# copied from the "Successfully installed" lines of its log, with every
+# transitive dependency pinned so that `pip install` can't drift.
+#
+# precheck/requirements.txt in tt-support-tools 9d13ff3 (pip-compile output,
+# klayout left open as >=0.30.8,<0.31.0):
+#   source: uoftasic/sentry run 43796948508, precheck job, 2026-11-16
+click==8.3.1
+gdstk==0.9.52
+iniconfig==2.0.0
+klayout==0.30.13
+numpy==1.26.4
+packaging==24.1
+platformdirs==4.9.4
+pluggy==1.5.0
+pytest==8.2.2
+pyyaml==6.0.1
+wasmtime==42.0.0
+yowasp-runtime==1.88
+yowasp-yosys==0.63.0.0.post1107
+#
+# ciel, which TinyTapeout/ciel-action@v1 installs into the same environment
+# when the PDK isn't already in the runner's cache:
+#   source: erik1567/ttsky26d-VCO run 42570954316, precheck job, 2026-11-09
+ciel==3.2.0
+anyio==4.16.0
+certifi==2026.10.23
+h11==0.16.0
+httpcore==1.0.9
+httpx==0.28.1
+idna==3.20
+markdown-it-py==4.2.0
+mdurl==0.1.2
+pcpp==1.30
+pygments==2.21.0
+rich==15.0.0
+typing_extensions==4.16.0
+zstandard==0.25.0

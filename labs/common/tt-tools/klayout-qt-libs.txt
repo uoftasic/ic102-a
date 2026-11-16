@@ -1,0 +1,5 @@
+http://archive.ubuntu.com/ubuntu/pool/universe/q/qtbase-opensource-src/libqt5printsupport5t64_5.15.13+dfsg-1ubuntu1_amd64.deb 7576b79215515f2a126da74d5542ed7769974d8e96069c7fd68a4f44e56b538e
+http://archive.ubuntu.com/ubuntu/pool/universe/q/qttools-opensource-src/libqt5designer5_5.15.13-1_amd64.deb b0cab5d14b47ba06111d44da4f17e7f5a330fd01ae1b2dc57db229a1dfcf48e5
+http://archive.ubuntu.com/ubuntu/pool/universe/q/qtmultimedia-opensource-src/libqt5multimedia5_5.15.13-1_amd64.deb cb22a460fbc861fdd1177f2f25037b5cb9fa6c345bfc3e429fed962047a098ce
+http://archive.ubuntu.com/ubuntu/pool/universe/q/qtmultimedia-opensource-src/libqt5multimediawidgets5_5.15.13-1_amd64.deb 4d4ec906cbb7132199f39e8a9cc6a73e76fdeb9096eb16858a0bc462bcc2324c
+http://archive.ubuntu.com/ubuntu/pool/universe/q/qtxmlpatterns-opensource-src/libqt5xmlpatterns5_5.15.13-1_amd64.deb e295d207444aeeebc5f223503e928d3e924965ec122b858f107650d8b6219ff7
