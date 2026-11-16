@@ -465,7 +465,7 @@ repository and reviews the copy opened on your own.
    - `gds/` and `lef/` weren't rebuilt, so every check ran on `main`'s old layout. The file list
      has no GDS, the render has no new inverter, and `make lvs` on the branch warns that
      `layout/slots.tcl layout/cells/inv_ai.mag changed after gds/tt_um_ic102a_sandbox.gds was
-     written` and ends `Final result: Top level cell failed pin matching.`, so the description's
+     written` and reports `Final result: Top level cell failed pin matching.`, so the description's
      LVS line is false. Its precheck line is true, for the old GDS.
    - The pinout describes `ui[K+1]` and `uo[K+1]` for slot K. Neither precheck nor LVS reads it.
    - `.gitignore` now lists `gds/` and `lef/` as build output, which the claim didn't need and
