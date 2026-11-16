@@ -9,7 +9,7 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-A practice project for IC102-A Lab 04, never meant for a shuttle. The course's inverter sits between ua[0] and ua[1]. Each student in the cohort adds one more inverter, in one of eight slots: slot K takes its input from ui_in[K] and drives uo_out[K]. Every digital output that no slot drives is tied to ground.
+A practice project for IC102-A Lab 04, never meant for a shuttle. The course's inverter sits between ua[0] and ua[1]. The repository's owner and their partner each add one more inverter, in one of eight slots: slot K takes its input from ui_in[K] and drives uo_out[K]. Every digital output that no slot drives is tied to ground.
 
 ## How to test
 
