@@ -88,14 +88,12 @@ whose resource owner is your own account, for "All repositories", with two permi
 "Read and write":
 
 - **Contents**, which is what pushing commits needs.
-- **Workflows**, because a push that adds or changes a file in `.github/workflows/` needs it as
-  well as Contents. GitHub's documentation states that rule for Git over HTTPS in its guide to
-  choosing permissions for a GitHub App. The guide is written for apps rather than tokens, but it
-  calls the two permissions Contents and Workflows, as the token form does
-  ([permissions for Git access](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/choosing-permissions-for-a-github-app#choosing-permissions-for-git-access)).
-  You won't edit a workflow in this course, but two pushes add workflow files all the same: the
-  first push of your Lab 04 review repository, which is a copy of the course's sandbox, and the
-  first push of Lab 05's prepared history.
+- **Workflows**, which lets a token add or change files under `.github/workflows/`. You won't
+  edit a workflow in this course, but two of your pushes carry workflow files: the first push of
+  your Lab 04 review repository, and the first push of Lab 05's history.
+
+GitHub's documentation gives the same two permissions, for the same reasons, to a GitHub App that
+uses git ([choosing permissions for Git access](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/choosing-permissions-for-a-github-app#choosing-permissions-for-git-access)).
 
 "All repositories" is there because the Lab 04 and Lab 05 repositories don't exist yet when you
 make the token in Lab 01. Every push in the course goes to a repository you own: the four in the
