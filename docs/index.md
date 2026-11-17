@@ -1,9 +1,10 @@
 # IC102-A — Working in Tiny Tapeout Repos (Analog)
 
-In this course you run an analog Tiny Tapeout project the way the team's projects should be run.
-You make your own repository from Tiny Tapeout's analog template, put a layout in it that passes
-precheck, take a change to `main` through a reviewed pull request, and use the repository's history
-to find the commit that broke something.
+In this course you make an analog Tiny Tapeout project on your own GitHub account from Tiny
+Tapeout's analog template, and push to it until every workflow passes. In Lab 03 you place a CMOS
+inverter in your tile, draw its output wire to an analog pin, and get DRC, LVS and precheck to
+pass. Later labs have you review a partner's pull request and use `git bisect` to find which of a
+small project's 33 commits broke Magic DRC.
 
 IC102-A is part of the UofT ASIC Team education materials, published at <https://uoftasic.com/ic102-a/>.
 The labs run partly on GitHub and partly in the workbench, which is the IIC-OSIC-TOOLS container
@@ -14,23 +15,21 @@ you through it.
 
 ## Who this course is for
 
-Anyone who will push to an analog Tiny Tapeout repository: an ASIC Zoo designer, someone joining a
-team project with an analog block, or someone starting one of their own. It's the course to take
-after IC101 and before your first push, and it assumes nothing beyond IC101: no Verilog and no
-layout. Each lab ships the layout it needs, from Tiny Tapeout's empty frame to the CMOS inverter
-from AD104, and the work you do is the work around it: you fill in the template, read failed runs,
-wire the cell to the tile's pins, review and merge pull requests, and search a history.
+This course is for anyone who will push to an analog Tiny Tapeout repository: an ASIC Zoo designer,
+someone joining a team project with an analog block, or someone starting one of their own. Take it
+after IC101 and before your first push. It assumes nothing beyond IC101: no Verilog and no layout.
+Each lab ships the layout it needs, from Tiny Tapeout's empty frame to the CMOS inverter from AD104.
 
 IC102 comes in two versions. Take this one, IC102-A, if you draw your layout yourself in Magic and
 commit the GDS, as in ASIC Zoo and CrossWalk's analog blocks. Take
-[IC102-D](https://uoftasic.com/ic102-d/) if your project is written in Verilog and the GDS action
-builds its layout. About half the reading is the same in both.
+[IC102-D](https://uoftasic.com/ic102-d/) if your project is written in Verilog and Tiny Tapeout's
+`gds` workflow builds its layout. Eight of the guide pages are the same in both.
 
 | | |
 |---|---|
 | Prerequisites | [IC101](https://uoftasic.com/ic101/), and a GitHub account |
 | Tools | The workbench image `hpretl/iic-osic-tools:2026.08`, plus the versions of Tiny Tapeout's precheck tools that its runners use (Magic 8.3.568, KLayout 0.30.8, the sky130A PDK at `0536d02d`), which Lab 01 installs next to the workbench's |
-| Machine | The workbench you already have, about 2 GB more disk for those tools, and an internet connection. Most layout commands take under a second; a local precheck takes about 45 s, and a run on GitHub a few minutes |
+| Machine | The workbench you already have, about 2 GB more disk for those tools, and an internet connection. A local precheck takes about 45 s, and a run on GitHub a few minutes |
 | Total time | About 9 h 30 min, self-paced, including the waits for GitHub's runners. The Course path rows below add up to 9 h 30 min. |
 
 The course stops at "ready to submit": every workflow green on a commit you made. It doesn't cover
