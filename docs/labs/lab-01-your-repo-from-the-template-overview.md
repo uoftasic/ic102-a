@@ -125,8 +125,6 @@ a way for the workbench to push to GitHub.
    this kind of token, why it needs Workflows as well as Contents, and why it lives in your password
    manager rather than in a file.
 
-   <!-- RUN-TODO: with a fine-grained token like this one, from the workbench: a push to the student's own ttsky-ic102-a, the first push of the Lab 04 sandbox copy (it adds workflow files) to a new empty ttsky-ic102-a-review, and GitHub's exact refusal when Workflows is left off, to quote in Getting started. One account is enough. A test token may be limited to the test repositories (the planned ones were limited to ic102-test-a, ic102-test-d, ic102-review-sandbox-a and ic102-review-sandbox-d); say so where the result is quoted, since the students' token covers all their repositories. A push to a fork is dropped: it needs a second account, and that was decided against on Nov 16, 2026. Still open after the evening run of Nov 16, 2026, and not because of GitHub: the new-token form opened without GitHub's sudo prompt and the screenshot above was taken, but this session's permission system refused the command that would have pressed Generate token, so no token was made and nothing was pushed. The live test before that used the GitHub CLI's own sign-in, which proves nothing about this token. -->
-
 Check: you have the no-reply address and the token saved somewhere you can paste from.
 
 ## Part 3: Make the repository
