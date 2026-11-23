@@ -19,9 +19,9 @@ writes into each GDS is replaced with the commit's date (BGNLIB and BGNSTR recor
 this again gives the same commit hashes. Precheck doesn't read those dates. If you change a step,
 the hashes from that commit on change, and the writeup's expected outputs must be re-run.
 
-The history's Makefile is the kit's Makefile as it was at commit 541dff9 of this repository, read
+The history's Makefile is the kit's Makefile as it was at commit b4e96ea of this repository, read
 from git, and not the kit's current one. The kit's Makefile changed after the bundle was built
-(commit 5244157 changed how `make drc` and `make lvs` decide that the GDS is out of date), and
+(commit 66d6c9c changed how `make drc` and `make lvs` decide that the GDS is out of date), and
 copying the current one would change every hash from commit 5 on. Lab 05's steps don't depend on
 that change: its `make lvs` runs straight after a `make`. So this script needs a git checkout of
 the course, not a copy of its files.
@@ -40,7 +40,7 @@ COURSE = Path(__file__).resolve().parents[3]          # the ic102-a checkout
 KIT = COURSE / "labs/lab-01-your-repo-from-the-template"
 LAB03 = COURSE / "labs/lab-03-a-layout-that-passes-precheck"
 # The commit whose kit Makefile history.bundle was built with (see the docstring).
-KIT_MAKEFILE_COMMIT = "541dff95c348f6cd263d7c6112c8f8c1dbb72a85"
+KIT_MAKEFILE_COMMIT = "b4e96eaa59e0bcf13e83e3a24e1962be6fd23a02"
 
 AVERY = ("Avery Example", "avery@example.com")
 SAM = ("Sam Example", "sam@example.com")
