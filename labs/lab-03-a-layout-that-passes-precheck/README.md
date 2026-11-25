@@ -19,7 +19,7 @@ Then, from the top of your repository, `make`, `make drc`, `make lvs` and `make 
 
 | File in your repository | What it is |
 |---|---|
-| `layout/cells/ic102_inv.mag` | AD104 Lab 03's reference inverter (`solutions/inv_ref.mag` in [uoftasic/ad104](https://github.com/uoftasic/ad104), at b89a8b8), renamed; DRC and LVS clean |
+| `layout/cells/ic102_inv.mag` | AD104 Lab 03's reference inverter (`solutions/inv_ref.mag` in [uoftasic/ad104-m](https://github.com/uoftasic/ad104-m), at b89a8b8), renamed; DRC and LVS clean |
 | `layout/wires.tcl` | replaces Lab 01's stubs: the cell placed at (140, 10), its supplies and its input wired, and a TODO for the output wire |
 | `layout/lvs/reference.spice` | the circuit the finished tile should contain, with your `top_module` filled in |
 
